@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-slate-900 font-sans antialiased selection:bg-red-100 selection:text-dcore-red;
+  }
+
+  /* Custom scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9b111e;
+  }
+}
+
+/* Glassmorphism & UI utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(241, 245, 249, 1);
+  box-shadow: 0 4px 20px -2px rgba(155, 17, 30, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(155, 17, 30, 0.2);
+  box-shadow: 0 12px 28px -4px rgba(155, 17, 30, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+}
+
+.dcore-gradient-text {
+  background: linear-gradient(135deg, #0f172a 0%, #9b111e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dcore-red-gradient {
+  background: linear-gradient(135deg, #9b111e 0%, #7f0d18 100%);
+}
+
+.dcore-hero-gradient {
+  background: radial-gradient(circle at 50% 0%, rgba(155, 17, 30, 0.08) 0%, rgba(255, 255, 255, 0) 75%);
+}
+
+.badge-p0 {
+  @apply bg-red-100 text-red-700 border border-red-200 font-bold px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+}
+
+.badge-p1 {
+  @apply bg-rose-50 text-dcore-red border border-rose-200 font-semibold px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+}
+
+.badge-p2 {
+  @apply bg-amber-50 text-amber-700 border border-amber-200 font-medium px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+}
+
+.badge-p3 {
+  @apply bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+}

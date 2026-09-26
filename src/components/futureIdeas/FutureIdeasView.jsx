@@ -1,0 +1,172 @@
+import React, { useState } from 'react';
+import { useApp } from '../../context/AppContext';
+import {
+  Lightbulb,
+  Plus,
+  Sparkles,
+  ArrowRight,
+  User,
+  Calendar,
+  Layers,
+  CheckCircle2,
+  BrainCircuit
+} from 'lucide-react';
+
+export const FutureIdeasView = () => {
+  const { state, convertIdeaToProject, setIsQuickAddOpen, setQuickAddType } = useApp();
+
+  const [statusFilter, setStatusFilter] = useState('ALL');
+
+  let ideas = state.ideas || [];
+
+  if (statusFilter !== 'ALL') {
+    ideas = ideas.filter(i => i.status === statusFilter);
+  }
+
+  const handleOpenAddIdea = () => {
+    setQuickAddType('idea');
+    setIsQuickAddOpen(true);
+  };
+
+  return (
+    <div className="space-y-6 pb-12 animate-in fade-in duration-300">
+      
+      {/* Header Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-soft">
+        <div>
+          <div className="flex items-center gap-2 text-blue-600 text-xs font-bold uppercase tracking-wider mb-1">
+            <Lightbulb className="w-4 h-4" />
+            <span>Innovation Repository</span>
+          </div>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">FUTURE IDEAS</h1>
+          <p className="text-xs text-slate-500 mt-1">
+            Capture tech proposals, AI automations & infrastructure ideas without cluttering active operational work.
+          </p>
+        </div>
+
+        <button
+          onClick={handleOpenAddIdea}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-blue-600/20 flex items-center gap-2 transition-all self-start sm:self-center"
+        >
+          <Plus className="w-4 h-4 stroke-[3]" />
+          <span>+ Add Future Idea</span>
+        </button>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-xl bg-slate-100/70 border border-slate-200 text-xs font-bold">
+        {['ALL', 'NEW', 'DISCUSSION', 'RESEARCH', 'APPROVED', 'CONVERTED TO PROJECT'].map((st) => (
+          <button
+            key={st}
+            onClick={() => setStatusFilter(st)}
+            className={`px-3 py-1.5 rounded-lg transition-all ${
+              statusFilter === st
+                ? 'bg-white text-blue-700 shadow-sm'
+                : 'text-slate-600 hover:bg-white/50'
+            }`}
+          >
+            {st}
+          </button>
+        ))}
+      </div>
+
+      {/* Ideas Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {ideas.length === 0 ? (
+          <div className="col-span-2 bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-400 space-y-3">
+            <BrainCircuit className="w-12 h-12 mx-auto text-blue-300" />
+            <h3 className="text-base font-extrabold text-slate-700">No ideas in repository</h3>
+            <p className="text-xs text-slate-500 max-w-sm mx-auto">
+              Capture the next big digital innovation before it gets lost.
+            </p>
+            <button
+              onClick={handleOpenAddIdea}
+              className="mt-2 bg-blue-600 text-white px-4 py-2 rounded-xl font-bold text-xs hover:bg-blue-700"
+            >
+              + Submit Idea
+            </button>
+          </div>
+        ) : (
+          ideas.map((idea) => {
+            const isConverted = idea.status === 'CONVERTED TO PROJECT';
+
+            return (
+              <div
+                key={idea.id}
+                className={`glass-card p-6 rounded-2xl border transition-all flex flex-col justify-between space-y-4 ${
+                  isConverted
+                    ? 'border-emerald-200 bg-emerald-50/20 opacity-80'
+                    : 'border-slate-200/90 bg-white hover:border-blue-300'
+                }`}
+              >
+                <div className="space-y-3">
+                  {/* Top Metadata Badges */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 uppercase">
+                      {idea.category}
+                    </span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                      isConverted ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'
+                    }`}>
+                      {idea.status}
+                    </span>
+                  </div>
+
+                  {/* Idea Title */}
+                  <h3 className="text-base font-extrabold text-slate-900 leading-snug flex items-start gap-2">
+                    <span className="text-amber-500">💡</span>
+                    <span>{idea.title}</span>
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {idea.description}
+                  </p>
+
+                  {/* Impact & Complexity indicators */}
+                  <div className="flex items-center gap-3 text-xs pt-1">
+                    <div className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 font-semibold text-slate-700">
+                      Impact: <span className="font-bold text-dcore-red">{idea.impact}</span>
+                    </div>
+                    <div className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 font-semibold text-slate-700">
+                      Complexity: <span className="font-bold text-slate-800">{idea.complexity}</span>
+                    </div>
+                  </div>
+
+                  {idea.notes && (
+                    <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 font-mono">
+                      Note: {idea.notes}
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer Creator & Convert CTA */}
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3 text-xs">
+                  <div className="flex items-center gap-2 text-slate-500 font-medium">
+                    <User className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{idea.createdBy || 'D-Core Team'}</span>
+                  </div>
+
+                  {!isConverted ? (
+                    <button
+                      onClick={() => convertIdeaToProject(idea.id)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow-sm flex items-center gap-1.5 transition-all hover:scale-105"
+                    >
+                      <span>Convert to Project</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  ) : (
+                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                      <CheckCircle2 className="w-4 h-4" />
+                      Project Created
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+};
