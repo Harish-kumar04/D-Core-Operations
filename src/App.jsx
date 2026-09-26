@@ -7,6 +7,7 @@ import { SearchModal } from './components/common/SearchModal';
 import { QuickAddModal } from './components/common/QuickAddModal';
 import { AdminLoginModal } from './components/common/AdminLoginModal';
 import { EditEntityModal } from './components/common/EditEntityModal';
+import { InternalAuthWall } from './components/common/InternalAuthWall';
 import { QuotePopup } from './components/common/QuotePopup';
 import { Toast } from './components/common/Toast';
 import { LandingPage } from './components/landing/LandingPage';
@@ -22,7 +23,12 @@ import { HistoryView } from './components/history/HistoryView';
 import { SettingsView } from './components/settings/SettingsView';
 
 const MainLayout = () => {
-  const { activeTab, isAdminLoginOpen, setIsAdminLoginOpen, editModal, closeEditModal } = useApp();
+  const { userSession, activeTab, isAdminLoginOpen, setIsAdminLoginOpen, editModal, closeEditModal } = useApp();
+
+  // If user is not authenticated for internal access, show mandatory Internal Auth Wall first
+  if (!userSession.isAuthenticated) {
+    return <InternalAuthWall />;
+  }
 
   if (activeTab === 'landing') {
     return (

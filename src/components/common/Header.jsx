@@ -5,14 +5,10 @@ import {
   Plus,
   Bell,
   CheckCircle2,
-  AlertTriangle,
   Globe,
-  Sliders,
   ShieldCheck,
-  UserCheck,
-  ChevronDown,
   Lock,
-  Unlock,
+  LogOut,
   History
 } from 'lucide-react';
 
@@ -24,6 +20,8 @@ export const Header = () => {
     setIsSearchOpen,
     setIsQuickAddOpen,
     setQuickAddType,
+    userSession,
+    logoutUserSession,
     isAdminLoggedIn,
     adminName,
     setIsAdminLoginOpen,
@@ -31,7 +29,6 @@ export const Header = () => {
   } = useApp();
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
-  const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
 
   const unreadNotifs = (state.notifications || []).filter(n => !n.read);
 
@@ -176,31 +173,36 @@ export const Header = () => {
             <span className="hidden sm:inline">Quick Add</span>
           </button>
 
-          {/* Admin Auth Status Button */}
-          {!isAdminLoggedIn ? (
-            <button
-              onClick={() => setIsAdminLoginOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs font-extrabold shadow-sm transition-all"
-            >
-              <Lock className="w-3.5 h-3.5 text-dcore-red" />
-              <span>Admin Login</span>
-            </button>
-          ) : (
-            <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-dcore-red px-3 py-1.5 rounded-xl text-xs font-bold">
-              <ShieldCheck className="w-4 h-4 text-dcore-red" />
-              <div className="hidden sm:block text-left">
-                <p className="text-[10px] font-black uppercase text-dcore-red">Admin Logged In</p>
-                <p className="text-xs font-extrabold text-slate-900 leading-none">{adminName}</p>
-              </div>
-              <button
-                onClick={logoutAdmin}
-                className="ml-1 text-[10px] bg-dcore-red text-white font-bold px-2 py-0.5 rounded hover:bg-dcore-red-hover"
-                title="Logout Admin"
-              >
-                Logout
-              </button>
+          {/* User Session Profile & Sign Out Control */}
+          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs">
+            <div className="text-left hidden sm:block">
+              <p className="text-[10px] font-black uppercase text-dcore-red leading-none">
+                {isAdminLoggedIn ? 'ADMIN' : 'INTERNAL USER'}
+              </p>
+              <p className="text-xs font-extrabold text-slate-900 leading-tight mt-0.5">
+                {userSession.userName || adminName || 'Internal Member'}
+              </p>
             </div>
-          )}
+
+            {!isAdminLoggedIn && (
+              <button
+                onClick={() => setIsAdminLoginOpen(true)}
+                className="text-[10px] bg-slate-900 text-white font-bold px-2 py-1 rounded hover:bg-slate-800 transition-colors flex items-center gap-1"
+                title="Unlock Admin Edit Access"
+              >
+                <Lock className="w-3 h-3 text-red-400" />
+                <span>Admin Login</span>
+              </button>
+            )}
+
+            <button
+              onClick={logoutUserSession}
+              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              title="Sign Out of Portal"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
 
         </div>
       </div>

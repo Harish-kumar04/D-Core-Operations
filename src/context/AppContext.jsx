@@ -3,15 +3,46 @@ import { DataService } from '../services/dataService';
 
 const AppContext = createContext();
 
+const SESSION_KEY = 'dcore_internal_user_session';
+
 export const AppProvider = ({ children }) => {
   const [state, setState] = useState(() => DataService.loadState());
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
 
-  // Admin Authentication & Name capture state
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
-  const [adminName, setAdminName] = useState('');
+  // User Session & Gated Access State
+  const [userSession, setUserSession] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return { isAuthenticated: false, userName: '', userRole: 'GUEST' };
+  });
+
+  // Admin Auth & Name capture state
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.userRole === 'ADMIN';
+      }
+    } catch (e) {}
+    return false;
+  });
+
+  const [adminName, setAdminName] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem(SESSION_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.userRole === 'ADMIN' ? parsed.userName : '';
+      }
+    } catch (e) {}
+    return '';
+  });
+
   const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
 
   // Edit Modal State
@@ -55,14 +86,56 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // --- INTERNAL AUTH WALL LOGIN ---
+  const loginUserSession = (name, passcode, isAdmin = false) => {
+    const trimmedName = name.trim();
+    const cleanPass = passcode.trim();
+
+    if (isAdmin) {
+      if (cleanPass === 'admin123') {
+        const session = { isAuthenticated: true, userName: trimmedName, userRole: 'ADMIN' };
+        setUserSession(session);
+        setIsAdminLoggedIn(true);
+        setAdminName(trimmedName);
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+
+        addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${trimmedName}' logged in with full edit access.`, trimmedName);
+        DataService.loginAdminApi('admin@dcore.ops', 'admin123', trimmedName);
+        showToast(`Welcome Admin ${trimmedName}! Full editing access unlocked.`);
+        return { success: true };
+      }
+      return { success: false, error: 'Incorrect Admin Password (Default: admin123)' };
+    } else {
+      if (cleanPass === 'dcore2026' || cleanPass === 'dcoreops' || cleanPass === 'dcore' || cleanPass === 'admin123') {
+        const session = { isAuthenticated: true, userName: trimmedName, userRole: 'MEMBER' };
+        setUserSession(session);
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+
+        showToast(`Welcome ${trimmedName}! Authenticated for D-Core Internal Operations.`);
+        return { success: true };
+      }
+      return { success: false, error: 'Incorrect Passcode (Default: dcore2026)' };
+    }
+  };
+
+  const logoutUserSession = () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    setUserSession({ isAuthenticated: false, userName: '', userRole: 'GUEST' });
+    setIsAdminLoggedIn(false);
+    setAdminName('');
+    showToast('Signed out of D-Core Operations Portal.', 'info');
+  };
+
   // --- ADMIN AUTH & NAME LOGGING ---
   const loginAdmin = (email, password, name) => {
     if (email === 'admin@dcore.ops' && password === 'admin123') {
       const formattedName = name.trim();
+      const session = { isAuthenticated: true, userName: formattedName, userRole: 'ADMIN' };
+      setUserSession(session);
       setIsAdminLoggedIn(true);
       setAdminName(formattedName);
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
 
-      // Log login event in audit history
       addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${formattedName}' logged into Operations Center.`, formattedName);
       DataService.loginAdminApi(email, password, formattedName);
       showToast(`Welcome ${formattedName}! Admin editing access unlocked.`);
@@ -102,7 +175,7 @@ export const AppProvider = ({ children }) => {
   const addHistoryLog = (action, entityType, entityId, entityName, details, overrideAdminName = null) => {
     const newLog = {
       id: `hist_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
-      adminName: overrideAdminName || adminName || 'Admin User',
+      adminName: overrideAdminName || adminName || userSession.userName || 'Admin User',
       action,
       entityType,
       entityId,
@@ -124,7 +197,7 @@ export const AppProvider = ({ children }) => {
       text,
       projectId,
       taskId,
-      user: adminName || state.settings.currentUserName || 'Arun Kumar',
+      user: adminName || userSession.userName || state.settings.currentUserName || 'Arun Kumar',
       timestamp: new Date().toISOString()
     };
     setState(prev => ({
@@ -301,7 +374,7 @@ export const AppProvider = ({ children }) => {
       description: ideaData.description || '',
       category: ideaData.category || 'General Innovation',
       status: ideaData.status || 'NEW',
-      createdBy: ideaData.createdBy || adminName || 'Arun Kumar',
+      createdBy: ideaData.createdBy || adminName || userSession.userName || 'Arun Kumar',
       impact: ideaData.impact || 'MEDIUM',
       complexity: ideaData.complexity || 'MEDIUM',
       notes: ideaData.notes || '',
@@ -345,7 +418,7 @@ export const AppProvider = ({ children }) => {
       priority: idea.impact === 'CRITICAL' || idea.impact === 'HIGH' ? 'P1' : 'P2',
       status: 'active',
       progress: 0,
-      notes: `Converted from Future Idea by ${adminName || 'Admin'}.`
+      notes: `Converted from Future Idea by ${adminName || userSession.userName || 'Admin'}.`
     });
 
     updateIdea(ideaId, { status: 'CONVERTED TO PROJECT' });
@@ -422,6 +495,9 @@ export const AppProvider = ({ children }) => {
     activeTab,
     selectedProjectId,
     selectedTaskId,
+    userSession,
+    loginUserSession,
+    logoutUserSession,
     isAdminLoggedIn,
     adminName,
     isAdminLoginOpen,
