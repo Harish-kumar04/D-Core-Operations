@@ -86,13 +86,17 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- INTERNAL AUTH WALL LOGIN ---
+  // --- INTERNAL AUTH WALL LOGIN (FOR 4 AUTHORIZED USERS) ---
   const loginUserSession = (name, passcode, isAdmin = false) => {
     const trimmedName = name.trim();
     const cleanPass = passcode.trim();
 
+    // Map passcodes for the 4 users
+    const validAdminPasscodes = ['dcore101', 'dcore102', 'admin123'];
+    const validMemberPasscodes = ['dcore101', 'dcore102', 'dcore103', 'dcore104', 'dcore2026', 'dcoreops', 'admin123'];
+
     if (isAdmin) {
-      if (cleanPass === 'admin123') {
+      if (validAdminPasscodes.includes(cleanPass)) {
         const session = { isAuthenticated: true, userName: trimmedName, userRole: 'ADMIN' };
         setUserSession(session);
         setIsAdminLoggedIn(true);
@@ -100,13 +104,13 @@ export const AppProvider = ({ children }) => {
         sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
 
         addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${trimmedName}' logged in with full edit access.`, trimmedName);
-        DataService.loginAdminApi('admin@dcore.ops', 'admin123', trimmedName);
+        DataService.loginAdminApi('admin@dcore.ops', cleanPass, trimmedName);
         showToast(`Welcome Admin ${trimmedName}! Full editing access unlocked.`);
         return { success: true };
       }
-      return { success: false, error: 'Incorrect Admin Password (Default: admin123)' };
+      return { success: false, error: `Incorrect passcode for ${trimmedName}.` };
     } else {
-      if (cleanPass === 'dcore2026' || cleanPass === 'dcoreops' || cleanPass === 'dcore' || cleanPass === 'admin123') {
+      if (validMemberPasscodes.includes(cleanPass)) {
         const session = { isAuthenticated: true, userName: trimmedName, userRole: 'MEMBER' };
         setUserSession(session);
         sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
@@ -114,7 +118,7 @@ export const AppProvider = ({ children }) => {
         showToast(`Welcome ${trimmedName}! Authenticated for D-Core Internal Operations.`);
         return { success: true };
       }
-      return { success: false, error: 'Incorrect Passcode (Default: dcore2026)' };
+      return { success: false, error: `Incorrect passcode for ${trimmedName}.` };
     }
   };
 
@@ -128,7 +132,7 @@ export const AppProvider = ({ children }) => {
 
   // --- ADMIN AUTH & NAME LOGGING ---
   const loginAdmin = (email, password, name) => {
-    if (email === 'admin@dcore.ops' && password === 'admin123') {
+    if (email === 'admin@dcore.ops' && (password === 'admin123' || password === 'dcore101' || password === 'dcore102')) {
       const formattedName = name.trim();
       const session = { isAuthenticated: true, userName: formattedName, userRole: 'ADMIN' };
       setUserSession(session);

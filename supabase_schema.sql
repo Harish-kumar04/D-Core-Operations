@@ -3,7 +3,19 @@
 -- Copy and paste this script into Supabase SQL Editor & click Run
 -- ============================================================
 
--- 1. PROJECTS TABLE
+-- 1. AUTHORIZED USERS TABLE (STRICT 4 USERS)
+CREATE TABLE IF NOT EXISTS public.users (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  passcode TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'MEMBER', -- ADMIN or MEMBER
+  department TEXT,
+  avatar TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2. PROJECTS TABLE
 CREATE TABLE IF NOT EXISTS public.projects (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -21,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. TASKS TABLE
+-- 3. TASKS TABLE
 CREATE TABLE IF NOT EXISTS public.tasks (
   id TEXT PRIMARY KEY,
   project_id TEXT REFERENCES public.projects(id) ON DELETE CASCADE,
@@ -42,7 +54,7 @@ CREATE TABLE IF NOT EXISTS public.tasks (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. FUTURE IDEAS TABLE
+-- 4. FUTURE IDEAS TABLE
 CREATE TABLE IF NOT EXISTS public.ideas (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
@@ -56,7 +68,7 @@ CREATE TABLE IF NOT EXISTS public.ideas (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. TEAM MEMBERS TABLE
+-- 5. TEAM MEMBERS TABLE
 CREATE TABLE IF NOT EXISTS public.team (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -69,7 +81,7 @@ CREATE TABLE IF NOT EXISTS public.team (
   capacity INT DEFAULT 50
 );
 
--- 5. ADMIN EDIT HISTORY AUDIT LOG TABLE
+-- 6. ADMIN EDIT HISTORY AUDIT LOG TABLE
 CREATE TABLE IF NOT EXISTS public.history (
   id TEXT PRIMARY KEY,
   admin_name TEXT NOT NULL,
@@ -84,11 +96,14 @@ CREATE TABLE IF NOT EXISTS public.history (
 -- ============================================================
 -- ENABLE PUBLIC RLS POLICIES FOR TEAM COLLABORATION
 -- ============================================================
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ideas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.team ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.history ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow anon read users" ON public.users FOR SELECT USING (true);
 
 CREATE POLICY "Allow anon read projects" ON public.projects FOR SELECT USING (true);
 CREATE POLICY "Allow anon insert projects" ON public.projects FOR INSERT WITH CHECK (true);
@@ -114,8 +129,18 @@ CREATE POLICY "Allow anon read history" ON public.history FOR SELECT USING (true
 CREATE POLICY "Allow anon insert history" ON public.history FOR INSERT WITH CHECK (true);
 
 -- ============================================================
--- INITIAL SEED DATA FOR DEMO PLATFORMS
+-- INITIAL SEED DATA FOR THE 4 AUTHORIZED USERS & PLATFORMS
 -- ============================================================
+
+-- SEED 4 AUTHORIZED USERS
+INSERT INTO public.users (id, name, email, passcode, role, department, avatar) VALUES
+('team_1', 'Arun Kumar', 'arun.k@dcore.ops', 'dcore101', 'ADMIN', 'Technology Operations', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'),
+('team_2', 'Priya Ramachandran', 'priya.r@dcore.ops', 'dcore102', 'ADMIN', 'Digital Platforms', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'),
+('team_3', 'Karthik Subramanian', 'karthik.s@dcore.ops', 'dcore103', 'MEMBER', 'IT Infrastructure', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'),
+('team_4', 'Deepa Sundaram', 'deepa.s@dcore.ops', 'dcore104', 'MEMBER', 'Technology Operations', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80')
+ON CONFLICT (id) DO NOTHING;
+
+-- SEED TEAM TABLE
 INSERT INTO public.team (id, name, role, department, email, avatar, skills, active_projects, capacity) VALUES
 ('team_1', 'Arun Kumar', 'Lead Systems Architect', 'Technology Operations', 'arun.k@dcore.ops', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80', '["Cloud Infrastructure", "Kubernetes", "React", "DevOps"]'::jsonb, 3, 80),
 ('team_2', 'Priya Ramachandran', 'Senior Frontend Engineer', 'Digital Platforms', 'priya.r@dcore.ops', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80', '["React", "Next.js", "Tailwind CSS", "UI/UX"]'::jsonb, 2, 65),
@@ -123,6 +148,7 @@ INSERT INTO public.team (id, name, role, department, email, avatar, skills, acti
 ('team_4', 'Deepa Sundaram', 'Data & Systems Specialist', 'Technology Operations', 'deepa.s@dcore.ops', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80', '["Data Pipelines", "PostgreSQL", "Analytics", "Automation"]'::jsonb, 2, 45)
 ON CONFLICT (id) DO NOTHING;
 
+-- SEED PROJECTS TABLE
 INSERT INTO public.projects (id, name, url, description, status, priority, progress, owner_id, category, start_date, target_date, notes) VALUES
 ('proj_1', 'Periyar.net', 'https://periyar.net/', 'Digital archive and educational repository platform for Periyar thought, historical literature, and public research.', 'active', 'P1', 78, 'team_1', 'Digital Archive', '2026-01-15', '2026-11-30', '["CDN edge caching implemented.", "OCR text extraction scheduled."]'::jsonb),
 ('proj_2', 'Makkalveeran.com', 'https://makkalveeran.com/', 'Community engagement platform and digital publication network for public outreach and announcements.', 'active', 'P1', 62, 'team_2', 'Web Platform', '2026-02-01', '2026-12-15', '["Mobile responsive redressing passed QA."]'::jsonb),
@@ -130,16 +156,19 @@ INSERT INTO public.projects (id, name, url, description, status, priority, progr
 ('proj_4', 'TVK Files', 'https://tvkfiles.org/', 'Centralized digital asset management, document storage, and media repository system for verified operational assets.', 'active', 'P2', 45, 'team_4', 'Data & Storage', '2026-03-10', '2027-01-20', '["S3 compatible storage tier setup finished."]'::jsonb)
 ON CONFLICT (id) DO NOTHING;
 
+-- SEED TASKS TABLE
 INSERT INTO public.tasks (id, project_id, title, description, status, priority, owner_id, due_date, progress, estimated_hours, tags, type, notes) VALUES
 ('task_001', 'proj_3', 'Website Infrastructure & Failover Upgrade', 'Deploy dual-region redundant server instances and automated DNS failover for Kalaignar.org high traffic load.', 'IN PROGRESS', 'P0', 'team_3', '2026-09-28', 68, 32, '["Infrastructure", "High Priority", "Failover"]'::jsonb, 'CURRENT_WORK', 'Primary node synced. Edge proxies responding within 18ms.'),
 ('task_002', 'proj_1', 'Archival Document Indexing Engine', 'Optimize elastic search queries for historical document search on Periyar.net.', 'IN PROGRESS', 'P1', 'team_1', '2026-10-05', 55, 24, '["Search", "Performance", "ElasticSearch"]'::jsonb, 'CURRENT_WORK', 'Query latency reduced by 40% in initial benchmark tests.'),
 ('task_003', 'proj_2', 'Mobile Navigation & Touch Interface Audit', 'Refactor navigation UI for Makkalveeran.com to ensure seamless touch interactions on mobile devices.', 'REVIEW', 'P1', 'team_2', '2026-09-29', 90, 16, '["Frontend", "UX", "Mobile"]'::jsonb, 'CURRENT_WORK', 'PR submitted for review by design team lead.')
 ON CONFLICT (id) DO NOTHING;
 
+-- SEED IDEAS TABLE
 INSERT INTO public.ideas (id, title, description, category, status, created_by, impact, complexity, notes) VALUES
 ('idea_001', 'AI-Powered Archival Document Search & Summarization', 'Implement an intelligent semantic search agent leveraging LLM embeddings to allow researchers to query historical speeches.', 'Artificial Intelligence', 'RESEARCH', 'Arun Kumar', 'HIGH', 'MEDIUM', 'Evaluated sentence-transformers with Tamil embeddings.')
 ON CONFLICT (id) DO NOTHING;
 
+-- SEED HISTORY TABLE
 INSERT INTO public.history (id, admin_name, action, entity_type, entity_id, entity_name, details) VALUES
-('hist_001', 'Arun Kumar (Admin)', 'SYSTEM_INITIALIZED', 'SYSTEM', 'sys_01', 'Supabase Cloud Database', 'Supabase Cloud Database initialized for D-CORE Operations Vercel deployment.')
+('hist_001', 'Arun Kumar (Admin)', 'SYSTEM_INITIALIZED', 'SYSTEM', 'sys_01', 'Supabase Cloud Database', 'Supabase Cloud Database initialized with 4 Authorized Users system.')
 ON CONFLICT (id) DO NOTHING;

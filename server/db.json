@@ -310,6 +310,16 @@
   ],
   "history": [
     {
+      "id": "hist_1790439923960_946",
+      "adminName": "Harish",
+      "action": "ADMIN_LOGIN",
+      "entityType": "AUTH",
+      "entityId": "session_01",
+      "entityName": "Admin Session",
+      "details": "Admin 'Harish' logged into Operations Center.",
+      "timestamp": "2026-09-26T16:25:23.960Z"
+    },
+    {
       "id": "hist_1790436154043_192",
       "adminName": "Harish",
       "action": "ADMIN_LOGIN",
