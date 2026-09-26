@@ -106,6 +106,7 @@ export const AppProvider = ({ children }) => {
       setIsAdminLoggedIn(true);
       setAdminName(trimmedName);
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      sessionStorage.removeItem('dcore_quote_popup_seen');
 
       addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${trimmedName}' logged in with full edit access.`, trimmedName);
       DataService.loginAdminApi(`${trimmedName}@dcore.ops`, cleanPass, trimmedName);

@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useApp } from '../../context/AppContext';
 import { X, Quote as QuoteIcon, Sparkles } from 'lucide-react';
 
 export const QuotePopup = () => {
+  const { userSession } = useApp();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Check if quote popup has already been seen in this session
-    try {
-      const seen = sessionStorage.getItem('dcore_quote_popup_seen');
-      if (!seen) {
-        // Show after small smooth delay on page entry
-        const timer = setTimeout(() => {
-          setIsOpen(true);
-        }, 600);
-        return () => clearTimeout(timer);
+    if (userSession.isAuthenticated) {
+      try {
+        const seen = sessionStorage.getItem('dcore_quote_popup_seen');
+        if (!seen) {
+          const timer = setTimeout(() => {
+            setIsOpen(true);
+          }, 300);
+          return () => clearTimeout(timer);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
     }
-  }, []);
+  }, [userSession.isAuthenticated]);
 
   const handleClose = () => {
     setIsOpen(false);
