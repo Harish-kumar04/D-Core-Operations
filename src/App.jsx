@@ -17,7 +17,6 @@ import { TaskDetailDrawer } from './components/currentWorks/TaskDetailDrawer';
 import { WorkQueueView } from './components/workQueue/WorkQueueView';
 import { FutureIdeasView } from './components/futureIdeas/FutureIdeasView';
 import { ProjectsView } from './components/projects/ProjectsView';
-import { TeamView } from './components/team/TeamView';
 import { AnalyticsView } from './components/analytics/AnalyticsView';
 import { HistoryView } from './components/history/HistoryView';
 import { SettingsView } from './components/settings/SettingsView';
@@ -55,7 +54,6 @@ const MainLayout = () => {
           {activeTab === 'work-queue' && <WorkQueueView />}
           {activeTab === 'future-ideas' && <FutureIdeasView />}
           {activeTab === 'projects' && <ProjectsView />}
-          {activeTab === 'team' && <TeamView />}
           {activeTab === 'analytics' && <AnalyticsView />}
           {activeTab === 'history' && <HistoryView />}
           {activeTab === 'settings' && <SettingsView />}

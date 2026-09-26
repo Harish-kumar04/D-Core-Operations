@@ -4,39 +4,39 @@ import { ShieldCheck, Lock, ArrowRight, UserCheck, Sparkles, AlertCircle, Check 
 
 export const AUTHORIZED_USERS = [
   {
-    id: 'team_1',
-    name: 'Arun Kumar',
-    roleTitle: 'Lead Systems Architect',
+    id: 'user_1',
+    name: 'admin',
+    roleTitle: 'Primary System Admin',
     role: 'ADMIN',
-    email: 'arun.k@dcore.ops',
-    passcode: 'dcore101',
+    email: 'admin@dcore.ops',
+    passcode: 'admin@321',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
   },
   {
-    id: 'team_2',
-    name: 'Priya Ramachandran',
-    roleTitle: 'Senior Frontend Engineer',
+    id: 'user_2',
+    name: 'admin2',
+    roleTitle: 'Operations Admin',
     role: 'ADMIN',
-    email: 'priya.r@dcore.ops',
-    passcode: 'dcore102',
+    email: 'admin2@dcore.ops',
+    passcode: 'admin!321',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'
   },
   {
-    id: 'team_3',
-    name: 'Karthik Subramanian',
-    roleTitle: 'Infrastructure & Security Lead',
-    role: 'MEMBER',
-    email: 'karthik.s@dcore.ops',
-    passcode: 'dcore103',
+    id: 'user_3',
+    name: 'admin3',
+    roleTitle: 'DMK Infrastructure Admin',
+    role: 'ADMIN',
+    email: 'admin3@dcore.ops',
+    passcode: 'admin@dmk67',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
   },
   {
-    id: 'team_4',
-    name: 'Deepa Sundaram',
-    roleTitle: 'Data & Systems Specialist',
-    role: 'MEMBER',
-    email: 'deepa.s@dcore.ops',
-    passcode: 'dcore104',
+    id: 'user_4',
+    name: 'admin4',
+    roleTitle: 'Core Ops Admin',
+    role: 'ADMIN',
+    email: 'admin4@dcore.ops',
+    passcode: 'admin@dcore67',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80'
   }
 ];

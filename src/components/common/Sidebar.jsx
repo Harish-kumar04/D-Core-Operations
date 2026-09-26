@@ -29,7 +29,6 @@ export const Sidebar = () => {
     { id: 'work-queue', label: 'Work Queue', icon: ListOrdered, badge: workQueueCount, badgeColor: 'bg-amber-100 text-amber-800' },
     { id: 'future-ideas', label: 'Future Ideas', icon: Lightbulb, badge: ideasCount, badgeColor: 'bg-blue-100 text-blue-800' },
     { id: 'projects', label: 'Projects', icon: FolderKanban, badge: projectsCount },
-    { id: 'team', label: 'Team & Workload', icon: Users },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'history', label: 'History Log', icon: History, badge: historyCount, badgeColor: 'bg-red-100 text-dcore-red' },
     { id: 'settings', label: 'Settings', icon: Settings },

@@ -86,40 +86,34 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- INTERNAL AUTH WALL LOGIN (FOR 4 AUTHORIZED USERS) ---
-  const loginUserSession = (name, passcode, isAdmin = false) => {
+  // --- INTERNAL AUTH WALL LOGIN (FOR 4 AUTHORIZED ADMIN USERS) ---
+  const loginUserSession = (name, passcode) => {
     const trimmedName = name.trim();
     const cleanPass = passcode.trim();
 
-    // Map passcodes for the 4 users
-    const validAdminPasscodes = ['dcore101', 'dcore102', 'admin123'];
-    const validMemberPasscodes = ['dcore101', 'dcore102', 'dcore103', 'dcore104', 'dcore2026', 'dcoreops', 'admin123'];
+    // Passcode mapping for the 4 users
+    const userPasscodes = {
+      'admin': 'admin@321',
+      'admin2': 'admin!321',
+      'admin3': 'admin@dmk67',
+      'admin4': 'admin@dcore67'
+    };
 
-    if (isAdmin) {
-      if (validAdminPasscodes.includes(cleanPass)) {
-        const session = { isAuthenticated: true, userName: trimmedName, userRole: 'ADMIN' };
-        setUserSession(session);
-        setIsAdminLoggedIn(true);
-        setAdminName(trimmedName);
-        sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    const expectedPasscode = userPasscodes[trimmedName];
+    if (expectedPasscode && cleanPass === expectedPasscode) {
+      const session = { isAuthenticated: true, userName: trimmedName, userRole: 'ADMIN' };
+      setUserSession(session);
+      setIsAdminLoggedIn(true);
+      setAdminName(trimmedName);
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
 
-        addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${trimmedName}' logged in with full edit access.`, trimmedName);
-        DataService.loginAdminApi('admin@dcore.ops', cleanPass, trimmedName);
-        showToast(`Welcome Admin ${trimmedName}! Full editing access unlocked.`);
-        return { success: true };
-      }
-      return { success: false, error: `Incorrect passcode for ${trimmedName}.` };
-    } else {
-      if (validMemberPasscodes.includes(cleanPass)) {
-        const session = { isAuthenticated: true, userName: trimmedName, userRole: 'MEMBER' };
-        setUserSession(session);
-        sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-
-        showToast(`Welcome ${trimmedName}! Authenticated for D-Core Internal Operations.`);
-        return { success: true };
-      }
-      return { success: false, error: `Incorrect passcode for ${trimmedName}.` };
+      addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${trimmedName}' logged in with full edit access.`, trimmedName);
+      DataService.loginAdminApi(`${trimmedName}@dcore.ops`, cleanPass, trimmedName);
+      showToast(`Welcome Admin '${trimmedName}'! Full editing access unlocked.`);
+      return { success: true };
     }
+
+    return { success: false, error: `Incorrect passcode for ${trimmedName}.` };
   };
 
   const logoutUserSession = () => {

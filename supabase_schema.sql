@@ -132,20 +132,12 @@ CREATE POLICY "Allow anon insert history" ON public.history FOR INSERT WITH CHEC
 -- INITIAL SEED DATA FOR THE 4 AUTHORIZED USERS & PLATFORMS
 -- ============================================================
 
--- SEED 4 AUTHORIZED USERS
+-- SEED 4 AUTHORIZED ADMIN USERS
 INSERT INTO public.users (id, name, email, passcode, role, department, avatar) VALUES
-('team_1', 'Arun Kumar', 'arun.k@dcore.ops', 'dcore101', 'ADMIN', 'Technology Operations', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'),
-('team_2', 'Priya Ramachandran', 'priya.r@dcore.ops', 'dcore102', 'ADMIN', 'Digital Platforms', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'),
-('team_3', 'Karthik Subramanian', 'karthik.s@dcore.ops', 'dcore103', 'MEMBER', 'IT Infrastructure', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'),
-('team_4', 'Deepa Sundaram', 'deepa.s@dcore.ops', 'dcore104', 'MEMBER', 'Technology Operations', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80')
-ON CONFLICT (id) DO NOTHING;
-
--- SEED TEAM TABLE
-INSERT INTO public.team (id, name, role, department, email, avatar, skills, active_projects, capacity) VALUES
-('team_1', 'Arun Kumar', 'Lead Systems Architect', 'Technology Operations', 'arun.k@dcore.ops', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80', '["Cloud Infrastructure", "Kubernetes", "React", "DevOps"]'::jsonb, 3, 80),
-('team_2', 'Priya Ramachandran', 'Senior Frontend Engineer', 'Digital Platforms', 'priya.r@dcore.ops', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80', '["React", "Next.js", "Tailwind CSS", "UI/UX"]'::jsonb, 2, 65),
-('team_3', 'Karthik Subramanian', 'Infrastructure & Security Lead', 'IT Infrastructure', 'karthik.s@dcore.ops', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', '["Cybersecurity", "NOC", "Database Admin", "Python"]'::jsonb, 3, 90),
-('team_4', 'Deepa Sundaram', 'Data & Systems Specialist', 'Technology Operations', 'deepa.s@dcore.ops', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80', '["Data Pipelines", "PostgreSQL", "Analytics", "Automation"]'::jsonb, 2, 45)
+('user_1', 'admin', 'admin@dcore.ops', 'admin@321', 'ADMIN', 'System Administration', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'),
+('user_2', 'admin2', 'admin2@dcore.ops', 'admin!321', 'ADMIN', 'Operations Management', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'),
+('user_3', 'admin3', 'admin3@dcore.ops', 'admin@dmk67', 'ADMIN', 'DMK Infrastructure', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'),
+('user_4', 'admin4', 'admin4@dcore.ops', 'admin@dcore67', 'ADMIN', 'Core Operations', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80')
 ON CONFLICT (id) DO NOTHING;
 
 -- SEED PROJECTS TABLE

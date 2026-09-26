@@ -20,7 +20,7 @@ export const QuickAddModal = () => {
     title: '',
     description: '',
     projectId: state.projects[0]?.id || '',
-    ownerId: state.team[0]?.id || '',
+    ownerId: '',
     priority: 'P1',
     status: 'TO DO',
     type: 'CURRENT_WORK',
@@ -35,7 +35,7 @@ export const QuickAddModal = () => {
     description: '',
     url: '',
     category: 'Digital Platform',
-    ownerId: state.team[0]?.id || '',
+    ownerId: '',
     priority: 'P1',
     startDate: new Date().toISOString().split('T')[0],
     targetDate: '',
@@ -50,15 +50,6 @@ export const QuickAddModal = () => {
     impact: 'HIGH',
     complexity: 'MEDIUM',
     notes: ''
-  });
-
-  // Team form state
-  const [teamForm, setTeamForm] = useState({
-    name: '',
-    role: 'Systems Engineer',
-    department: 'Technology Operations',
-    email: '',
-    skills: 'DevOps, Cloud, React'
   });
 
   if (!isQuickAddOpen) return null;
@@ -84,13 +75,6 @@ export const QuickAddModal = () => {
     setIsQuickAddOpen(false);
   };
 
-  const handleTeamSubmit = (e) => {
-    e.preventDefault();
-    if (!teamForm.name.trim()) return;
-    addTeamMember(teamForm);
-    setIsQuickAddOpen(false);
-  };
-
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div
@@ -105,7 +89,7 @@ export const QuickAddModal = () => {
             </div>
             <div>
               <h3 className="font-extrabold text-slate-900 text-base">Quick Add Item</h3>
-              <p className="text-xs text-slate-500">Add operational tasks, projects, ideas or team members.</p>
+              <p className="text-xs text-slate-500">Add operational tasks, projects, or ideas.</p>
             </div>
           </div>
           <button
@@ -146,16 +130,6 @@ export const QuickAddModal = () => {
           >
             <Lightbulb className="w-3.5 h-3.5" />
             <span>+ Idea</span>
-          </button>
-
-          <button
-            onClick={() => setQuickAddType('team')}
-            className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
-              quickAddType === 'team' ? 'bg-white text-dcore-red shadow-sm' : 'text-slate-600 hover:bg-white/50'
-            }`}
-          >
-            <UserPlus className="w-3.5 h-3.5" />
-            <span>+ Member</span>
           </button>
         </div>
 
@@ -460,84 +434,6 @@ export const QuickAddModal = () => {
                   className="px-5 py-2 rounded-xl text-white bg-dcore-red font-bold hover:bg-dcore-red-hover shadow-md shadow-dcore-red/20"
                 >
                   Add Future Idea
-                </button>
-              </div>
-            </form>
-          )}
-
-          {quickAddType === 'team' && (
-            <form onSubmit={handleTeamSubmit} className="space-y-4 text-xs font-medium">
-              <div>
-                <label className="block text-slate-700 font-bold mb-1">Full Name *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Sundar Rajan"
-                  value={teamForm.name}
-                  onChange={(e) => setTeamForm({ ...teamForm, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-dcore-red text-sm"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">Role Title</label>
-                  <input
-                    type="text"
-                    placeholder="DevOps Lead / Security Engineer"
-                    value={teamForm.role}
-                    onChange={(e) => setTeamForm({ ...teamForm, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-dcore-red"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">Department</label>
-                  <input
-                    type="text"
-                    placeholder="Technology Operations"
-                    value={teamForm.department}
-                    onChange={(e) => setTeamForm({ ...teamForm, department: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-dcore-red"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-slate-700 font-bold mb-1">Email Address</label>
-                <input
-                  type="email"
-                  placeholder="sundar.r@dcore.ops"
-                  value={teamForm.email}
-                  onChange={(e) => setTeamForm({ ...teamForm, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-dcore-red"
-                />
-              </div>
-
-              <div>
-                <label className="block text-slate-700 font-bold mb-1">Technical Skills (comma separated)</label>
-                <input
-                  type="text"
-                  placeholder="React, Kubernetes, Python, Security"
-                  value={teamForm.skills}
-                  onChange={(e) => setTeamForm({ ...teamForm, skills: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-dcore-red"
-                />
-              </div>
-
-              <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => setIsQuickAddOpen(false)}
-                  className="px-4 py-2 rounded-xl text-slate-600 bg-slate-100 font-bold hover:bg-slate-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl text-white bg-dcore-red font-bold hover:bg-dcore-red-hover shadow-md shadow-dcore-red/20"
-                >
-                  Add Team Member
                 </button>
               </div>
             </form>

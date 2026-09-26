@@ -18,7 +18,6 @@ export const BottomNav = () => {
     { id: 'work-queue', label: 'Queue', icon: ListOrdered },
     { id: 'future-ideas', label: 'Ideas', icon: Lightbulb },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
-    { id: 'team', label: 'Team', icon: Users },
   ];
 
   return (

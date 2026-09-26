@@ -41,13 +41,7 @@ export const SearchModal = () => {
       )
     : [];
 
-  const matchedTeam = q
-    ? (state.team || []).filter(
-        m => m.name.toLowerCase().includes(q) || m.role.toLowerCase().includes(q) || m.department.toLowerCase().includes(q)
-      )
-    : [];
-
-  const totalResults = matchedProjects.length + matchedTasks.length + matchedIdeas.length + matchedTeam.length;
+  const totalResults = matchedProjects.length + matchedTasks.length + matchedIdeas.length;
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-start justify-center pt-16 sm:pt-24 px-4 animate-in fade-in duration-200">
@@ -189,37 +183,6 @@ export const SearchModal = () => {
                           <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{i.description}</p>
                         </div>
                         <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-600 transition-all" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Team Members */}
-              {matchedTeam.length > 0 && (
-                <div>
-                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">
-                    <User className="w-3.5 h-3.5 text-purple-600" />
-                    Team ({matchedTeam.length})
-                  </h4>
-                  <div className="space-y-1.5">
-                    {matchedTeam.map(m => (
-                      <div
-                        key={m.id}
-                        onClick={() => {
-                          setIsSearchOpen(false);
-                          navigate('team');
-                        }}
-                        className="p-2.5 rounded-xl hover:bg-purple-50/60 border border-slate-100 flex items-center justify-between cursor-pointer transition-all group"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <img src={m.avatar} alt={m.name} className="w-6 h-6 rounded-full object-cover" />
-                          <div>
-                            <p className="text-xs font-bold text-slate-900 group-hover:text-purple-700">{m.name}</p>
-                            <p className="text-[11px] text-slate-500">{m.role} • {m.department}</p>
-                          </div>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-purple-600 transition-all" />
                       </div>
                     ))}
                   </div>

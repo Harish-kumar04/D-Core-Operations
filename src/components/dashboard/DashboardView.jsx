@@ -266,7 +266,6 @@ export const DashboardView = () => {
           <div className="space-y-3">
             {urgentTasks.map((t) => {
               const proj = projects.find(p => p.id === t.projectId);
-              const owner = state.team.find(m => m.id === t.ownerId);
 
               return (
                 <div
@@ -283,7 +282,7 @@ export const DashboardView = () => {
                         {t.title}
                       </h4>
                       <p className="text-[11px] text-slate-500 mt-0.5">
-                        Project: <span className="font-semibold text-slate-700">{proj?.name || 'DMK Core'}</span> • Owner: <span className="font-semibold text-slate-700">{owner?.name || 'Unassigned'}</span>
+                        Project: <span className="font-semibold text-slate-700">{proj?.name || 'DMK Core'}</span>
                       </p>
                     </div>
                   </div>
