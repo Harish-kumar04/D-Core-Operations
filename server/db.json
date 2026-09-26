@@ -98,7 +98,11 @@
       "dueDate": "2026-09-28",
       "progress": 68,
       "estimatedHours": 32,
-      "tags": ["Infrastructure", "High Priority", "Failover"],
+      "tags": [
+        "Infrastructure",
+        "High Priority",
+        "Failover"
+      ],
       "type": "CURRENT_WORK",
       "notes": "Primary node synced. Edge proxies responding within 18ms.",
       "createdAt": "2026-09-18T10:00:00Z",
@@ -115,7 +119,11 @@
       "dueDate": "2026-10-05",
       "progress": 55,
       "estimatedHours": 24,
-      "tags": ["Search", "Performance", "ElasticSearch"],
+      "tags": [
+        "Search",
+        "Performance",
+        "ElasticSearch"
+      ],
       "type": "CURRENT_WORK",
       "notes": "Query latency reduced by 40% in initial benchmark tests.",
       "createdAt": "2026-09-15T09:30:00Z",
@@ -132,7 +140,11 @@
       "dueDate": "2026-09-29",
       "progress": 90,
       "estimatedHours": 16,
-      "tags": ["Frontend", "UX", "Mobile"],
+      "tags": [
+        "Frontend",
+        "UX",
+        "Mobile"
+      ],
       "type": "CURRENT_WORK",
       "notes": "PR submitted for review by design team lead.",
       "createdAt": "2026-09-12T14:00:00Z",
@@ -149,7 +161,11 @@
       "dueDate": "2026-10-12",
       "progress": 20,
       "estimatedHours": 20,
-      "tags": ["Security", "OAuth2", "Storage"],
+      "tags": [
+        "Security",
+        "OAuth2",
+        "Storage"
+      ],
       "type": "CURRENT_WORK",
       "notes": "Architectural spec finalized. Implementation starting next sprint.",
       "createdAt": "2026-09-20T11:20:00Z",
@@ -166,7 +182,11 @@
       "dueDate": "2026-09-20",
       "progress": 100,
       "estimatedHours": 28,
-      "tags": ["Media", "HTML5", "Interactive"],
+      "tags": [
+        "Media",
+        "HTML5",
+        "Interactive"
+      ],
       "type": "CURRENT_WORK",
       "notes": "Deployed to production and tested on Chrome/Safari/Firefox.",
       "createdAt": "2026-09-01T08:00:00Z",
@@ -184,7 +204,11 @@
       "targetDate": "2026-11-10",
       "progress": 0,
       "estimatedHours": 40,
-      "tags": ["AI/ML", "Audio", "Archival"],
+      "tags": [
+        "AI/ML",
+        "Audio",
+        "Archival"
+      ],
       "type": "WORK_QUEUE",
       "dependencies": "Archival audio upload completion",
       "notes": "Approved in operational meeting. Ready to be moved to Current Works.",
@@ -226,7 +250,12 @@
       "department": "Technology Operations",
       "email": "arun.k@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-      "skills": ["Cloud Infrastructure", "Kubernetes", "React", "DevOps"],
+      "skills": [
+        "Cloud Infrastructure",
+        "Kubernetes",
+        "React",
+        "DevOps"
+      ],
       "activeProjects": 3,
       "capacity": 80
     },
@@ -237,7 +266,12 @@
       "department": "Digital Platforms",
       "email": "priya.r@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
-      "skills": ["React", "Next.js", "Tailwind CSS", "UI/UX"],
+      "skills": [
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "UI/UX"
+      ],
       "activeProjects": 2,
       "capacity": 65
     },
@@ -248,7 +282,12 @@
       "department": "IT Infrastructure",
       "email": "karthik.s@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-      "skills": ["Cybersecurity", "NOC", "Database Admin", "Python"],
+      "skills": [
+        "Cybersecurity",
+        "NOC",
+        "Database Admin",
+        "Python"
+      ],
       "activeProjects": 3,
       "capacity": 90
     },
@@ -259,12 +298,27 @@
       "department": "Technology Operations",
       "email": "deepa.s@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
-      "skills": ["Data Pipelines", "PostgreSQL", "Analytics", "Automation"],
+      "skills": [
+        "Data Pipelines",
+        "PostgreSQL",
+        "Analytics",
+        "Automation"
+      ],
       "activeProjects": 2,
       "capacity": 45
     }
   ],
   "history": [
+    {
+      "id": "hist_1790436154043_192",
+      "adminName": "Harish",
+      "action": "ADMIN_LOGIN",
+      "entityType": "AUTH",
+      "entityId": "session_01",
+      "entityName": "Admin Session",
+      "details": "Admin 'Harish' logged into Operations Center.",
+      "timestamp": "2026-09-26T15:22:34.043Z"
+    },
     {
       "id": "hist_001",
       "adminName": "Arun Kumar (Admin)",

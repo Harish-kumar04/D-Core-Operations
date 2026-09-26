@@ -24,7 +24,7 @@ export const AppProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [toast, setToast] = useState(null);
 
-  // Initial async sync from REST API server
+  // Initial async sync from Supabase Cloud / REST API server
   useEffect(() => {
     DataService.fetchStateAsync().then((fetchedState) => {
       if (fetchedState) {
@@ -114,6 +114,7 @@ export const AppProvider = ({ children }) => {
       ...prev,
       history: [newLog, ...(prev.history || [])]
     }));
+    DataService.saveHistoryApi(newLog);
   };
 
   const addActivity = (text, type = 'GENERAL', projectId = null, taskId = null) => {
