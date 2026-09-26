@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { X, Calendar, User, Tag, Clock, CheckCircle2, History, AlertCircle, Trash2, Edit3 } from 'lucide-react';
 
 export const TaskDetailDrawer = () => {
-  const { selectedTaskId, closeTaskDrawer, state, updateTask, moveTaskStatus, deleteTask } = useApp();
+  const { selectedTaskId, closeTaskDrawer, state, updateTask, moveTaskStatus, deleteTask, openEditModal } = useApp();
   const [noteText, setNoteText] = useState('');
 
   if (!selectedTaskId) return null;
@@ -51,6 +51,13 @@ export const TaskDetailDrawer = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => openEditModal('TASK', task)}
+              className="p-2 rounded-xl text-slate-600 hover:text-dcore-red hover:bg-red-50 transition-colors"
+              title="Edit Task Details"
+            >
+              <Edit3 className="w-4 h-4" />
+            </button>
             <button
               onClick={() => deleteTask(task.id)}
               className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"

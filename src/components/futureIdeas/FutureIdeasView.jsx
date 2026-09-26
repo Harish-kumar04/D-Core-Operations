@@ -10,11 +10,12 @@ import {
   Calendar,
   Layers,
   CheckCircle2,
-  BrainCircuit
+  BrainCircuit,
+  Edit3
 } from 'lucide-react';
 
 export const FutureIdeasView = () => {
-  const { state, convertIdeaToProject, setIsQuickAddOpen, setQuickAddType } = useApp();
+  const { state, convertIdeaToProject, setIsQuickAddOpen, setQuickAddType, openEditModal } = useApp();
 
   const [statusFilter, setStatusFilter] = useState('ALL');
 
@@ -113,11 +114,20 @@ export const FutureIdeasView = () => {
                     <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 uppercase">
                       {idea.category}
                     </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      isConverted ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'
-                    }`}>
-                      {idea.status}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                        isConverted ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'
+                      }`}>
+                        {idea.status}
+                      </span>
+                      <button
+                        onClick={() => openEditModal('IDEA', idea)}
+                        className="p-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition-colors"
+                        title="Edit Idea"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Idea Title */}

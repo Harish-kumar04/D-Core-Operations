@@ -8,13 +8,32 @@ export const AppProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
+
+  // Admin Authentication & Name capture state
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [adminName, setAdminName] = useState('');
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
+
+  // Edit Modal State
+  const [editModal, setEditModal] = useState({ isOpen: false, type: null, data: null });
+
+  // Quick Add & Search state
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
-  const [quickAddType, setQuickAddType] = useState('task'); // task, project, idea, team
+  const [quickAddType, setQuickAddType] = useState('task');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [toast, setToast] = useState(null); // { message, type: 'success'|'error'|'info' }
+  const [toast, setToast] = useState(null);
 
-  // Auto-save to localStorage whenever state changes
+  // Initial async sync from REST API server
+  useEffect(() => {
+    DataService.fetchStateAsync().then((fetchedState) => {
+      if (fetchedState) {
+        setState(fetchedState);
+      }
+    });
+  }, []);
+
+  // Auto-save to localStorage whenever state updates
   useEffect(() => {
     DataService.saveState(state);
   }, [state]);
@@ -36,12 +55,65 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // --- ADMIN AUTH & NAME LOGGING ---
+  const loginAdmin = (email, password, name) => {
+    if (email === 'admin@dcore.ops' && password === 'admin123') {
+      const formattedName = name.trim();
+      setIsAdminLoggedIn(true);
+      setAdminName(formattedName);
+
+      // Log login event in audit history
+      addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${formattedName}' logged into Operations Center.`, formattedName);
+      DataService.loginAdminApi(email, password, formattedName);
+      showToast(`Welcome ${formattedName}! Admin editing access unlocked.`);
+      return { success: true };
+    }
+    return { success: false, error: 'Invalid Admin credentials.' };
+  };
+
+  const logoutAdmin = () => {
+    setIsAdminLoggedIn(false);
+    setAdminName('');
+    showToast('Admin session logged out.', 'info');
+  };
+
+  const openEditModal = (type, data) => {
+    if (!isAdminLoggedIn) {
+      setIsAdminLoginOpen(true);
+      showToast('Please log in as Admin to edit entries.', 'info');
+      return;
+    }
+    setEditModal({ isOpen: true, type, data });
+  };
+
+  const closeEditModal = () => {
+    setEditModal({ isOpen: false, type: null, data: null });
+  };
+
   const openTaskDrawer = (taskId) => {
     setSelectedTaskId(taskId);
   };
 
   const closeTaskDrawer = () => {
     setSelectedTaskId(null);
+  };
+
+  // Helper to append history audit logs
+  const addHistoryLog = (action, entityType, entityId, entityName, details, overrideAdminName = null) => {
+    const newLog = {
+      id: `hist_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      adminName: overrideAdminName || adminName || 'Admin User',
+      action,
+      entityType,
+      entityId,
+      entityName,
+      details,
+      timestamp: new Date().toISOString()
+    };
+    setState(prev => ({
+      ...prev,
+      history: [newLog, ...(prev.history || [])]
+    }));
   };
 
   const addActivity = (text, type = 'GENERAL', projectId = null, taskId = null) => {
@@ -51,27 +123,12 @@ export const AppProvider = ({ children }) => {
       text,
       projectId,
       taskId,
-      user: state.settings.currentUserName || 'Arun Kumar',
+      user: adminName || state.settings.currentUserName || 'Arun Kumar',
       timestamp: new Date().toISOString()
     };
     setState(prev => ({
       ...prev,
       activities: [newActivity, ...(prev.activities || [])]
-    }));
-  };
-
-  const addNotification = (title, message, type = 'info') => {
-    const newNotif = {
-      id: `notif_${Date.now()}`,
-      title,
-      message,
-      time: 'Just now',
-      read: false,
-      type
-    };
-    setState(prev => ({
-      ...prev,
-      notifications: [newNotif, ...(prev.notifications || [])]
     }));
   };
 
@@ -99,19 +156,37 @@ export const AppProvider = ({ children }) => {
       projects: [newProject, ...prev.projects]
     }));
 
-    addActivity(`Project created: '${newProject.name}'`, 'PROJECT_CREATED', newProject.id);
-    addNotification('Project Created', `New project '${newProject.name}' registered.`, 'project');
-    showToast(`Project '${newProject.name}' created successfully!`);
+    addHistoryLog('CREATE_PROJECT', 'PROJECT', newProject.id, newProject.name, `Created project '${newProject.name}' (${newProject.category}).`);
+    DataService.saveProjectApi(newProject, adminName, false);
+    showToast(`Project '${newProject.name}' created!`);
     return newProject;
   };
 
   const updateProject = (projectId, updates) => {
+    setState(prev => {
+      const proj = prev.projects.find(p => p.id === projectId);
+      const projName = updates.name || (proj ? proj.name : 'Project');
+      addHistoryLog('EDIT_PROJECT', 'PROJECT', projectId, projName, `Updated project '${projName}'. Modified progress to ${updates.progress}%.`);
+      DataService.saveProjectApi({ id: projectId, ...updates }, adminName, true);
+
+      return {
+        ...prev,
+        projects: prev.projects.map(p => p.id === projectId ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p)
+      };
+    });
+    showToast('Project entry updated successfully.');
+  };
+
+  const deleteProject = (projectId) => {
+    const proj = state.projects.find(p => p.id === projectId);
+    const projName = proj ? proj.name : projectId;
     setState(prev => ({
       ...prev,
-      projects: prev.projects.map(p => p.id === projectId ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p)
+      projects: prev.projects.filter(p => p.id !== projectId)
     }));
-    addActivity(`Project updated: '${updates.name || projectId}'`, 'PROJECT_UPDATED', projectId);
-    showToast('Project updated successfully.');
+    addHistoryLog('DELETE_PROJECT', 'PROJECT', projectId, projName, `Deleted project '${projName}'.`);
+    DataService.deleteEntityApi('PROJECT', projectId, adminName);
+    showToast(`Project '${projName}' deleted.`, 'info');
   };
 
   // --- TASKS ---
@@ -126,9 +201,9 @@ export const AppProvider = ({ children }) => {
       ownerId: taskData.ownerId || 'team_1',
       dueDate: taskData.dueDate || '',
       progress: parseInt(taskData.progress || 0, 10),
-      estimatedHours: parseInt(taskData.estimatedHours || 8, 10),
+      estimatedHours: parseInt(taskData.estimatedHours || 16, 10),
       tags: Array.isArray(taskData.tags) ? taskData.tags : (taskData.tags ? taskData.tags.split(',').map(t => t.trim()) : []),
-      type: taskData.type || 'CURRENT_WORK', // CURRENT_WORK or WORK_QUEUE
+      type: taskData.type || 'CURRENT_WORK',
       notes: taskData.notes || '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -139,19 +214,25 @@ export const AppProvider = ({ children }) => {
       tasks: [newTask, ...prev.tasks]
     }));
 
-    const proj = state.projects.find(p => p.id === taskData.projectId);
-    const projName = proj ? proj.name : 'System';
-    addActivity(`Task created: '${newTask.title}' under ${projName}`, 'TASK_CREATED', taskData.projectId, newTask.id);
+    addHistoryLog('CREATE_TASK', 'TASK', newTask.id, newTask.title, `Created task '${newTask.title}' in ${newTask.type}.`);
+    DataService.saveTaskApi(newTask, adminName, false);
     showToast(`Task '${newTask.title}' added.`);
     return newTask;
   };
 
   const updateTask = (taskId, updates) => {
-    setState(prev => ({
-      ...prev,
-      tasks: prev.tasks.map(t => t.id === taskId ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t)
-    }));
-    showToast('Task updated successfully.');
+    setState(prev => {
+      const task = prev.tasks.find(t => t.id === taskId);
+      const taskTitle = updates.title || (task ? task.title : 'Task');
+      addHistoryLog('EDIT_TASK', 'TASK', taskId, taskTitle, `Updated task '${taskTitle}'. Status: ${updates.status || (task ? task.status : '')}.`);
+      DataService.saveTaskApi({ id: taskId, ...updates }, adminName, true);
+
+      return {
+        ...prev,
+        tasks: prev.tasks.map(t => t.id === taskId ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t)
+      };
+    });
+    showToast('Task entry updated successfully.');
   };
 
   const moveTaskStatus = (taskId, newStatus) => {
@@ -172,7 +253,7 @@ export const AppProvider = ({ children }) => {
       } : t)
     }));
 
-    addActivity(`Task moved '${task.title}': ${oldStatus} → ${newStatus}`, 'STATUS_CHANGE', task.projectId, taskId);
+    addHistoryLog('STATUS_CHANGE', 'TASK', taskId, task.title, `Moved status '${task.title}': ${oldStatus} → ${newStatus}.`);
     showToast(`Task moved to ${newStatus}`);
   };
 
@@ -190,16 +271,22 @@ export const AppProvider = ({ children }) => {
       } : t)
     }));
 
-    addActivity(`Work Queue item '${task.title}' moved to Current Works`, 'WORK_STARTED', task.projectId, taskId);
+    addHistoryLog('WORK_STARTED', 'TASK', taskId, task.title, `Transferred Work Queue item '${task.title}' into active Current Works.`);
     showToast(`'${task.title}' moved to Current Works Kanban!`);
   };
 
   const deleteTask = (taskId) => {
+    const task = state.tasks.find(t => t.id === taskId);
+    const taskTitle = task ? task.title : taskId;
+
     setState(prev => ({
       ...prev,
       tasks: prev.tasks.filter(t => t.id !== taskId)
     }));
-    showToast('Task removed.', 'info');
+
+    addHistoryLog('DELETE_TASK', 'TASK', taskId, taskTitle, `Deleted task '${taskTitle}'.`);
+    DataService.deleteEntityApi('TASK', taskId, adminName);
+    showToast('Task entry deleted.', 'info');
     if (selectedTaskId === taskId) {
       setSelectedTaskId(null);
     }
@@ -213,7 +300,7 @@ export const AppProvider = ({ children }) => {
       description: ideaData.description || '',
       category: ideaData.category || 'General Innovation',
       status: ideaData.status || 'NEW',
-      createdBy: ideaData.createdBy || state.settings.currentUserName || 'Arun Kumar',
+      createdBy: ideaData.createdBy || adminName || 'Arun Kumar',
       impact: ideaData.impact || 'MEDIUM',
       complexity: ideaData.complexity || 'MEDIUM',
       notes: ideaData.notes || '',
@@ -225,24 +312,31 @@ export const AppProvider = ({ children }) => {
       ideas: [newIdea, ...prev.ideas]
     }));
 
-    addActivity(`New Future Idea added: '${newIdea.title}'`, 'IDEA_CREATED');
-    showToast(`Idea '${newIdea.title}' added to Future Ideas repository!`);
+    addHistoryLog('CREATE_IDEA', 'IDEA', newIdea.id, newIdea.title, `Added future idea '${newIdea.title}'.`);
+    DataService.saveIdeaApi(newIdea, adminName, false);
+    showToast(`Idea '${newIdea.title}' added!`);
     return newIdea;
   };
 
   const updateIdea = (ideaId, updates) => {
-    setState(prev => ({
-      ...prev,
-      ideas: prev.ideas.map(i => i.id === ideaId ? { ...i, ...updates } : i)
-    }));
-    showToast('Idea updated.');
+    setState(prev => {
+      const idea = prev.ideas.find(i => i.id === ideaId);
+      const ideaTitle = updates.title || (idea ? idea.title : 'Idea');
+      addHistoryLog('EDIT_IDEA', 'IDEA', ideaId, ideaTitle, `Updated future idea '${ideaTitle}'.`);
+      DataService.saveIdeaApi({ id: ideaId, ...updates }, adminName, true);
+
+      return {
+        ...prev,
+        ideas: prev.ideas.map(i => i.id === ideaId ? { ...i, ...updates } : i)
+      };
+    });
+    showToast('Idea entry updated.');
   };
 
   const convertIdeaToProject = (ideaId) => {
     const idea = state.ideas.find(i => i.id === ideaId);
     if (!idea) return;
 
-    // Create a project from this idea
     const createdProject = addProject({
       name: idea.title,
       description: idea.description,
@@ -250,12 +344,11 @@ export const AppProvider = ({ children }) => {
       priority: idea.impact === 'CRITICAL' || idea.impact === 'HIGH' ? 'P1' : 'P2',
       status: 'active',
       progress: 0,
-      notes: `Converted from Future Idea. Original impact: ${idea.impact}, complexity: ${idea.complexity}.`
+      notes: `Converted from Future Idea by ${adminName || 'Admin'}.`
     });
 
-    // Update idea status to CONVERTED TO PROJECT
     updateIdea(ideaId, { status: 'CONVERTED TO PROJECT' });
-    addActivity(`Future Idea '${idea.title}' converted to Project`, 'IDEA_CONVERTED', createdProject.id);
+    addHistoryLog('CONVERT_IDEA', 'IDEA', ideaId, idea.title, `Converted future idea '${idea.title}' into Project '${createdProject.name}'.`);
     showToast(`Idea converted into Project '${createdProject.name}'!`);
     navigate('projects', createdProject.id);
   };
@@ -268,7 +361,7 @@ export const AppProvider = ({ children }) => {
       role: memberData.role || 'Software Engineer',
       department: memberData.department || 'Technology Operations',
       email: memberData.email || '',
-      avatar: memberData.avatar || `https://images.unsplash.com/photo-${1534528741775 + Math.floor(Math.random()*1000)}?w=150&auto=format&fit=crop&q=80`,
+      avatar: memberData.avatar || `https://images.unsplash.com/photo-1534528741775?w=150&auto=format&fit=crop&q=80`,
       skills: Array.isArray(memberData.skills) ? memberData.skills : (memberData.skills ? memberData.skills.split(',').map(s=>s.trim()) : ['Tech Ops']),
       activeProjects: 1,
       capacity: 50
@@ -279,8 +372,24 @@ export const AppProvider = ({ children }) => {
       team: [...prev.team, newMember]
     }));
 
-    addActivity(`New team member added: '${newMember.name}'`, 'TEAM_ADDED');
-    showToast(`Team member '${newMember.name}' registered!`);
+    addHistoryLog('CREATE_TEAM', 'TEAM', newMember.id, newMember.name, `Registered team member '${newMember.name}' (${newMember.role}).`);
+    DataService.saveTeamApi(newMember, adminName, false);
+    showToast(`Team member '${newMember.name}' added!`);
+  };
+
+  const updateTeamMember = (memberId, updates) => {
+    setState(prev => {
+      const member = prev.team.find(m => m.id === memberId);
+      const name = updates.name || (member ? member.name : 'Team Member');
+      addHistoryLog('EDIT_TEAM', 'TEAM', memberId, name, `Updated team member profile for '${name}'.`);
+      DataService.saveTeamApi({ id: memberId, ...updates }, adminName, true);
+
+      return {
+        ...prev,
+        team: prev.team.map(m => m.id === memberId ? { ...m, ...updates } : m)
+      };
+    });
+    showToast('Team member profile updated.');
   };
 
   // --- SETTINGS & DATA MANAGEMENT ---
@@ -312,6 +421,15 @@ export const AppProvider = ({ children }) => {
     activeTab,
     selectedProjectId,
     selectedTaskId,
+    isAdminLoggedIn,
+    adminName,
+    isAdminLoginOpen,
+    setIsAdminLoginOpen,
+    loginAdmin,
+    logoutAdmin,
+    editModal,
+    openEditModal,
+    closeEditModal,
     isQuickAddOpen,
     quickAddType,
     isSearchOpen,
@@ -327,6 +445,7 @@ export const AppProvider = ({ children }) => {
     setSearchQuery,
     addProject,
     updateProject,
+    deleteProject,
     addTask,
     updateTask,
     moveTaskStatus,
@@ -336,8 +455,8 @@ export const AppProvider = ({ children }) => {
     updateIdea,
     convertIdeaToProject,
     addTeamMember,
+    updateTeamMember,
     addActivity,
-    addNotification,
     resetDemoData,
     exportJSON,
     importJSON

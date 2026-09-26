@@ -1,9 +1,9 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { Users, UserPlus, Mail, Briefcase, Award, CheckCircle2, AlertTriangle, Layers } from 'lucide-react';
+import { Users, UserPlus, Mail, Briefcase, Award, CheckCircle2, AlertTriangle, Layers, Edit3 } from 'lucide-react';
 
 export const TeamView = () => {
-  const { state, setIsQuickAddOpen, setQuickAddType } = useApp();
+  const { state, setIsQuickAddOpen, setQuickAddType, openEditModal } = useApp();
 
   const handleOpenAddTeam = () => {
     setQuickAddType('team');
@@ -28,7 +28,7 @@ export const TeamView = () => {
 
         <button
           onClick={handleOpenAddTeam}
-          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-purple-600/20 flex items-center gap-2 transition-all self-start sm:self-center"
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-purple-600/20 flex items-center gap-2 transition-all self-start sm:self-center shrink-0"
         >
           <UserPlus className="w-4 h-4 stroke-[3]" />
           <span>+ Add Team Member</span>
@@ -74,7 +74,6 @@ export const TeamView = () => {
                   </div>
                 </div>
 
-                {/* ASCII & Visual Workload Bar */}
                 <div className="flex items-center gap-3">
                   <div className="flex-1 bg-slate-100 h-3 rounded-full overflow-hidden p-0.5">
                     <div
@@ -101,18 +100,28 @@ export const TeamView = () => {
           const assignedProjects = state.projects.filter(p => p.ownerId === member.id);
 
           return (
-            <div key={member.id} className="glass-card p-6 rounded-2xl border border-slate-200/90 bg-white space-y-4">
-              <div className="flex items-start gap-4">
-                <img
-                  src={member.avatar}
-                  alt={member.name}
-                  className="w-14 h-14 rounded-2xl object-cover ring-2 ring-dcore-red/20 shrink-0"
-                />
-                <div className="flex-1">
-                  <h3 className="text-base font-extrabold text-slate-900">{member.name}</h3>
-                  <p className="text-xs font-bold text-dcore-red mt-0.5">{member.role}</p>
-                  <p className="text-[11px] text-slate-500 font-medium">{member.department}</p>
+            <div key={member.id} className="glass-card p-6 rounded-2xl border border-slate-200/90 bg-white space-y-4 relative">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-4">
+                  <img
+                    src={member.avatar}
+                    alt={member.name}
+                    className="w-14 h-14 rounded-2xl object-cover ring-2 ring-dcore-red/20 shrink-0"
+                  />
+                  <div>
+                    <h3 className="text-base font-extrabold text-slate-900">{member.name}</h3>
+                    <p className="text-xs font-bold text-dcore-red mt-0.5">{member.role}</p>
+                    <p className="text-[11px] text-slate-500 font-medium">{member.department}</p>
+                  </div>
                 </div>
+
+                <button
+                  onClick={() => openEditModal('TEAM', member)}
+                  className="p-2 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-dcore-red border border-slate-200 transition-colors"
+                  title="Edit Team Profile"
+                >
+                  <Edit3 className="w-4 h-4" />
+                </button>
               </div>
 
               {/* Skills */}

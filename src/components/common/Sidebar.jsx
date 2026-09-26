@@ -8,6 +8,7 @@ import {
   FolderKanban,
   Users,
   BarChart3,
+  History,
   Settings,
   Sparkles,
   ArrowUpRight
@@ -20,6 +21,7 @@ export const Sidebar = () => {
   const workQueueCount = (state.tasks || []).filter(t => t.type === 'WORK_QUEUE').length;
   const ideasCount = (state.ideas || []).filter(i => i.status !== 'CONVERTED TO PROJECT').length;
   const projectsCount = (state.projects || []).length;
+  const historyCount = (state.history || []).length;
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -29,6 +31,7 @@ export const Sidebar = () => {
     { id: 'projects', label: 'Projects', icon: FolderKanban, badge: projectsCount },
     { id: 'team', label: 'Team & Workload', icon: Users },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'history', label: 'History Log', icon: History, badge: historyCount, badgeColor: 'bg-red-100 text-dcore-red' },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
@@ -101,7 +104,7 @@ export const Sidebar = () => {
             <span className="font-medium">NOC Active</span>
           </div>
           <span className="font-mono text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">
-            v1.0.4
+            v1.0.5
           </span>
         </div>
       </div>

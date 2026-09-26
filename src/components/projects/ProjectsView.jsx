@@ -9,13 +9,13 @@ import {
   Calendar,
   User,
   CheckCircle2,
-  Clock
+  Clock,
+  Edit3
 } from 'lucide-react';
 
 export const ProjectsView = () => {
-  const { state, selectedProjectId, navigate, setIsQuickAddOpen, setQuickAddType } = useApp();
+  const { state, selectedProjectId, navigate, setIsQuickAddOpen, setQuickAddType, openEditModal } = useApp();
 
-  // If a specific project is selected, render its detail page
   if (selectedProjectId) {
     return (
       <ProjectDetailView
@@ -48,7 +48,7 @@ export const ProjectsView = () => {
 
         <button
           onClick={handleOpenAddProject}
-          className="bg-dcore-red hover:bg-dcore-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-dcore-red/20 flex items-center gap-2 transition-all self-start sm:self-center"
+          className="bg-dcore-red hover:bg-dcore-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-dcore-red/20 flex items-center gap-2 transition-all self-start sm:self-center shrink-0"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>+ New Project</span>
@@ -65,7 +65,7 @@ export const ProjectsView = () => {
             <div
               key={proj.id}
               onClick={() => navigate('projects', proj.id)}
-              className="glass-card p-6 rounded-2xl border border-slate-200/90 bg-white hover:border-dcore-red/40 cursor-pointer transition-all space-y-4 group"
+              className="glass-card p-6 rounded-2xl border border-slate-200/90 bg-white hover:border-dcore-red/40 cursor-pointer transition-all space-y-4 group relative"
             >
               {/* Card Header */}
               <div className="flex items-start justify-between gap-3">
@@ -83,18 +83,31 @@ export const ProjectsView = () => {
                   </h3>
                 </div>
 
-                {proj.url && (
-                  <a
-                    href={proj.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="p-2 rounded-xl bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-dcore-red border border-slate-200 transition-colors"
-                    title="Open Website"
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEditModal('PROJECT', proj);
+                    }}
+                    className="p-2 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-dcore-red border border-slate-200 transition-colors"
+                    title="Edit Project Entry"
                   >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
+                    <Edit3 className="w-4 h-4" />
+                  </button>
+
+                  {proj.url && (
+                    <a
+                      href={proj.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="p-2 rounded-xl bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-dcore-red border border-slate-200 transition-colors"
+                      title="Open Website"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
               </div>
 
               {/* Description */}

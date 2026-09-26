@@ -5,6 +5,8 @@ import { Sidebar } from './components/common/Sidebar';
 import { BottomNav } from './components/common/BottomNav';
 import { SearchModal } from './components/common/SearchModal';
 import { QuickAddModal } from './components/common/QuickAddModal';
+import { AdminLoginModal } from './components/common/AdminLoginModal';
+import { EditEntityModal } from './components/common/EditEntityModal';
 import { QuotePopup } from './components/common/QuotePopup';
 import { Toast } from './components/common/Toast';
 import { LandingPage } from './components/landing/LandingPage';
@@ -16,10 +18,11 @@ import { FutureIdeasView } from './components/futureIdeas/FutureIdeasView';
 import { ProjectsView } from './components/projects/ProjectsView';
 import { TeamView } from './components/team/TeamView';
 import { AnalyticsView } from './components/analytics/AnalyticsView';
+import { HistoryView } from './components/history/HistoryView';
 import { SettingsView } from './components/settings/SettingsView';
 
 const MainLayout = () => {
-  const { activeTab } = useApp();
+  const { activeTab, isAdminLoginOpen, setIsAdminLoginOpen, editModal, closeEditModal } = useApp();
 
   if (activeTab === 'landing') {
     return (
@@ -30,6 +33,7 @@ const MainLayout = () => {
         <SearchModal />
         <QuickAddModal />
         <QuotePopup />
+        <AdminLoginModal isOpen={isAdminLoginOpen} onClose={() => setIsAdminLoginOpen(false)} />
       </div>
     );
   }
@@ -47,6 +51,7 @@ const MainLayout = () => {
           {activeTab === 'projects' && <ProjectsView />}
           {activeTab === 'team' && <TeamView />}
           {activeTab === 'analytics' && <AnalyticsView />}
+          {activeTab === 'history' && <HistoryView />}
           {activeTab === 'settings' && <SettingsView />}
         </main>
       </div>
@@ -54,6 +59,13 @@ const MainLayout = () => {
       <SearchModal />
       <QuickAddModal />
       <TaskDetailDrawer />
+      <AdminLoginModal isOpen={isAdminLoginOpen} onClose={() => setIsAdminLoginOpen(false)} />
+      <EditEntityModal
+        isOpen={editModal.isOpen}
+        onClose={closeEditModal}
+        entityType={editModal.type}
+        entityData={editModal.data}
+      />
       <QuotePopup />
       <Toast />
     </div>

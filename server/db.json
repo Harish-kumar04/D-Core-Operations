@@ -1,0 +1,295 @@
+{
+  "admin": {
+    "email": "admin@dcore.ops",
+    "password": "admin123"
+  },
+  "organization": {
+    "name": "D-CORE OPERATIONS",
+    "tagline": "Technology at the Core. Operations at Scale.",
+    "description": "Technology and digital operations team managing requirements, platforms, infrastructure, and projects for DMK."
+  },
+  "projects": [
+    {
+      "id": "proj_1",
+      "name": "Periyar.net",
+      "url": "https://periyar.net/",
+      "description": "Digital archive and educational repository platform for Periyar thought, historical literature, and public research.",
+      "status": "active",
+      "priority": "P1",
+      "progress": 78,
+      "ownerId": "team_1",
+      "category": "Digital Archive",
+      "startDate": "2026-01-15",
+      "targetDate": "2026-11-30",
+      "createdAt": "2026-01-15T09:00:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z",
+      "notes": [
+        "CDN edge caching implemented for high volume archival documents.",
+        "OCR text extraction integration scheduled for Q4."
+      ]
+    },
+    {
+      "id": "proj_2",
+      "name": "Makkalveeran.com",
+      "url": "https://makkalveeran.com/",
+      "description": "Community engagement platform and digital publication network for public outreach and announcements.",
+      "status": "active",
+      "priority": "P1",
+      "progress": 62,
+      "ownerId": "team_2",
+      "category": "Web Platform",
+      "startDate": "2026-02-01",
+      "targetDate": "2026-12-15",
+      "createdAt": "2026-02-01T10:00:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z",
+      "notes": [
+        "Mobile responsive redressing passed preliminary QA.",
+        "Push notification engine undergoing stress testing."
+      ]
+    },
+    {
+      "id": "proj_3",
+      "name": "Kalaignar.org",
+      "url": "https://kalaignar.org/",
+      "description": "Official memorial & legacy portal showcasing historical contributions, digitized speeches, and interactive timeline.",
+      "status": "active",
+      "priority": "P0",
+      "progress": 85,
+      "ownerId": "team_3",
+      "category": "Core Infrastructure",
+      "startDate": "2025-11-01",
+      "targetDate": "2026-10-31",
+      "createdAt": "2025-11-01T08:30:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z",
+      "notes": [
+        "Primary server cluster hardware migration completed successfully.",
+        "High availability load balancers configured for peak traffic."
+      ]
+    },
+    {
+      "id": "proj_4",
+      "name": "TVK Files",
+      "url": "https://tvkfiles.org/",
+      "description": "Centralized digital asset management, document storage, and media repository system for verified operational assets.",
+      "status": "active",
+      "priority": "P2",
+      "progress": 45,
+      "ownerId": "team_4",
+      "category": "Data & Storage",
+      "startDate": "2026-03-10",
+      "targetDate": "2027-01-20",
+      "createdAt": "2026-03-10T11:00:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z",
+      "notes": [
+        "S3 compatible storage tier setup finished.",
+        "Metadata indexing framework under active review."
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task_001",
+      "projectId": "proj_3",
+      "title": "Website Infrastructure & Failover Upgrade",
+      "description": "Deploy dual-region redundant server instances and automated DNS failover for Kalaignar.org high traffic load.",
+      "status": "IN PROGRESS",
+      "priority": "P0",
+      "ownerId": "team_3",
+      "dueDate": "2026-09-28",
+      "progress": 68,
+      "estimatedHours": 32,
+      "tags": ["Infrastructure", "High Priority", "Failover"],
+      "type": "CURRENT_WORK",
+      "notes": "Primary node synced. Edge proxies responding within 18ms.",
+      "createdAt": "2026-09-18T10:00:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z"
+    },
+    {
+      "id": "task_002",
+      "projectId": "proj_1",
+      "title": "Archival Document Indexing Engine",
+      "description": "Optimize elastic search queries for historical document search on Periyar.net.",
+      "status": "IN PROGRESS",
+      "priority": "P1",
+      "ownerId": "team_1",
+      "dueDate": "2026-10-05",
+      "progress": 55,
+      "estimatedHours": 24,
+      "tags": ["Search", "Performance", "ElasticSearch"],
+      "type": "CURRENT_WORK",
+      "notes": "Query latency reduced by 40% in initial benchmark tests.",
+      "createdAt": "2026-09-15T09:30:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z"
+    },
+    {
+      "id": "task_003",
+      "projectId": "proj_2",
+      "title": "Mobile Navigation & Touch Interface Audit",
+      "description": "Refactor navigation UI for Makkalveeran.com to ensure seamless touch interactions on mobile devices.",
+      "status": "REVIEW",
+      "priority": "P1",
+      "ownerId": "team_2",
+      "dueDate": "2026-09-29",
+      "progress": 90,
+      "estimatedHours": 16,
+      "tags": ["Frontend", "UX", "Mobile"],
+      "type": "CURRENT_WORK",
+      "notes": "PR submitted for review by design team lead.",
+      "createdAt": "2026-09-12T14:00:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z"
+    },
+    {
+      "id": "task_004",
+      "projectId": "proj_4",
+      "title": "Role-Based Storage Access Security Hardening",
+      "description": "Implement granular OAuth2 scopes and signed URLs for document access on TVK Files.",
+      "status": "TO DO",
+      "priority": "P2",
+      "ownerId": "team_4",
+      "dueDate": "2026-10-12",
+      "progress": 20,
+      "estimatedHours": 20,
+      "tags": ["Security", "OAuth2", "Storage"],
+      "type": "CURRENT_WORK",
+      "notes": "Architectural spec finalized. Implementation starting next sprint.",
+      "createdAt": "2026-09-20T11:20:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z"
+    },
+    {
+      "id": "task_005",
+      "projectId": "proj_3",
+      "title": "Interactive Speech Timeline Video Sync",
+      "description": "Integrate HTML5 video player with synchronized transcript markers for historical speeches.",
+      "status": "COMPLETED",
+      "priority": "P1",
+      "ownerId": "team_2",
+      "dueDate": "2026-09-20",
+      "progress": 100,
+      "estimatedHours": 28,
+      "tags": ["Media", "HTML5", "Interactive"],
+      "type": "CURRENT_WORK",
+      "notes": "Deployed to production and tested on Chrome/Safari/Firefox.",
+      "createdAt": "2026-09-01T08:00:00Z",
+      "updatedAt": "2026-09-20T17:30:00Z"
+    },
+    {
+      "id": "task_queue_101",
+      "projectId": "proj_3",
+      "title": "AI Speech Audio Denoising & Enhancement",
+      "description": "Approved project to apply ML noise removal models to vintage audio archives on Kalaignar.org.",
+      "status": "READY",
+      "priority": "P1",
+      "ownerId": "team_1",
+      "dueDate": "2026-11-10",
+      "targetDate": "2026-11-10",
+      "progress": 0,
+      "estimatedHours": 40,
+      "tags": ["AI/ML", "Audio", "Archival"],
+      "type": "WORK_QUEUE",
+      "dependencies": "Archival audio upload completion",
+      "notes": "Approved in operational meeting. Ready to be moved to Current Works.",
+      "createdAt": "2026-09-20T14:00:00Z",
+      "updatedAt": "2026-09-26T14:30:00Z"
+    }
+  ],
+  "ideas": [
+    {
+      "id": "idea_001",
+      "title": "AI-Powered Archival Document Search & Summarization",
+      "description": "Implement an intelligent semantic search agent leveraging LLM embeddings to allow researchers to query historical speeches, essays, and archival documents in natural Tamil/English.",
+      "category": "Artificial Intelligence",
+      "status": "RESEARCH",
+      "createdBy": "Arun Kumar",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Evaluated sentence-transformers with Tamil embeddings.",
+      "createdAt": "2026-09-10T11:00:00Z"
+    },
+    {
+      "id": "idea_002",
+      "title": "Automated Infrastructure Health Monitoring & Alerting Bot",
+      "description": "Unified NOC dashboard bot that monitors uptime, CPU usage, and bandwidth across all D-Core ecosystem domains and broadcasts instant alerts.",
+      "category": "DevOps & NOC",
+      "status": "APPROVED",
+      "createdBy": "Karthik Subramanian",
+      "impact": "CRITICAL",
+      "complexity": "LOW",
+      "notes": "Approved for Q4 implementation.",
+      "createdAt": "2026-09-14T09:30:00Z"
+    }
+  ],
+  "team": [
+    {
+      "id": "team_1",
+      "name": "Arun Kumar",
+      "role": "Lead Systems Architect",
+      "department": "Technology Operations",
+      "email": "arun.k@dcore.ops",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "skills": ["Cloud Infrastructure", "Kubernetes", "React", "DevOps"],
+      "activeProjects": 3,
+      "capacity": 80
+    },
+    {
+      "id": "team_2",
+      "name": "Priya Ramachandran",
+      "role": "Senior Frontend Engineer",
+      "department": "Digital Platforms",
+      "email": "priya.r@dcore.ops",
+      "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
+      "skills": ["React", "Next.js", "Tailwind CSS", "UI/UX"],
+      "activeProjects": 2,
+      "capacity": 65
+    },
+    {
+      "id": "team_3",
+      "name": "Karthik Subramanian",
+      "role": "Infrastructure & Security Lead",
+      "department": "IT Infrastructure",
+      "email": "karthik.s@dcore.ops",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      "skills": ["Cybersecurity", "NOC", "Database Admin", "Python"],
+      "activeProjects": 3,
+      "capacity": 90
+    },
+    {
+      "id": "team_4",
+      "name": "Deepa Sundaram",
+      "role": "Data & Systems Specialist",
+      "department": "Technology Operations",
+      "email": "deepa.s@dcore.ops",
+      "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+      "skills": ["Data Pipelines", "PostgreSQL", "Analytics", "Automation"],
+      "activeProjects": 2,
+      "capacity": 45
+    }
+  ],
+  "history": [
+    {
+      "id": "hist_001",
+      "adminName": "Arun Kumar (Admin)",
+      "action": "SYSTEM_INITIALIZED",
+      "entityType": "SYSTEM",
+      "entityId": "sys_01",
+      "entityName": "D-CORE Operations Server",
+      "details": "REST API database initialized with 4 core platforms.",
+      "timestamp": "2026-09-26T14:30:00Z"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act_001",
+      "type": "STATUS_CHANGE",
+      "text": "Status changed for 'Website Infrastructure & Failover Upgrade' to IN PROGRESS",
+      "projectId": "proj_3",
+      "taskId": "task_001",
+      "user": "Karthik Subramanian",
+      "timestamp": "2026-09-26T14:30:00Z"
+    }
+  ],
+  "settings": {
+    "organizationName": "D-CORE OPERATIONS",
+    "tagline": "Technology at the Core. Operations at Scale.",
+    "version": "1.0.5-PROD"
+  }
+}
