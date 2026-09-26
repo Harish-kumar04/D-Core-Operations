@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { QuoteCard } from '../common/QuoteCard';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import {
   Kanban,
@@ -77,12 +78,19 @@ export const CurrentWorksView = () => {
 
         <button
           onClick={handleOpenAddTask}
-          className="bg-dcore-red hover:bg-dcore-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-dcore-red/20 flex items-center gap-2 transition-all self-start sm:self-center"
+          className="bg-dcore-red hover:bg-dcore-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-dcore-red/20 flex items-center gap-2 transition-all self-start sm:self-center shrink-0"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>+ Add Current Task</span>
         </button>
       </div>
+
+      {/* Integrated Kalaignar Action Motivational Quote */}
+      <QuoteCard
+        quote="முடித்தே தீருவோம் என்பது வெற்றிக்கான தொடக்கம்."
+        speaker="கலைஞர் மு. கருணாநிதி"
+        variant="minimal"
+      />
 
       {/* Filter Bar */}
       <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">

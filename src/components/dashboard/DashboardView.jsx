@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { QuoteCard } from '../common/QuoteCard';
 import {
   FolderKanban,
   Kanban,
@@ -83,6 +84,13 @@ export const DashboardView = () => {
           </div>
         </div>
       </div>
+
+      {/* Integrated Periyar Inspirational Value Quote */}
+      <QuoteCard
+        quote="மனிதன் தனது தன்மானத்தையும் சுயமரியாதையையும் உயிரைவிட உயர்வாகக் கருத வேண்டும்."
+        speaker="தந்தை பெரியார்"
+        variant="minimal"
+      />
 
       {/* 5 Summary Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">

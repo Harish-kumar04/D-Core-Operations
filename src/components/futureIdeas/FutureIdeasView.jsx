@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { QuoteCard } from '../common/QuoteCard';
 import {
   Lightbulb,
   Plus,
@@ -46,12 +47,19 @@ export const FutureIdeasView = () => {
 
         <button
           onClick={handleOpenAddIdea}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-blue-600/20 flex items-center gap-2 transition-all self-start sm:self-center"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-blue-600/20 flex items-center gap-2 transition-all self-start sm:self-center shrink-0"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>+ Add Future Idea</span>
         </button>
       </div>
+
+      {/* Integrated Periyar Critical Thinking / Research Quote */}
+      <QuoteCard
+        quote="எதையும் யாரும் சொன்னார்கள் என்பதற்காக நம்பாதீர்கள்; சிந்தித்து, ஆராய்ந்து, உண்மை எனத் தெரிந்ததை ஏற்றுக்கொள்ளுங்கள்."
+        speaker="தந்தை பெரியார்"
+        variant="featured"
+      />
 
       {/* Filter Tabs */}
       <div className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-xl bg-slate-100/70 border border-slate-200 text-xs font-bold">

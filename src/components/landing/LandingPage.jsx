@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { QuoteCard } from '../common/QuoteCard';
 import {
   ArrowRight,
   ExternalLink,
@@ -14,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export const LandingPage = () => {
-  const { navigate, state } = useApp();
+  const { navigate } = useApp();
 
   const preloadedProjects = [
     {
@@ -90,6 +91,15 @@ export const LandingPage = () => {
           </div>
 
         </div>
+      </section>
+
+      {/* Integrated Periyar Technology & Advancement Dark Banner Quote */}
+      <section className="px-4 lg:px-8 max-w-7xl mx-auto mb-12">
+        <QuoteCard
+          quote="கல்வி, அறிவியல் அறிவு, தொழில்நுட்பம், ஒழுக்கம் ஆகியவை வளர்ந்தால்தான் மக்கள் முன்னேற முடியும்."
+          speaker="தந்தை பெரியார்"
+          variant="dark"
+        />
       </section>
 
       {/* OUR DIGITAL ECOSYSTEM Section */}

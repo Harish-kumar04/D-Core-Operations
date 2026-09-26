@@ -5,6 +5,7 @@ import { Sidebar } from './components/common/Sidebar';
 import { BottomNav } from './components/common/BottomNav';
 import { SearchModal } from './components/common/SearchModal';
 import { QuickAddModal } from './components/common/QuickAddModal';
+import { QuotePopup } from './components/common/QuotePopup';
 import { Toast } from './components/common/Toast';
 import { LandingPage } from './components/landing/LandingPage';
 import { DashboardView } from './components/dashboard/DashboardView';
@@ -28,6 +29,7 @@ const MainLayout = () => {
         <Toast />
         <SearchModal />
         <QuickAddModal />
+        <QuotePopup />
       </div>
     );
   }
@@ -52,6 +54,7 @@ const MainLayout = () => {
       <SearchModal />
       <QuickAddModal />
       <TaskDetailDrawer />
+      <QuotePopup />
       <Toast />
     </div>
   );

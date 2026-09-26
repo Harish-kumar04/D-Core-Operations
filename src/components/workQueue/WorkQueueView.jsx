@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { QuoteCard } from '../common/QuoteCard';
 import {
   ListOrdered,
   Plus,
@@ -45,12 +46,19 @@ export const WorkQueueView = () => {
 
         <button
           onClick={handleOpenAddPlanned}
-          className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-amber-600/20 flex items-center gap-2 transition-all self-start sm:self-center"
+          className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-amber-600/20 flex items-center gap-2 transition-all self-start sm:self-center shrink-0"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>+ Add Planned Work</span>
         </button>
       </div>
+
+      {/* Integrated Kalaignar Challenge Quote */}
+      <QuoteCard
+        quote="துணிவிருந்தால் துக்கமில்லை."
+        speaker="கலைஞர் மு. கருணாநிதி"
+        variant="minimal"
+      />
 
       {/* Workflow Indicator Banner */}
       <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-bold text-slate-700">
