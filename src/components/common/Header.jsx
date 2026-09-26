@@ -47,9 +47,11 @@ export const Header = () => {
             onClick={() => navigate('dashboard')}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-dcore-red to-dcore-maroon text-white flex items-center justify-center font-black text-xl shadow-card shadow-dcore-red/20 group-hover:scale-105 transition-transform">
-              <span className="tracking-tighter">D</span>
-            </div>
+            <img
+              src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790443218/ChatGPT_Image_Sep_26_2026_10_47_31_PM_mtiwsu.png"
+              alt="D-CORE Logo"
+              className="w-10 h-10 object-contain rounded-xl shadow-sm border border-slate-100 group-hover:scale-105 transition-transform"
+            />
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-extrabold tracking-tight text-xl text-slate-900 group-hover:text-dcore-red transition-colors">

@@ -51,6 +51,15 @@ export const LandingPage = () => {
       <section className="relative pt-12 pb-20 px-4 lg:px-8 max-w-7xl mx-auto overflow-hidden dcore-hero-gradient">
         <div className="text-center space-y-6 max-w-3xl mx-auto">
           
+          {/* Custom Logo */}
+          <div className="flex justify-center">
+            <img
+              src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790443218/ChatGPT_Image_Sep_26_2026_10_47_31_PM_mtiwsu.png"
+              alt="D-CORE Logo"
+              className="w-20 h-20 sm:w-24 sm:h-24 object-contain rounded-3xl shadow-xl shadow-red-950/10 border border-slate-100 p-1 animate-in zoom-in duration-500"
+            />
+          </div>
+
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-red-50 border border-red-100 text-dcore-red text-xs font-bold uppercase tracking-wider shadow-sm animate-bounce">
             <Sparkles className="w-3.5 h-3.5" />

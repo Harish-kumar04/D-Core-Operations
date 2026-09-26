@@ -68,9 +68,11 @@ export const InternalAuthWall = () => {
       {/* Top Header Logo */}
       <div className="max-w-5xl mx-auto w-full flex items-center justify-between z-10 py-3 animate-in fade-in slide-in-from-top-4 duration-500">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-dcore-red to-dcore-maroon text-white flex items-center justify-center font-black text-2xl shadow-lg shadow-dcore-red/30 transform hover:rotate-3 transition-transform">
-            <span className="tracking-tighter">D</span>
-          </div>
+          <img
+            src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790443218/ChatGPT_Image_Sep_26_2026_10_47_31_PM_mtiwsu.png"
+            alt="D-CORE Logo"
+            className="w-12 h-12 object-contain rounded-2xl shadow-md border border-red-100 transform hover:rotate-3 transition-transform"
+          />
           <div>
             <div className="flex items-center gap-2">
               <span className="font-black tracking-tight text-2xl text-slate-900">D-CORE</span>
