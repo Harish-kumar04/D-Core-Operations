@@ -228,7 +228,6 @@ export const InternalAuthWall = () => {
               <div>
                 <label className="block text-[#111111] font-extrabold mb-1.5 text-xs flex items-center justify-between">
                   <span>Your Full Name / Member Name *</span>
-                  <span className="text-[10px] text-[#E42129] font-bold uppercase tracking-wider">Required for Audit Logs</span>
                 </label>
                 <div className="relative">
                   <input

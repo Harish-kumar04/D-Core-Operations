@@ -88,9 +88,9 @@ export const DashboardView = () => {
         </div>
       </div>
 
-      {/* Integrated Periyar Tamil Quote Card */}
+      {/* Integrated Periyar Self-Respect Quote Card */}
       <QuoteCard
-        quote="மனிதன் தனது தன்மானத்தையும் சுயமரியாதையையும் உயிரைவிட உயர்வாகக் கருத வேண்டும்."
+        quote="சுயமரியாதை இல்லாத வாழ்க்கை, பிறர் கருணையில் உயிர்வாழும் அடிமைத்தனமே."
         speaker="தந்தை பெரியார்"
         variant="minimal"
       />

@@ -122,9 +122,14 @@ export const LandingPage = () => {
       </section>
 
       {/* Integrated Tamil Value Quote Section */}
-      <section className="px-4 lg:px-8 max-w-7xl mx-auto mb-16">
+      <section className="px-4 lg:px-8 max-w-7xl mx-auto mb-16 grid grid-cols-1 md:grid-cols-2 gap-6">
         <QuoteCard
-          quote="கல்வி, அறிவியல் அறிவு, தொழில்நுட்பம், ஒழுக்கம் ஆகியவை வளர்ந்தால்தான் மக்கள் முன்னேற முடியும்."
+          quote="மனிதனை உயர்த்துவது ஜாதி அல்ல; அவனது சிந்தனையே."
+          speaker="தந்தை பெரியார்"
+          variant="dark"
+        />
+        <QuoteCard
+          quote="எந்த மனிதனும் எனக்குக் கீழானவன் அல்ல, அது போலவே எவனும் எனக்கு மேலானவனும் அல்ல."
           speaker="தந்தை பெரியார்"
           variant="dark"
         />

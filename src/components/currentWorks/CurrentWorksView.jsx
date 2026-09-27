@@ -79,10 +79,10 @@ export const CurrentWorksView = () => {
         </button>
       </div>
 
-      {/* Integrated Kalaignar Action Motivational Quote */}
+      {/* Integrated Kalaignar Perseverance Quote Card */}
       <QuoteCard
-        quote="முடித்தே தீருவோம் என்பது வெற்றிக்கான தொடக்கம்."
-        speaker="கலைஞர் மு. கருணாநிதி"
+        quote="ஒவ்வொரு தடையும் தன்னம்பிக்கையை வளர்க்கும் வாய்ப்பே."
+        speaker="கலைஞர் மு.கருணாநிதி"
         variant="minimal"
       />
 

@@ -2,15 +2,71 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { X, Quote as QuoteIcon, Sparkles } from 'lucide-react';
 
+const POPUP_QUOTES = [
+  {
+    quote: "சுயமரியாதை இல்லாத வாழ்க்கை, பிறர் கருணையில் உயிர்வாழும் அடிமைத்தனமே.",
+    speaker: "தந்தை பெரியார்",
+    tag: "சுயமரியாதை"
+  },
+  {
+    quote: "கேள்வி கேட்கத் துணிவில்லாத சமூகம் முன்னேற முடியாது.",
+    speaker: "தந்தை பெரியார்",
+    tag: "பகுத்தறிவு"
+  },
+  {
+    quote: "மனிதனை உயர்த்துவது ஜாதி அல்ல; அவனது சிந்தனையே.",
+    speaker: "தந்தை பெரியார்",
+    tag: "சிந்தனை"
+  },
+  {
+    quote: "நானே சொல்லியிருந்தாலும் நம்பாதே! உன் பகுத்தறிவைக் கொண்டு யோசித்து பார்.",
+    speaker: "தந்தை பெரியார்",
+    tag: "சுயநம்பிக்கை"
+  },
+  {
+    quote: "எந்த மனிதனும் எனக்குக் கீழானவன் அல்ல, அது போலவே எவனும் எனக்கு மேலானவனும் அல்ல.",
+    speaker: "தந்தை பெரியார்",
+    tag: "சமத்துவம்"
+  },
+  {
+    quote: "பெண்ணை அடக்கி வைத்த சமூகம் தன்னைத்தானே சுருக்கிக் கொள்கிறது.",
+    speaker: "தந்தை பெரியார்",
+    tag: "பெண் விடுதலை"
+  },
+  {
+    quote: "வெற்றி என்பது குறிக்கோள்களை அடைவதற்கான பயணமே.",
+    speaker: "கலைஞர் மு.கருணாநிதி",
+    tag: "முயற்சி"
+  },
+  {
+    quote: "நம்மால் பயனடைந்தவர்கள் நம்மிடம் நன்றி காட்டுவார்கள் என்று எதிர்பார்க்க வேண்டாம். நாம் செய்தது மனிதத்திற்காக... புகழுக்காக அல்ல.",
+    speaker: "கலைஞர் மு.கருணாநிதி",
+    tag: "சேவை"
+  },
+  {
+    quote: "ஒவ்வொரு தடையும் தன்னம்பிக்கையை வளர்க்கும் வாய்ப்பே.",
+    speaker: "கலைஞர் மு.கருணாநிதி",
+    tag: "தடை"
+  },
+  {
+    quote: "உண்மையை மறைக்க முனைவது, விதையை பூமிக்குள் மறைப்பதுபோலத்தான்.",
+    speaker: "கலைஞர் மு.கருணாநிதி",
+    tag: "உண்மை"
+  }
+];
+
 export const QuotePopup = () => {
   const { userSession } = useApp();
   const [isOpen, setIsOpen] = useState(false);
+  const [activeQuote, setActiveQuote] = useState(POPUP_QUOTES[0]);
 
   useEffect(() => {
     if (userSession.isAuthenticated) {
       try {
         const seen = sessionStorage.getItem('dcore_quote_popup_seen');
         if (!seen) {
+          const randomIndex = Math.floor(Math.random() * POPUP_QUOTES.length);
+          setActiveQuote(POPUP_QUOTES[randomIndex]);
           const timer = setTimeout(() => {
             setIsOpen(true);
           }, 300);
@@ -67,9 +123,9 @@ export const QuotePopup = () => {
         <div className="text-center space-y-6 pt-2">
           
           {/* Badge */}
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#E42129] text-xs font-black uppercase tracking-wider border border-red-100 shadow-xs">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#E42129] text-xs font-black uppercase tracking-wider border border-red-100 shadow-xs font-tamil">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>D-CORE OPERATIONAL PHILOSOPHY</span>
+            <span>D-CORE OPERATIONAL PHILOSOPHY • {activeQuote.tag}</span>
           </div>
 
           {/* Quotation Icon */}
@@ -79,17 +135,13 @@ export const QuotePopup = () => {
 
           {/* Tamil Quote Text */}
           <div className="space-y-4 px-2 sm:px-4">
-            <p className="text-lg sm:text-xl font-serif font-bold text-[#111111] leading-relaxed tracking-wide tamil-quote">
-              “மக்களிடம் செல்.<br />
-              மக்களுடன் வாழ்.<br />
-              அவர்களிடமிருந்து கற்றுக்கொள்.<br />
-              அவர்களை నేசி.<br />
-              அவர்களுக்குச் சேவை செய்.”
+            <p className="text-lg sm:text-xl font-serif font-bold text-[#111111] leading-relaxed tracking-wide font-tamil">
+              “{activeQuote.quote}”
             </p>
             <div className="pt-2 flex items-center justify-center gap-2">
               <span className="w-8 h-0.5 bg-[#E42129] rounded-full"></span>
-              <p className="text-sm font-black text-[#E42129] tracking-wider">
-                — பேரறிஞர் அண்ணா
+              <p className="text-sm font-black text-[#E42129] tracking-wider font-tamil">
+                — {activeQuote.speaker}
               </p>
               <span className="w-8 h-0.5 bg-[#E42129] rounded-full"></span>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { QuoteCard } from '../common/QuoteCard';
 import {
@@ -8,13 +8,37 @@ import {
   User,
   CheckCircle2,
   BrainCircuit,
-  Edit3
+  Edit3,
+  X,
+  Sparkles,
+  Quote as QuoteIcon
 } from 'lucide-react';
 
 export const FutureIdeasView = () => {
   const { state, convertIdeaToProject, setIsQuickAddOpen, setQuickAddType, openEditModal } = useApp();
 
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [showQuotePopup, setShowQuotePopup] = useState(false);
+
+  useEffect(() => {
+    try {
+      const seen = sessionStorage.getItem('dcore_future_idea_quote_seen');
+      if (!seen) {
+        setShowQuotePopup(true);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  const handleClosePopup = () => {
+    setShowQuotePopup(false);
+    try {
+      sessionStorage.setItem('dcore_future_idea_quote_seen', 'true');
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   let ideas = state.ideas || [];
 
@@ -28,8 +52,64 @@ export const FutureIdeasView = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12 animate-in fade-in duration-300 select-none">
+    <div className="space-y-6 pb-12 animate-in fade-in duration-300 select-none relative">
       
+      {/* Dr. Kalaignar Effort Quote Pop-Up Modal */}
+      {showQuotePopup && (
+        <div
+          className="fixed inset-0 z-50 bg-[#111111]/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-in fade-in duration-300"
+          onClick={handleClosePopup}
+        >
+          <div
+            className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-[#E8E8E8] overflow-hidden relative p-6 sm:p-8 animate-in zoom-in-95 slide-in-from-bottom-6 duration-300 select-none"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#E42129]"></div>
+
+            <button
+              onClick={handleClosePopup}
+              className="absolute top-4 right-4 p-2 rounded-xl text-[#666666] hover:text-[#111111] hover:bg-[#F5F5F5] transition-all z-10"
+              aria-label="Close quote modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center space-y-6 pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-[#E42129] text-xs font-black uppercase tracking-wider border border-red-100 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>FUTURE IDEAS & INNOVATION VISION</span>
+              </div>
+
+              <div className="w-12 h-12 rounded-2xl bg-[#E42129] text-white mx-auto flex items-center justify-center shadow-md shadow-red-500/20">
+                <QuoteIcon className="w-6 h-6" />
+              </div>
+
+              <div className="space-y-4 px-2 sm:px-4">
+                <p className="text-xl sm:text-2xl font-serif font-bold text-[#111111] leading-relaxed tracking-wide font-tamil">
+                  “வெற்றி என்பது குறிக்கோள்களை அடைவதற்கான பயணமே.”
+                </p>
+                <div className="pt-2 flex items-center justify-center gap-2">
+                  <span className="w-8 h-0.5 bg-[#E42129] rounded-full"></span>
+                  <p className="text-sm font-black text-[#E42129] tracking-wider font-tamil">
+                    — கலைஞர் மு.கருணாநிதி
+                  </p>
+                  <span className="w-8 h-0.5 bg-[#E42129] rounded-full"></span>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-[#E8E8E8]">
+                <button
+                  onClick={handleClosePopup}
+                  className="btn-primary w-full py-3.5"
+                >
+                  Explore Innovation Repository
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#E8E8E8] shadow-soft">
         <div>
@@ -43,18 +123,28 @@ export const FutureIdeasView = () => {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenAddIdea}
-          className="btn-primary self-start sm:self-center shrink-0"
-        >
-          <Plus className="w-4 h-4 stroke-[3]" />
-          <span>+ Add Future Idea</span>
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+          <button
+            onClick={() => setShowQuotePopup(true)}
+            className="btn-secondary py-2.5 px-3.5 text-xs flex items-center gap-1.5"
+            title="Show Kalaignar Vision Quote"
+          >
+            <QuoteIcon className="w-3.5 h-3.5 text-[#E42129]" />
+            <span>Vision Quote</span>
+          </button>
+          <button
+            onClick={handleOpenAddIdea}
+            className="btn-primary"
+          >
+            <Plus className="w-4 h-4 stroke-[3]" />
+            <span>+ Add Future Idea</span>
+          </button>
+        </div>
       </div>
 
-      {/* Integrated Periyar Critical Thinking / Research Quote */}
+      {/* Integrated Periyar Self-Confidence / Rationalism Quote */}
       <QuoteCard
-        quote="எதையும் யாரும் சொன்னார்கள் என்பதற்காக நம்பாதீர்கள்; சிந்தித்து, ஆராய்ந்து, உண்மை எனத் தெரிந்ததை ஏற்றுக்கொள்ளுங்கள்."
+        quote="நானே சொல்லியிருந்தாலும் நம்பாதே! உன் பகுத்தறிவைக் கொண்டு யோசித்து பார்."
         speaker="தந்தை பெரியார்"
         variant="featured"
       />

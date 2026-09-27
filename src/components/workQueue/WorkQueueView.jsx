@@ -51,10 +51,10 @@ export const WorkQueueView = () => {
         </button>
       </div>
 
-      {/* Integrated Kalaignar Challenge Quote */}
+      {/* Integrated Kalaignar Service Quote Card */}
       <QuoteCard
-        quote="துணிவிருந்தால் துக்கமில்லை."
-        speaker="கலைஞர் மு. கருணாநிதி"
+        quote="நம்மால் பயனடைந்தவர்கள் நம்மிடம் நன்றி காட்டுவார்கள் என்று எதிர்பார்க்க வேண்டாம். நாம் செய்தது மனிதத்திற்காக... புகழுக்காக அல்ல."
+        speaker="கலைஞர் மு.கருணாநிதி"
         variant="minimal"
       />
 
