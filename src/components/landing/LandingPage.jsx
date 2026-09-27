@@ -11,36 +11,44 @@ import {
 } from 'lucide-react';
 
 export const LandingPage = () => {
-  const { navigate } = useApp();
+  const { state, navigate } = useApp();
 
-  const preloadedProjects = [
+  const preloadedProjects = (state?.projects && state.projects.length > 0) ? state.projects : [
     {
       name: 'Periyar.net',
       url: 'https://periyar.net/',
       category: 'Digital Archive',
-      description: 'Digital archive and educational repository platform for Periyar thought, historical literature, and public research.',
-      image: 'https://res.cloudinary.com/dikaxqooz/image/upload/v1790526460/2_mzfrjd.webp'
+      description: 'Digital archive and educational repository platform for Periyar thought, historical literature, and public research.'
     },
     {
       name: 'Makkalveeran.com',
       url: 'https://makkalveeran.com/',
       category: 'Web Platform',
-      description: 'Community engagement platform and digital publication network for public outreach and announcements.',
-      image: 'https://res.cloudinary.com/dikaxqooz/image/upload/v1790526460/3_nvj3x1.webp'
+      description: 'Community engagement platform and digital publication network for public outreach and announcements.'
     },
     {
       name: 'Kalaignar.org',
       url: 'https://kalaignar.org/',
       category: 'Core Infrastructure',
-      description: 'Official memorial & legacy portal showcasing historical contributions, digitized speeches, and interactive timeline.',
-      image: 'https://res.cloudinary.com/dikaxqooz/image/upload/v1790526461/4_bjljdl.webp'
+      description: 'Official memorial & legacy portal showcasing historical contributions, digitized speeches, and interactive timeline.'
     },
     {
       name: 'TVK Files',
       url: 'https://tvkfiles.org/',
       category: 'Data & Storage',
-      description: 'Centralized digital asset management, document storage, and media repository system for verified operational assets.',
-      image: 'https://res.cloudinary.com/dikaxqooz/image/upload/v1790526460/1_cavhvy.webp'
+      description: 'Centralized digital asset management, document storage, and media repository system for verified operational assets.'
+    },
+    {
+      name: 'Legal Support System for Pro Party Members',
+      url: 'https://portal-tomebhnc.onslate.com/',
+      category: 'Legal Tech',
+      description: 'Legal support system, case tracking management, and legal assistance portal for pro party members and advocates.'
+    },
+    {
+      name: 'Party Volunteer Verification System',
+      url: 'https://verification-system-six.vercel.app/x',
+      category: 'Field Operations',
+      description: 'Field volunteer verification system for civic reports, party member validation, and on-ground operational authentication.'
     }
   ];
 
@@ -136,7 +144,7 @@ export const LandingPage = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {preloadedProjects.map((proj, idx) => (
             <div
               key={idx}

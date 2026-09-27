@@ -81,6 +81,44 @@
         "S3 compatible storage tier setup finished.",
         "Metadata indexing framework under active review."
       ]
+    },
+    {
+      "id": "proj_5",
+      "name": "Legal Support System for Pro Party Members",
+      "url": "https://portal-tomebhnc.onslate.com/",
+      "description": "Legal support system, case tracking management, and legal assistance portal for pro party members and advocates.",
+      "status": "active",
+      "priority": "P0",
+      "progress": 82,
+      "ownerId": "team_1",
+      "category": "Legal Tech",
+      "startDate": "2026-04-01",
+      "targetDate": "2026-12-01",
+      "createdAt": "2026-04-01T09:00:00Z",
+      "updatedAt": "2026-09-27T10:00:00Z",
+      "notes": [
+        "Case tracking portal live at portal-tomebhnc.onslate.com.",
+        "Court case daily monitoring integration in progress."
+      ]
+    },
+    {
+      "id": "proj_6",
+      "name": "Party Volunteer Verification System",
+      "url": "https://verification-system-six.vercel.app/x",
+      "description": "Field volunteer verification system for civic reports, party member validation, and on-ground operational authentication.",
+      "status": "active",
+      "priority": "P0",
+      "progress": 75,
+      "ownerId": "team_3",
+      "category": "Field Operations",
+      "startDate": "2026-05-15",
+      "targetDate": "2026-11-15",
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-09-27T11:30:00Z",
+      "notes": [
+        "Live volunteer verification system at verification-system-six.vercel.app/x.",
+        "RTI report endorsement module integration underway."
+      ]
     }
   ],
   "tasks": [
@@ -154,6 +192,40 @@
     },
     {
       "id": "task_005",
+      "projectId": "proj_5",
+      "title": "Legal Case Tracking & Daily Court Hearing Monitor",
+      "description": "Single-view module tracking daily court cases, argument summaries, hearing outcomes, and legal orders.",
+      "status": "IN PROGRESS",
+      "priority": "P0",
+      "ownerId": "team_1",
+      "dueDate": "2026-10-10",
+      "progress": 70,
+      "estimatedHours": 30,
+      "tags": ["Legal Tech", "High Priority", "Portal"],
+      "type": "CURRENT_WORK",
+      "notes": "Integrated into Legal Support System portal.",
+      "createdAt": "2026-09-26T09:00:00Z",
+      "updatedAt": "2026-09-27T14:00:00Z"
+    },
+    {
+      "id": "task_006",
+      "projectId": "proj_6",
+      "title": "Party Volunteer Identity Validation & RTI Integration",
+      "description": "Verification engine linking party field volunteers with RTI report endorsements and ground checks.",
+      "status": "IN PROGRESS",
+      "priority": "P0",
+      "ownerId": "team_3",
+      "dueDate": "2026-10-15",
+      "progress": 65,
+      "estimatedHours": 28,
+      "tags": ["Volunteer Verification", "RTI", "Field Ops"],
+      "type": "CURRENT_WORK",
+      "notes": "Field testing live on verification-system-six.vercel.app/x.",
+      "createdAt": "2026-09-26T10:00:00Z",
+      "updatedAt": "2026-09-27T15:00:00Z"
+    },
+    {
+      "id": "task_007",
       "projectId": "proj_3",
       "title": "Interactive Speech Timeline Video Sync",
       "description": "Integrate HTML5 video player with synchronized transcript markers for historical speeches.",
@@ -170,115 +242,213 @@
       "updatedAt": "2026-09-20T17:30:00Z"
     },
     {
-      "id": "task_006",
-      "projectId": "proj_1",
-      "title": "SSL Certificate Renewal & HSTS Configuration",
-      "description": "Automate Let's Encrypt certificate renewal via Cloudflare API with strict HSTS headers.",
-      "status": "BACKLOG",
-      "priority": "P3",
-      "ownerId": "team_3",
-      "dueDate": "2026-10-25",
-      "progress": 0,
-      "estimatedHours": 8,
-      "tags": ["DevOps", "SSL", "Security"],
-      "type": "CURRENT_WORK",
-      "notes": "Queued in backlog.",
-      "createdAt": "2026-09-22T13:45:00Z",
-      "updatedAt": "2026-09-22T13:45:00Z"
-    },
-    {
-      "id": "task_007",
-      "projectId": "proj_2",
-      "title": "Push Notification Queue Engine Integration",
-      "description": "Set up Redis-backed queue worker for real-time announcements on Makkalveeran.com.",
-      "status": "IN PROGRESS",
-      "priority": "P1",
-      "ownerId": "team_1",
-      "dueDate": "2026-10-02",
-      "progress": 40,
-      "estimatedHours": 18,
-      "tags": ["Backend", "Redis", "Notifications"],
-      "type": "CURRENT_WORK",
-      "notes": "Redis cluster configured. Worker daemon in progress.",
-      "createdAt": "2026-09-19T15:00:00Z",
-      "updatedAt": "2026-09-24T18:00:00Z"
-    },
-    {
-      "id": "task_008",
-      "projectId": "proj_4",
-      "title": "Batch Document Zip Download Microservice",
-      "description": "Create background worker to compress multi-file selections into downloadable archives.",
-      "status": "TO DO",
-      "priority": "P2",
-      "ownerId": "team_4",
-      "dueDate": "2026-10-18",
-      "progress": 10,
-      "estimatedHours": 14,
-      "tags": ["Microservice", "Storage"],
-      "type": "CURRENT_WORK",
-      "notes": "Dependencies evaluated.",
-      "createdAt": "2026-09-21T10:10:00Z",
-      "updatedAt": "2026-09-21T10:10:00Z"
-    },
-    {
       "id": "task_queue_101",
-      "projectId": "proj_3",
-      "title": "AI Speech Audio Denoising & Enhancement",
-      "description": "Approved project to apply ML noise removal models to vintage audio archives on Kalaignar.org.",
+      "projectId": "proj_5",
+      "title": "Advocate Directory & Emergency Legal Helpline Integration",
+      "description": "Emergency advocate lookup and automated legal assistance ticketing system for party members.",
       "status": "READY",
       "priority": "P1",
       "ownerId": "team_1",
-      "dueDate": "2026-11-10",
-      "targetDate": "2026-11-10",
+      "dueDate": "2026-11-05",
+      "targetDate": "2026-11-05",
       "progress": 0,
-      "estimatedHours": 40,
-      "tags": ["AI/ML", "Audio", "Archival"],
+      "estimatedHours": 24,
+      "tags": ["Legal Wing", "Directory", "Helpline"],
       "type": "WORK_QUEUE",
-      "dependencies": "Archival audio upload completion",
-      "notes": "Approved in operational meeting. Ready to be moved to Current Works.",
-      "createdAt": "2026-09-20T14:00:00Z",
-      "updatedAt": "2026-09-24T11:00:00Z"
+      "dependencies": "Legal Support System Auth Sync",
+      "notes": "Ready for implementation.",
+      "createdAt": "2026-09-27T11:00:00Z",
+      "updatedAt": "2026-09-27T11:00:00Z"
     },
     {
       "id": "task_queue_102",
-      "projectId": "proj_1",
-      "title": "Multi-language Archival Translation Pipeline",
-      "description": "Integrate Tamil to English machine translation with human verification workflow for Periyar.net documents.",
+      "projectId": "proj_6",
+      "title": "Ward Level Volunteer Badge & QR Auth Scanner",
+      "description": "Mobile QR authentication scanner for party volunteers during ward-level civic verification drives.",
       "status": "PLANNED",
       "priority": "P2",
-      "ownerId": "team_2",
-      "dueDate": "2026-11-25",
-      "targetDate": "2026-11-25",
-      "progress": 0,
-      "estimatedHours": 35,
-      "tags": ["Translation", "NLP", "Localization"],
-      "type": "WORK_QUEUE",
-      "dependencies": "OCR Indexing Engine",
-      "notes": "Scoped and estimated. Waiting for dependency completion.",
-      "createdAt": "2026-09-18T16:30:00Z",
-      "updatedAt": "2026-09-22T09:40:00Z"
-    },
-    {
-      "id": "task_queue_103",
-      "projectId": "proj_2",
-      "title": "CDN Edge Compression & Next-Gen Image Format",
-      "description": "Convert legacy JPEG images to WebP/AVIF dynamically at CDN edge nodes for Makkalveeran.com.",
-      "status": "READY",
-      "priority": "P2",
       "ownerId": "team_3",
-      "dueDate": "2026-10-30",
-      "targetDate": "2026-10-30",
+      "dueDate": "2026-11-20",
+      "targetDate": "2026-11-20",
       "progress": 0,
-      "estimatedHours": 12,
-      "tags": ["Performance", "CDN", "Images"],
+      "estimatedHours": 20,
+      "tags": ["QR Auth", "Mobile Scanner", "Field Ops"],
       "type": "WORK_QUEUE",
-      "dependencies": "Cloudflare Enterprise setup",
-      "notes": "Ready for implementation when current sprint finishes.",
-      "createdAt": "2026-09-15T11:00:00Z",
-      "updatedAt": "2026-09-23T14:20:00Z"
+      "dependencies": "Party Volunteer Database API",
+      "notes": "Planned for Q4 rollout.",
+      "createdAt": "2026-09-27T11:30:00Z",
+      "updatedAt": "2026-09-27T11:30:00Z"
     }
   ],
   "ideas": [
+    {
+      "id": "idea_gs_001",
+      "title": "AI Student Data & Resource Repository (Casteless Society)",
+      "description": "AI-driven student data repository, educational tools, and scholarship requirement manager for building an egalitarian, casteless society.",
+      "category": "Education & Social Welfare",
+      "status": "NEW",
+      "createdBy": "Kathir RS",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Requirements document mapped. Aimed at providing equal educational opportunities and AI tools for students.",
+      "createdAt": "2026-09-27T12:00:00Z"
+    },
+    {
+      "id": "idea_gs_002",
+      "title": "RTI Report Endorsement & Civic Verification System",
+      "description": "Integration framework to onboard RTI activists and endorse verified RTI reports directly into the civic verification tool.",
+      "category": "Civic Infrastructure",
+      "status": "NEW",
+      "createdBy": "Rajesh",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Linked with party volunteer verification system for field RTI report validation.",
+      "createdAt": "2026-09-27T12:05:00Z"
+    },
+    {
+      "id": "idea_gs_003",
+      "title": "Legal Wing Daily Court Case Monitoring Dashboard",
+      "description": "Single-view portal tracking daily hearing dates, case arguments, hearing outcomes, case history, court orders, and legal documents for the DMK Legal Wing.",
+      "category": "Legal Tech",
+      "status": "APPROVED",
+      "createdBy": "Kathirmani",
+      "impact": "CRITICAL",
+      "complexity": "MEDIUM",
+      "notes": "Enhancement for the Legal Support System portal (portal-tomebhnc.onslate.com). Enables full case lifecycle tracking.",
+      "createdAt": "2026-09-27T12:10:00Z"
+    },
+    {
+      "id": "idea_gs_004",
+      "title": "Kalaignar Writings & Historical Speeches OCR Digitization",
+      "description": "High-precision OCR conversion pipeline to digitize legacy Tamil books, speeches, and manuscripts of Kalaignar Karunanidhi into searchable text.",
+      "category": "Digital Archive & AI",
+      "status": "RESEARCH",
+      "createdBy": "Kathir RS",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Evaluation of Tamil Tesseract OCR and custom neural recognition models for historical print styles.",
+      "createdAt": "2026-09-27T12:15:00Z"
+    },
+    {
+      "id": "idea_gs_005",
+      "title": "DMK Representative Social Media Analytics Network",
+      "description": "Comprehensive social media analytics dashboard tracking performance, reach, and engagement across accounts of DMK MLAs, ex-MLAs, Ministers, and District Secretaries.",
+      "category": "Analytics & Outreach",
+      "status": "APPROVED",
+      "createdBy": "Rajesh",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Centralized dashboard tracking engagement metrics, follower growth, and post frequency.",
+      "createdAt": "2026-09-27T12:20:00Z"
+    },
+    {
+      "id": "idea_gs_006",
+      "title": "DMK Cadre Direct Connection & Engagement App",
+      "description": "Mobile application establishing direct connection between DMK leadership and all party members & supporters with daily engagement streaks and participation bars.",
+      "category": "Cadre Management",
+      "status": "NEW",
+      "createdBy": "Kathirmani",
+      "impact": "CRITICAL",
+      "complexity": "HIGH",
+      "notes": "Includes engagement bar tracking and direct message broadcasts from party leadership.",
+      "createdAt": "2026-09-27T12:25:00Z"
+    },
+    {
+      "id": "idea_gs_007",
+      "title": "Youth Wing & Frontal Wings Digital Portal Network",
+      "description": "Dedicated web platforms for DMK Youth Wing and all wings, appointing SM incharges per wing to monitor and boost digital footprint across all platforms.",
+      "category": "Digital Outreach",
+      "status": "NEW",
+      "createdBy": "Kathir RS",
+      "impact": "MEDIUM",
+      "complexity": "LOW",
+      "notes": "Minimum 5 influencers per wing added to advisory group with dedicated SM coordinators.",
+      "createdAt": "2026-09-27T12:30:00Z"
+    },
+    {
+      "id": "idea_gs_008",
+      "title": "Ward Level Hyper-Local Issues Tracker",
+      "description": "Ground-level issue tracking network appointing 1 coordinator per ward to log, monitor, and resolve hyper-local civic problems.",
+      "category": "Field Operations",
+      "status": "NEW",
+      "createdBy": "Rajesh",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "1 person per ward structure integrated with central D-Core operations desk.",
+      "createdAt": "2026-09-27T12:35:00Z"
+    },
+    {
+      "id": "idea_gs_009",
+      "title": "Auto Social Media Post Scheduler (Cogsend Integration)",
+      "description": "Open-source based social media scheduling platform (forked from Cogsend / Zoho integration) for automated multi-channel DMK content publishing.",
+      "category": "Automation & Outreach",
+      "status": "NEW",
+      "createdBy": "Kathirmani",
+      "impact": "MEDIUM",
+      "complexity": "LOW",
+      "notes": "Forking github.com/Interpoolx/cogsend for automated queue management.",
+      "createdAt": "2026-09-27T12:40:00Z"
+    },
+    {
+      "id": "idea_gs_010",
+      "title": "DMK Achievements & Popular Video/Meme Reference Vault",
+      "description": "Ready-reference digital repository of DMK governance achievements, video clips, meme templates, and structured answers to political controversies.",
+      "category": "Content & Media",
+      "status": "NEW",
+      "createdBy": "Kathir RS",
+      "impact": "HIGH",
+      "complexity": "LOW",
+      "notes": "Categorized vault for instant media creation and rapid response.",
+      "createdAt": "2026-09-27T12:45:00Z"
+    },
+    {
+      "id": "idea_gs_011",
+      "title": "AI-Mapped DMK Writers & Content Creators Network",
+      "description": "Directory of DMK social media writers and creators, cataloging their best indexed works accessible through an AI search interface.",
+      "category": "Content & AI",
+      "status": "NEW",
+      "createdBy": "Rajesh",
+      "impact": "MEDIUM",
+      "complexity": "MEDIUM",
+      "notes": "AI semantic search mapping top articles, tweets, and scripts.",
+      "createdAt": "2026-09-27T12:50:00Z"
+    },
+    {
+      "id": "idea_gs_012",
+      "title": "Master Campaign Narratives & Strategic Intelligence Dashboard",
+      "description": "Intelligence dashboard tracking DMK narrative strength, opposition strategy shifts, and campaign narrative counter-measures in real time.",
+      "category": "Strategic Intelligence",
+      "status": "RESEARCH",
+      "createdBy": "Kathirmani",
+      "impact": "CRITICAL",
+      "complexity": "HIGH",
+      "notes": "Real-time topic tracking, sentiment monitoring, and counter-narrative formulation.",
+      "createdAt": "2026-09-27T12:55:00Z"
+    },
+    {
+      "id": "idea_gs_013",
+      "title": "Kalaignar Historical Speeches & Assembly Debate Vault",
+      "description": "Digitized audio, video, and transcript vault of all past assembly and public speeches of Kalaignar Karunanidhi.",
+      "category": "Digital Archive",
+      "status": "APPROVED",
+      "createdBy": "Kathir RS",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Includes speech indexing, OCR transcript search, and video clip tagging.",
+      "createdAt": "2026-09-27T13:00:00Z"
+    },
+    {
+      "id": "idea_gs_014",
+      "title": "Campaign Strategy Psychological Advisory Unit",
+      "description": "Specialized advisory panel integrating psychological experts to evaluate voter sentiments and formulate communication strategies.",
+      "category": "Strategic Planning",
+      "status": "NEW",
+      "createdBy": "Rajesh",
+      "impact": "MEDIUM",
+      "complexity": "LOW",
+      "notes": "Advisory unit of 2-3 psychological experts for strategy guidance.",
+      "createdAt": "2026-09-27T13:05:00Z"
+    },
     {
       "id": "idea_001",
       "title": "AI-Powered Archival Document Search & Summarization",
@@ -302,30 +472,6 @@
       "complexity": "LOW",
       "notes": "Approved for Q4 implementation. Can be converted into a standalone project.",
       "createdAt": "2026-09-14T09:30:00Z"
-    },
-    {
-      "id": "idea_003",
-      "title": "Digital Archive Interactive VR/3D Museum Portal",
-      "description": "Immersive 3D virtual walkthrough of historical DMK monuments and Kalaignar memorial halls accessible in WebGL browsers.",
-      "category": "Interactive WebGL",
-      "status": "DISCUSSION",
-      "createdBy": "Priya Ramachandran",
-      "impact": "HIGH",
-      "complexity": "HIGH",
-      "notes": "Under initial evaluation for 3D model asset creation costs.",
-      "createdAt": "2026-09-18T14:15:00Z"
-    },
-    {
-      "id": "idea_004",
-      "title": "Internal Technical Operations Knowledge Base Portal",
-      "description": "Centralized wiki and operational runbooks for D-Core engineers covering deployment procedures, server IPs, and emergency escalation workflows.",
-      "category": "Internal Tools",
-      "status": "NEW",
-      "createdBy": "Deepa Sundaram",
-      "impact": "MEDIUM",
-      "complexity": "LOW",
-      "notes": "Submitted idea for team feedback.",
-      "createdAt": "2026-09-22T16:00:00Z"
     }
   ],
   "team": [
@@ -376,6 +522,29 @@
   ],
   "activities": [
     {
+      "id": "act_006",
+      "type": "PROJECT_UPDATED",
+      "text": "Added active project 'Legal Support System for Pro Party Members' (portal-tomebhnc.onslate.com)",
+      "projectId": "proj_5",
+      "user": "Kathirmani",
+      "timestamp": "2026-09-27T16:00:00Z"
+    },
+    {
+      "id": "act_007",
+      "type": "PROJECT_UPDATED",
+      "text": "Added active project 'Party Volunteer Verification System' (verification-system-six.vercel.app/x)",
+      "projectId": "proj_6",
+      "user": "Rajesh",
+      "timestamp": "2026-09-27T16:05:00Z"
+    },
+    {
+      "id": "act_008",
+      "type": "IDEA_CREATED",
+      "text": "Imported 14 strategic future works & ideas from central roadmap document",
+      "user": "Kathir RS",
+      "timestamp": "2026-09-27T16:10:00Z"
+    },
+    {
       "id": "act_001",
       "type": "STATUS_CHANGE",
       "text": "Status changed for 'Website Infrastructure & Failover Upgrade' to IN PROGRESS",
@@ -383,42 +552,17 @@
       "taskId": "task_001",
       "user": "Karthik Subramanian",
       "timestamp": "2026-09-25T10:42:00Z"
-    },
-    {
-      "id": "act_002",
-      "type": "TASK_ASSIGNED",
-      "text": "Task 'Mobile Navigation & Touch Interface Audit' assigned to Priya Ramachandran",
-      "projectId": "proj_2",
-      "taskId": "task_003",
-      "user": "Arun Kumar",
-      "timestamp": "2026-09-24T16:15:00Z"
-    },
-    {
-      "id": "act_003",
-      "type": "TASK_COMPLETED",
-      "text": "Task 'Interactive Speech Timeline Video Sync' moved to COMPLETED",
-      "projectId": "proj_3",
-      "taskId": "task_005",
-      "user": "Priya Ramachandran",
-      "timestamp": "2026-09-20T17:30:00Z"
-    },
-    {
-      "id": "act_004",
-      "type": "IDEA_CREATED",
-      "text": "New Future Idea added: 'Internal Technical Operations Knowledge Base Portal'",
-      "user": "Deepa Sundaram",
-      "timestamp": "2026-09-22T16:00:00Z"
-    },
-    {
-      "id": "act_005",
-      "type": "PROJECT_UPDATED",
-      "text": "Project progress updated for 'Kalaignar.org' to 85%",
-      "projectId": "proj_3",
-      "user": "Karthik Subramanian",
-      "timestamp": "2026-09-25T11:20:00Z"
     }
   ],
   "notifications": [
+    {
+      "id": "notif_004",
+      "title": "Roadmap Synced",
+      "message": "14 new future ideas & 2 active projects added from Central Google Sheet Roadmap",
+      "time": "Just now",
+      "read": false,
+      "type": "project"
+    },
     {
       "id": "notif_001",
       "title": "Task Assigned",
@@ -426,22 +570,6 @@
       "time": "10:42 AM",
       "read": false,
       "type": "task"
-    },
-    {
-      "id": "notif_002",
-      "title": "Deadline Approaching",
-      "message": "Mobile Navigation & Touch Interface Audit due on Sep 29",
-      "time": "Yesterday",
-      "read": false,
-      "type": "warning"
-    },
-    {
-      "id": "notif_003",
-      "title": "Project Updated",
-      "message": "Kalaignar.org progress reached 85%",
-      "time": "2 days ago",
-      "read": true,
-      "type": "project"
     }
   ],
   "settings": {
@@ -452,6 +580,6 @@
     "currentUserName": "Arun Kumar",
     "autoSave": true,
     "notificationsEnabled": true,
-    "version": "1.0.4-PROD"
+    "version": "1.0.5-PROD"
   }
 }

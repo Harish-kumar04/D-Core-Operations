@@ -2,7 +2,7 @@ import initialData from '../data/initialData.json';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
 const API_BASE = 'http://localhost:5000/api';
-const STORAGE_KEY = 'dcore_operations_state_v1';
+const STORAGE_KEY = 'dcore_operations_state_v2';
 
 export const DataService = {
   // Fetch full state from Supabase Cloud DB or local Express REST API or localStorage
@@ -354,9 +354,25 @@ export const DataService = {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (!parsed.projects || parsed.projects.length === 0) {
-          parsed.projects = initialData.projects;
+        // Ensure new initialData projects and ideas are merged if missing in local cache
+        const existingProjIds = new Set((parsed.projects || []).map(p => p.id));
+        const missingProj = initialData.projects.filter(p => !existingProjIds.has(p.id));
+        if (missingProj.length > 0) {
+          parsed.projects = [...(parsed.projects || []), ...missingProj];
         }
+
+        const existingIdeaIds = new Set((parsed.ideas || []).map(i => i.id));
+        const missingIdeas = initialData.ideas.filter(i => !existingIdeaIds.has(i.id));
+        if (missingIdeas.length > 0) {
+          parsed.ideas = [...(parsed.ideas || []), ...missingIdeas];
+        }
+
+        const existingTaskIds = new Set((parsed.tasks || []).map(t => t.id));
+        const missingTasks = initialData.tasks.filter(t => !existingTaskIds.has(t.id));
+        if (missingTasks.length > 0) {
+          parsed.tasks = [...(parsed.tasks || []), ...missingTasks];
+        }
+
         return parsed;
       }
     } catch (e) {
