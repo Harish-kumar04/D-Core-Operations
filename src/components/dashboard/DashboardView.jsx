@@ -51,9 +51,9 @@ export const DashboardView = () => {
       <div className="relative overflow-hidden rounded-3xl bg-[#111111] text-white p-6 sm:p-8 shadow-card border border-[#E8E8E8]">
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <img
-            src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790526460/1_cavhvy.webp"
+            src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790532799/5_qfwfnk.png"
             alt="DMK Operations Background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30"
           />
         </div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
