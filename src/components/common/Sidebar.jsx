@@ -74,7 +74,7 @@ export const Sidebar = () => {
       </div>
 
       {/* DMK Core Ecosystem Showcase Card */}
-      <div className="mt-8 p-4 rounded-2xl bg-gradient-to-br from-[#111111] via-[#1a1a1a] to-[#E42129] text-white shadow-card relative overflow-hidden group">
+      <div className="mt-6 p-4 rounded-2xl bg-gradient-to-br from-[#111111] via-[#1a1a1a] to-[#E42129] text-white shadow-card relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform pointer-events-none"></div>
         <div className="relative z-10">
           <div className="flex items-center gap-1.5 text-xs font-bold text-red-200 uppercase tracking-wider mb-1">
@@ -94,6 +94,27 @@ export const Sidebar = () => {
             <span>View All Platforms</span>
             <ArrowUpRight className="w-3 h-3" />
           </button>
+        </div>
+      </div>
+
+      {/* Featured Visual Editorial Card — Fills Empty Sidebar Space */}
+      <div className="mt-4 rounded-2xl overflow-hidden border border-[#E8E8E8] bg-white relative group shadow-xs shrink-0">
+        <div className="h-32 relative overflow-hidden">
+          <img
+            src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790526461/4_bjljdl.webp"
+            alt="DMK Leadership & IT Backbone"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/30 to-transparent"></div>
+          <div className="absolute bottom-2.5 left-3 right-3 text-white space-y-0.5">
+            <span className="text-[9px] font-black uppercase tracking-wider text-white bg-[#E42129] px-2 py-0.5 rounded">
+              D-CORE ARCHIVE
+            </span>
+            <p className="text-[11px] font-bold text-white leading-tight">
+              DMK Leadership & IT Backbone
+            </p>
+          </div>
         </div>
       </div>
 

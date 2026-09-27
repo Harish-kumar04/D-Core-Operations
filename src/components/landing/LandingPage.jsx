@@ -140,52 +140,39 @@ export const LandingPage = () => {
           {preloadedProjects.map((proj, idx) => (
             <div
               key={idx}
-              className="glass-card overflow-hidden flex flex-col justify-between group"
+              className="glass-card p-6 rounded-2xl bg-white border border-[#E8E8E8] hover:border-[#E42129]/40 flex flex-col justify-between group transition-all"
             >
-              <div>
-                <div className="h-44 overflow-hidden relative bg-[#F5F5F5]">
-                  <img
-                    src={proj.image}
-                    alt={proj.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span className="text-[10px] font-black px-2.5 py-1 rounded bg-[#111111]/80 backdrop-blur-md text-white uppercase tracking-wider">
-                      {proj.category}
-                    </span>
-                  </div>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-black px-2.5 py-1 rounded bg-red-50 text-[#E42129] border border-red-100 uppercase tracking-wider">
+                    {proj.category}
+                  </span>
+                  <a
+                    href={proj.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-1.5 rounded-lg bg-[#F5F5F5] hover:bg-red-50 text-[#666666] hover:text-[#E42129] transition-colors"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
                 </div>
 
-                <div className="p-5 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-base font-extrabold text-[#111111] group-hover:text-[#E42129] transition-colors">
-                      {proj.name}
-                    </h3>
-                    <a
-                      href={proj.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-[#666666] hover:text-[#E42129] transition-colors p-1"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </div>
-
-                  <p className="text-xs text-[#333333] leading-relaxed">
+                <div>
+                  <h3 className="text-lg font-black text-[#111111] group-hover:text-[#E42129] transition-colors">
+                    {proj.name}
+                  </h3>
+                  <p className="text-xs text-[#333333] font-medium leading-relaxed mt-2">
                     {proj.description}
                   </p>
                 </div>
               </div>
 
-              <div className="p-5 pt-0">
-                <div className="pt-3 border-t border-[#E8E8E8] flex items-center justify-between text-xs">
-                  <span className="font-mono text-[10px] text-[#666666] font-bold">{proj.url}</span>
-                  <span className="font-bold text-emerald-600 flex items-center gap-1 text-[11px]">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    Active
-                  </span>
-                </div>
+              <div className="pt-4 mt-6 border-t border-[#E8E8E8] flex items-center justify-between text-xs">
+                <span className="font-mono text-[10px] text-[#666666] font-bold">{proj.url}</span>
+                <span className="font-bold text-emerald-600 flex items-center gap-1 text-[11px]">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Active
+                </span>
               </div>
             </div>
           ))}
