@@ -119,13 +119,13 @@ export const CurrentWorksView = () => {
             <option value="P3">P3 — Low</option>
           </select>
 
-          {/* Owner Filter */}
+          {/* Owner / Operational Unit Filter */}
           <select
             value={ownerFilter}
             onChange={(e) => setOwnerFilter(e.target.value)}
             className="px-3 py-1.5 rounded-xl bg-white border border-[#E8E8E8] font-bold text-[#111111] focus:outline-none focus:border-[#E42129]"
           >
-            <option value="ALL">All Team Members</option>
+            <option value="ALL">All Operational Units</option>
             {state.team.map(m => (
               <option key={m.id} value={m.id}>{m.name}</option>
             ))}
@@ -239,9 +239,9 @@ export const CurrentWorksView = () => {
                                   <div className="pt-2 border-t border-[#E8E8E8] flex items-center justify-between text-[10px] text-[#666666]">
                                     <div className="flex items-center gap-1.5 font-bold text-[#111111]">
                                       {owner ? (
-                                        <span className="truncate max-w-[80px]">{owner.name.split(' ')[0]}</span>
+                                        <span className="truncate max-w-[100px] text-[10px] bg-[#F5F5F5] px-1.5 py-0.5 rounded border border-[#E8E8E8]">{owner.name}</span>
                                       ) : (
-                                        <span>DMK Ops</span>
+                                        <span className="text-[10px] bg-[#F5F5F5] px-1.5 py-0.5 rounded border border-[#E8E8E8]">D-Core Ops Unit</span>
                                       )}
                                     </div>
                                     {t.dueDate && (

@@ -159,7 +159,7 @@ export const FutureIdeasView = () => {
                 <div className="pt-4 border-t border-[#E8E8E8] flex items-center justify-between gap-3 text-xs font-medium">
                   <div className="flex items-center gap-2 text-[#666666] font-bold">
                     <User className="w-3.5 h-3.5 text-[#666666]" />
-                    <span>{idea.createdBy || 'D-Core Team'}</span>
+                    <span>D-Core Strategy Desk</span>
                   </div>
 
                   {!isConverted ? (

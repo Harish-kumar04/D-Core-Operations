@@ -22,7 +22,7 @@
       "startDate": "2026-01-15",
       "targetDate": "2026-11-30",
       "createdAt": "2026-01-15T09:00:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z",
+      "updatedAt": "2026-09-24T14:30:00Z",
       "notes": [
         "CDN edge caching implemented for high volume archival documents.",
         "OCR text extraction integration scheduled for Q4."
@@ -41,7 +41,7 @@
       "startDate": "2026-02-01",
       "targetDate": "2026-12-15",
       "createdAt": "2026-02-01T10:00:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z",
+      "updatedAt": "2026-09-25T08:15:00Z",
       "notes": [
         "Mobile responsive redressing passed preliminary QA.",
         "Push notification engine undergoing stress testing."
@@ -60,7 +60,7 @@
       "startDate": "2025-11-01",
       "targetDate": "2026-10-31",
       "createdAt": "2025-11-01T08:30:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z",
+      "updatedAt": "2026-09-25T11:20:00Z",
       "notes": [
         "Primary server cluster hardware migration completed successfully.",
         "High availability load balancers configured for peak traffic."
@@ -79,10 +79,48 @@
       "startDate": "2026-03-10",
       "targetDate": "2027-01-20",
       "createdAt": "2026-03-10T11:00:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z",
+      "updatedAt": "2026-09-23T16:45:00Z",
       "notes": [
         "S3 compatible storage tier setup finished.",
         "Metadata indexing framework under active review."
+      ]
+    },
+    {
+      "id": "proj_5",
+      "name": "Legal Support System for Pro Party Members",
+      "url": "https://portal-tomebhnc.onslate.com/",
+      "description": "Legal support system, case tracking management, and legal assistance portal for pro party members and advocates.",
+      "status": "active",
+      "priority": "P0",
+      "progress": 82,
+      "ownerId": "team_1",
+      "category": "Legal Tech",
+      "startDate": "2026-04-01",
+      "targetDate": "2026-12-01",
+      "createdAt": "2026-04-01T09:00:00Z",
+      "updatedAt": "2026-09-27T10:00:00Z",
+      "notes": [
+        "Case tracking portal live at portal-tomebhnc.onslate.com.",
+        "Court case daily monitoring integration in progress."
+      ]
+    },
+    {
+      "id": "proj_6",
+      "name": "Party Volunteer Verification System",
+      "url": "https://verification-system-six.vercel.app/x",
+      "description": "Field volunteer verification system for civic reports, party member validation, and on-ground operational authentication.",
+      "status": "active",
+      "priority": "P0",
+      "progress": 75,
+      "ownerId": "team_3",
+      "category": "Field Operations",
+      "startDate": "2026-05-15",
+      "targetDate": "2026-11-15",
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-09-27T11:30:00Z",
+      "notes": [
+        "Live volunteer verification system at verification-system-six.vercel.app/x.",
+        "RTI report endorsement module integration underway."
       ]
     }
   ],
@@ -98,15 +136,11 @@
       "dueDate": "2026-09-28",
       "progress": 68,
       "estimatedHours": 32,
-      "tags": [
-        "Infrastructure",
-        "High Priority",
-        "Failover"
-      ],
+      "tags": ["Infrastructure", "High Priority", "Failover"],
       "type": "CURRENT_WORK",
       "notes": "Primary node synced. Edge proxies responding within 18ms.",
       "createdAt": "2026-09-18T10:00:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z"
+      "updatedAt": "2026-09-25T10:42:00Z"
     },
     {
       "id": "task_002",
@@ -119,15 +153,11 @@
       "dueDate": "2026-10-05",
       "progress": 55,
       "estimatedHours": 24,
-      "tags": [
-        "Search",
-        "Performance",
-        "ElasticSearch"
-      ],
+      "tags": ["Search", "Performance", "ElasticSearch"],
       "type": "CURRENT_WORK",
       "notes": "Query latency reduced by 40% in initial benchmark tests.",
       "createdAt": "2026-09-15T09:30:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z"
+      "updatedAt": "2026-09-24T15:10:00Z"
     },
     {
       "id": "task_003",
@@ -140,15 +170,11 @@
       "dueDate": "2026-09-29",
       "progress": 90,
       "estimatedHours": 16,
-      "tags": [
-        "Frontend",
-        "UX",
-        "Mobile"
-      ],
+      "tags": ["Frontend", "UX", "Mobile"],
       "type": "CURRENT_WORK",
       "notes": "PR submitted for review by design team lead.",
       "createdAt": "2026-09-12T14:00:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z"
+      "updatedAt": "2026-09-25T09:15:00Z"
     },
     {
       "id": "task_004",
@@ -161,18 +187,48 @@
       "dueDate": "2026-10-12",
       "progress": 20,
       "estimatedHours": 20,
-      "tags": [
-        "Security",
-        "OAuth2",
-        "Storage"
-      ],
+      "tags": ["Security", "OAuth2", "Storage"],
       "type": "CURRENT_WORK",
       "notes": "Architectural spec finalized. Implementation starting next sprint.",
       "createdAt": "2026-09-20T11:20:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z"
+      "updatedAt": "2026-09-22T16:00:00Z"
     },
     {
       "id": "task_005",
+      "projectId": "proj_5",
+      "title": "Legal Case Tracking & Daily Court Hearing Monitor",
+      "description": "Single-view module tracking daily court cases, argument summaries, hearing outcomes, and legal orders.",
+      "status": "IN PROGRESS",
+      "priority": "P0",
+      "ownerId": "team_1",
+      "dueDate": "2026-10-10",
+      "progress": 70,
+      "estimatedHours": 30,
+      "tags": ["Legal Tech", "High Priority", "Portal"],
+      "type": "CURRENT_WORK",
+      "notes": "Integrated into Legal Support System portal.",
+      "createdAt": "2026-09-26T09:00:00Z",
+      "updatedAt": "2026-09-27T14:00:00Z"
+    },
+    {
+      "id": "task_006",
+      "projectId": "proj_6",
+      "title": "Party Volunteer Identity Validation & RTI Integration",
+      "description": "Verification engine linking party field volunteers with RTI report endorsements and ground checks.",
+      "status": "IN PROGRESS",
+      "priority": "P0",
+      "ownerId": "team_3",
+      "dueDate": "2026-10-15",
+      "progress": 65,
+      "estimatedHours": 28,
+      "tags": ["Volunteer Verification", "RTI", "Field Ops"],
+      "type": "CURRENT_WORK",
+      "notes": "Field testing live on verification-system-six.vercel.app/x.",
+      "createdAt": "2026-09-26T10:00:00Z",
+      "updatedAt": "2026-09-27T15:00:00Z"
+    },
+    {
+      "id": "task_007",
       "projectId": "proj_3",
       "title": "Interactive Speech Timeline Video Sync",
       "description": "Integrate HTML5 video player with synchronized transcript markers for historical speeches.",
@@ -182,11 +238,7 @@
       "dueDate": "2026-09-20",
       "progress": 100,
       "estimatedHours": 28,
-      "tags": [
-        "Media",
-        "HTML5",
-        "Interactive"
-      ],
+      "tags": ["Media", "HTML5", "Interactive"],
       "type": "CURRENT_WORK",
       "notes": "Deployed to production and tested on Chrome/Safari/Firefox.",
       "createdAt": "2026-09-01T08:00:00Z",
@@ -194,166 +246,323 @@
     },
     {
       "id": "task_queue_101",
-      "projectId": "proj_3",
-      "title": "AI Speech Audio Denoising & Enhancement",
-      "description": "Approved project to apply ML noise removal models to vintage audio archives on Kalaignar.org.",
+      "projectId": "proj_5",
+      "title": "Advocate Directory & Emergency Legal Helpline Integration",
+      "description": "Emergency advocate lookup and automated legal assistance ticketing system for party members.",
       "status": "READY",
       "priority": "P1",
       "ownerId": "team_1",
-      "dueDate": "2026-11-10",
-      "targetDate": "2026-11-10",
+      "dueDate": "2026-11-05",
+      "targetDate": "2026-11-05",
       "progress": 0,
-      "estimatedHours": 40,
-      "tags": [
-        "AI/ML",
-        "Audio",
-        "Archival"
-      ],
+      "estimatedHours": 24,
+      "tags": ["Legal Wing", "Directory", "Helpline"],
       "type": "WORK_QUEUE",
-      "dependencies": "Archival audio upload completion",
-      "notes": "Approved in operational meeting. Ready to be moved to Current Works.",
-      "createdAt": "2026-09-20T14:00:00Z",
-      "updatedAt": "2026-09-26T14:30:00Z"
+      "dependencies": "Legal Support System Auth Sync",
+      "notes": "Ready for implementation.",
+      "createdAt": "2026-09-27T11:00:00Z",
+      "updatedAt": "2026-09-27T11:00:00Z"
+    },
+    {
+      "id": "task_queue_102",
+      "projectId": "proj_6",
+      "title": "Ward Level Volunteer Badge & QR Auth Scanner",
+      "description": "Mobile QR authentication scanner for party volunteers during ward-level civic verification drives.",
+      "status": "PLANNED",
+      "priority": "P2",
+      "ownerId": "team_3",
+      "dueDate": "2026-11-20",
+      "targetDate": "2026-11-20",
+      "progress": 0,
+      "estimatedHours": 20,
+      "tags": ["QR Auth", "Mobile Scanner", "Field Ops"],
+      "type": "WORK_QUEUE",
+      "dependencies": "Party Volunteer Database API",
+      "notes": "Planned for Q4 rollout.",
+      "createdAt": "2026-09-27T11:30:00Z",
+      "updatedAt": "2026-09-27T11:30:00Z"
     }
   ],
   "ideas": [
+    {
+      "id": "idea_gs_001",
+      "title": "AI Student Data & Resource Repository (Casteless Society)",
+      "description": "AI-driven student data repository, educational tools, and scholarship requirement manager for building an egalitarian, casteless society.",
+      "category": "Education & Social Welfare",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Requirements document mapped. Aimed at providing equal educational opportunities and AI tools for students.",
+      "createdAt": "2026-09-27T12:00:00Z"
+    },
+    {
+      "id": "idea_gs_002",
+      "title": "RTI Report Endorsement & Civic Verification System",
+      "description": "Integration framework to onboard RTI activists and endorse verified RTI reports directly into the civic verification tool.",
+      "category": "Civic Infrastructure",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Linked with party volunteer verification system for field RTI report validation.",
+      "createdAt": "2026-09-27T12:05:00Z"
+    },
+    {
+      "id": "idea_gs_003",
+      "title": "Legal Wing Daily Court Case Monitoring Dashboard",
+      "description": "Single-view portal tracking daily hearing dates, case arguments, hearing outcomes, case history, court orders, and legal documents for the DMK Legal Wing.",
+      "category": "Legal Tech",
+      "status": "APPROVED",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "CRITICAL",
+      "complexity": "MEDIUM",
+      "notes": "Enhancement for the Legal Support System portal (portal-tomebhnc.onslate.com). Enables full case lifecycle tracking.",
+      "createdAt": "2026-09-27T12:10:00Z"
+    },
+    {
+      "id": "idea_gs_004",
+      "title": "Kalaignar Writings & Historical Speeches OCR Digitization",
+      "description": "High-precision OCR conversion pipeline to digitize legacy Tamil books, speeches, and manuscripts of Kalaignar Karunanidhi into searchable text.",
+      "category": "Digital Archive & AI",
+      "status": "RESEARCH",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Evaluation of Tamil Tesseract OCR and custom neural recognition models for historical print styles.",
+      "createdAt": "2026-09-27T12:15:00Z"
+    },
+    {
+      "id": "idea_gs_005",
+      "title": "DMK Representative Social Media Analytics Network",
+      "description": "Comprehensive social media analytics dashboard tracking performance, reach, and engagement across accounts of DMK MLAs, ex-MLAs, Ministers, and District Secretaries.",
+      "category": "Analytics & Outreach",
+      "status": "APPROVED",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Centralized dashboard tracking engagement metrics, follower growth, and post frequency.",
+      "createdAt": "2026-09-27T12:20:00Z"
+    },
+    {
+      "id": "idea_gs_006",
+      "title": "DMK Cadre Direct Connection & Engagement App",
+      "description": "Mobile application establishing direct connection between DMK leadership and all party members & supporters with daily engagement streaks and participation bars.",
+      "category": "Cadre Management",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "CRITICAL",
+      "complexity": "HIGH",
+      "notes": "Includes engagement bar tracking and direct message broadcasts from party leadership.",
+      "createdAt": "2026-09-27T12:25:00Z"
+    },
+    {
+      "id": "idea_gs_007",
+      "title": "Youth Wing & Frontal Wings Digital Portal Network",
+      "description": "Dedicated web platforms for DMK Youth Wing and all wings, appointing SM incharges per wing to monitor and boost digital footprint across all platforms.",
+      "category": "Digital Outreach",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "MEDIUM",
+      "complexity": "LOW",
+      "notes": "Minimum 5 influencers per wing added to advisory group with dedicated SM coordinators.",
+      "createdAt": "2026-09-27T12:30:00Z"
+    },
+    {
+      "id": "idea_gs_008",
+      "title": "Ward Level Hyper-Local Issues Tracker",
+      "description": "Ground-level issue tracking network appointing 1 coordinator per ward to log, monitor, and resolve hyper-local civic problems.",
+      "category": "Field Operations",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "1 person per ward structure integrated with central D-Core operations desk.",
+      "createdAt": "2026-09-27T12:35:00Z"
+    },
+    {
+      "id": "idea_gs_009",
+      "title": "Auto Social Media Post Scheduler (Cogsend Integration)",
+      "description": "Open-source based social media scheduling platform (forked from Cogsend / Zoho integration) for automated multi-channel DMK content publishing.",
+      "category": "Automation & Outreach",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "MEDIUM",
+      "complexity": "LOW",
+      "notes": "Forking github.com/Interpoolx/cogsend for automated queue management.",
+      "createdAt": "2026-09-27T12:40:00Z"
+    },
+    {
+      "id": "idea_gs_010",
+      "title": "DMK Achievements & Popular Video/Meme Reference Vault",
+      "description": "Ready-reference digital repository of DMK governance achievements, video clips, meme templates, and structured answers to political controversies.",
+      "category": "Content & Media",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "HIGH",
+      "complexity": "LOW",
+      "notes": "Categorized vault for instant media creation and rapid response.",
+      "createdAt": "2026-09-27T12:45:00Z"
+    },
+    {
+      "id": "idea_gs_011",
+      "title": "AI-Mapped DMK Writers & Content Creators Network",
+      "description": "Directory of DMK social media writers and creators, cataloging their best indexed works accessible through an AI search interface.",
+      "category": "Content & AI",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "MEDIUM",
+      "complexity": "MEDIUM",
+      "notes": "AI semantic search mapping top articles, tweets, and scripts.",
+      "createdAt": "2026-09-27T12:50:00Z"
+    },
+    {
+      "id": "idea_gs_012",
+      "title": "Master Campaign Narratives & Strategic Intelligence Dashboard",
+      "description": "Intelligence dashboard tracking DMK narrative strength, opposition strategy shifts, and campaign narrative counter-measures in real time.",
+      "category": "Strategic Intelligence",
+      "status": "RESEARCH",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "CRITICAL",
+      "complexity": "HIGH",
+      "notes": "Real-time topic tracking, sentiment monitoring, and counter-narrative formulation.",
+      "createdAt": "2026-09-27T12:55:00Z"
+    },
+    {
+      "id": "idea_gs_013",
+      "title": "Kalaignar Historical Speeches & Assembly Debate Vault",
+      "description": "Digitized audio, video, and transcript vault of all past assembly and public speeches of Kalaignar Karunanidhi.",
+      "category": "Digital Archive",
+      "status": "APPROVED",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Includes speech indexing, OCR transcript search, and video clip tagging.",
+      "createdAt": "2026-09-27T13:00:00Z"
+    },
+    {
+      "id": "idea_gs_014",
+      "title": "Campaign Strategy Psychological Advisory Unit",
+      "description": "Specialized advisory panel integrating psychological experts to evaluate voter sentiments and formulate communication strategies.",
+      "category": "Strategic Planning",
+      "status": "NEW",
+      "createdBy": "D-Core Strategy Unit",
+      "impact": "MEDIUM",
+      "complexity": "LOW",
+      "notes": "Advisory unit of 2-3 psychological experts for strategy guidance.",
+      "createdAt": "2026-09-27T13:05:00Z"
+    },
     {
       "id": "idea_001",
       "title": "AI-Powered Archival Document Search & Summarization",
       "description": "Implement an intelligent semantic search agent leveraging LLM embeddings to allow researchers to query historical speeches, essays, and archival documents in natural Tamil/English.",
       "category": "Artificial Intelligence",
       "status": "RESEARCH",
-      "createdBy": "Arun Kumar",
+      "createdBy": "D-Core Strategy Unit",
       "impact": "HIGH",
       "complexity": "MEDIUM",
-      "notes": "Evaluated sentence-transformers with Tamil embeddings.",
+      "notes": "Evaluated sentence-transformers with Tamil embeddings. Initial retrieval precision looks promising.",
       "createdAt": "2026-09-10T11:00:00Z"
     },
     {
       "id": "idea_002",
       "title": "Automated Infrastructure Health Monitoring & Alerting Bot",
-      "description": "Unified NOC dashboard bot that monitors uptime, CPU usage, and bandwidth across all D-Core ecosystem domains and broadcasts instant alerts.",
+      "description": "Unified NOC dashboard bot that monitors uptime, CPU usage, and bandwidth across all D-Core ecosystem domains and broadcasts instant alerts via Telegram/WhatsApp webhook.",
       "category": "DevOps & NOC",
       "status": "APPROVED",
-      "createdBy": "Karthik Subramanian",
+      "createdBy": "D-Core Strategy Unit",
       "impact": "CRITICAL",
       "complexity": "LOW",
-      "notes": "Approved for Q4 implementation.",
+      "notes": "Approved for Q4 implementation. Can be converted into a standalone project.",
       "createdAt": "2026-09-14T09:30:00Z"
     }
   ],
   "team": [
     {
       "id": "team_1",
-      "name": "Arun Kumar",
+      "name": "Systems & Architecture Desk",
       "role": "Lead Systems Architect",
       "department": "Technology Operations",
-      "email": "arun.k@dcore.ops",
+      "email": "architect@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-      "skills": [
-        "Cloud Infrastructure",
-        "Kubernetes",
-        "React",
-        "DevOps"
-      ],
+      "skills": ["Cloud Infrastructure", "Kubernetes", "React", "DevOps"],
       "activeProjects": 3,
       "capacity": 80
     },
     {
       "id": "team_2",
-      "name": "Priya Ramachandran",
-      "role": "Senior Frontend Engineer",
+      "name": "Frontend Platforms Unit",
+      "role": "Senior Frontend Lead",
       "department": "Digital Platforms",
-      "email": "priya.r@dcore.ops",
+      "email": "frontend@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
-      "skills": [
-        "React",
-        "Next.js",
-        "Tailwind CSS",
-        "UI/UX"
-      ],
+      "skills": ["React", "Next.js", "Tailwind CSS", "UI/UX"],
       "activeProjects": 2,
       "capacity": 65
     },
     {
       "id": "team_3",
-      "name": "Karthik Subramanian",
+      "name": "IT Security & NOC Unit",
       "role": "Infrastructure & Security Lead",
       "department": "IT Infrastructure",
-      "email": "karthik.s@dcore.ops",
+      "email": "noc@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-      "skills": [
-        "Cybersecurity",
-        "NOC",
-        "Database Admin",
-        "Python"
-      ],
+      "skills": ["Cybersecurity", "NOC", "Database Admin", "Python"],
       "activeProjects": 3,
       "capacity": 90
     },
     {
       "id": "team_4",
-      "name": "Deepa Sundaram",
-      "role": "Data & Systems Specialist",
+      "name": "Data & Operations Unit",
+      "role": "Data Systems Specialist",
       "department": "Technology Operations",
-      "email": "deepa.s@dcore.ops",
+      "email": "data@dcore.ops",
       "avatar": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
-      "skills": [
-        "Data Pipelines",
-        "PostgreSQL",
-        "Analytics",
-        "Automation"
-      ],
+      "skills": ["Data Pipelines", "PostgreSQL", "Analytics", "Automation"],
       "activeProjects": 2,
       "capacity": 45
     }
   ],
   "history": [
     {
-      "id": "hist_1790439923960_946",
-      "adminName": "Harish",
-      "action": "ADMIN_LOGIN",
-      "entityType": "AUTH",
-      "entityId": "session_01",
-      "entityName": "Admin Session",
-      "details": "Admin 'Harish' logged into Operations Center.",
-      "timestamp": "2026-09-26T16:25:23.960Z"
-    },
-    {
-      "id": "hist_1790436154043_192",
-      "adminName": "Harish",
-      "action": "ADMIN_LOGIN",
-      "entityType": "AUTH",
-      "entityId": "session_01",
-      "entityName": "Admin Session",
-      "details": "Admin 'Harish' logged into Operations Center.",
-      "timestamp": "2026-09-26T15:22:34.043Z"
-    },
-    {
       "id": "hist_001",
-      "adminName": "Arun Kumar (Admin)",
+      "adminName": "Admin Operator",
       "action": "SYSTEM_INITIALIZED",
       "entityType": "SYSTEM",
       "entityId": "sys_01",
       "entityName": "D-CORE Operations Server",
-      "details": "REST API database initialized with 4 core platforms.",
-      "timestamp": "2026-09-26T14:30:00Z"
+      "details": "REST API database initialized with 6 core active platforms and 16 future ideas.",
+      "timestamp": "2026-09-27T16:00:00Z"
     }
   ],
   "activities": [
     {
-      "id": "act_001",
-      "type": "STATUS_CHANGE",
-      "text": "Status changed for 'Website Infrastructure & Failover Upgrade' to IN PROGRESS",
-      "projectId": "proj_3",
-      "taskId": "task_001",
-      "user": "Karthik Subramanian",
-      "timestamp": "2026-09-26T14:30:00Z"
+      "id": "act_006",
+      "type": "PROJECT_UPDATED",
+      "text": "Added active project 'Legal Support System for Pro Party Members' (portal-tomebhnc.onslate.com)",
+      "projectId": "proj_5",
+      "user": "D-Core Ops",
+      "timestamp": "2026-09-27T16:00:00Z"
+    },
+    {
+      "id": "act_007",
+      "type": "PROJECT_UPDATED",
+      "text": "Added active project 'Party Volunteer Verification System' (verification-system-six.vercel.app/x)",
+      "projectId": "proj_6",
+      "user": "D-Core Ops",
+      "timestamp": "2026-09-27T16:05:00Z"
+    },
+    {
+      "id": "act_008",
+      "type": "IDEA_CREATED",
+      "text": "Imported 14 strategic future works & ideas from central roadmap document",
+      "user": "D-Core Ops",
+      "timestamp": "2026-09-27T16:10:00Z"
     }
   ],
   "settings": {
     "organizationName": "D-CORE OPERATIONS",
     "tagline": "Technology at the Core. Operations at Scale.",
-    "version": "1.0.5-PROD"
+    "version": "1.0.6-PROD"
   }
 }

@@ -180,7 +180,7 @@ export const Header = () => {
                 {isAdminLoggedIn ? 'ADMIN' : 'INTERNAL USER'}
               </p>
               <p className="text-xs font-extrabold text-[#111111] leading-tight mt-0.5">
-                {userSession.userName || adminName || 'Internal Member'}
+                OPERATOR
               </p>
             </div>
 

@@ -85,7 +85,7 @@ export const Sidebar = () => {
             DMK Technology Infrastructure
           </h4>
           <p className="text-[11px] text-slate-200 mt-1.5 leading-relaxed font-medium">
-            Managing Periyar.net, Makkalveeran.com, Kalaignar.org & TVK Files.
+            Managing 6 Active Platforms including Legal Support Portal & Volunteer Verification.
           </p>
           <button
             onClick={() => navigate('projects')}
