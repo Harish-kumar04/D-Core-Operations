@@ -93,12 +93,6 @@ export const AnalyticsView = () => {
         </div>
       </div>
 
-      {/* Integrated Periyar Women Empowerment Quote Card */}
-      <QuoteCard
-        quote="பெண்ணை அடக்கி வைத்த சமூகம் தன்னைத்தானே சுருக்கிக் கொள்கிறது."
-        speaker="தந்தை பெரியார்"
-        variant="minimal"
-      />
 
       {/* Grid of 4 Recharts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

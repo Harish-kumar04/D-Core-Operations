@@ -1,3 +1,5 @@
+import React from 'react';
+import { useApp } from '../../context/AppContext';
 import { QuoteCard } from '../common/QuoteCard';
 import { ProjectDetailView } from './ProjectDetailView';
 import {
