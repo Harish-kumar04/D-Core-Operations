@@ -80,14 +80,14 @@ export const InternalAuthWall = () => {
               </span>
             </div>
             <p className="text-[10px] font-bold tracking-wider text-[#666666] uppercase -mt-0.5">
-              4 AUTHORIZED ADMIN USERS
+              AUTHORIZED ADMIN ACCESS
             </p>
           </div>
         </div>
 
         <div className="hidden sm:flex items-center gap-2 text-xs font-bold text-[#111111] bg-[#F5F5F5] px-3.5 py-2 rounded-xl border border-[#E8E8E8]">
           <ShieldCheck className="w-4 h-4 text-[#E42129]" />
-          <span>Strict 4-User Authentication</span>
+          <span>Protected Authentication</span>
         </div>
       </div>
 
@@ -144,7 +144,7 @@ export const InternalAuthWall = () => {
               </p>
             </div>
 
-            {/* 4 User Selector Grid */}
+            {/* User Selector Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {AUTHORIZED_USERS.map((usr) => {
                 const isSelected = selectedUser.id === usr.id;
@@ -227,7 +227,7 @@ export const InternalAuthWall = () => {
             </form>
 
             <p className="text-[11px] text-[#666666] font-medium text-center pt-1">
-              🔒 Strictly restricted to 4 authorized internal admin users.
+              🔒 Restricted to authorized internal admin profiles.
             </p>
 
           </div>
