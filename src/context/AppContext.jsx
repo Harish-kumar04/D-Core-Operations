@@ -87,11 +87,16 @@ export const AppProvider = ({ children }) => {
   };
 
   // --- INTERNAL AUTH WALL LOGIN (FOR 4 AUTHORIZED ADMIN USERS) ---
-  const loginUserSession = (name, passcode) => {
-    const trimmedName = name.trim();
+  const loginUserSession = (profileName, passcode, memberName = '') => {
+    const trimmedProfile = profileName.trim();
     const cleanPass = passcode.trim();
+    const cleanMemberName = memberName.trim();
 
-    // Passcode mapping for the 4 users
+    if (!cleanMemberName) {
+      return { success: false, error: 'Your name is required to enter the application.' };
+    }
+
+    // Passcode mapping for the authorized users
     const userPasscodes = {
       'admin': 'admin@321',
       'admin2': 'admin!321',
@@ -99,22 +104,36 @@ export const AppProvider = ({ children }) => {
       'admin4': 'admin@dcore67'
     };
 
-    const expectedPasscode = userPasscodes[trimmedName];
+    const expectedPasscode = userPasscodes[trimmedProfile];
     if (expectedPasscode && cleanPass === expectedPasscode) {
-      const session = { isAuthenticated: true, userName: trimmedName, userRole: 'ADMIN' };
+      const displayName = `${cleanMemberName} (${trimmedProfile})`;
+      const session = {
+        isAuthenticated: true,
+        userName: displayName,
+        memberName: cleanMemberName,
+        profileName: trimmedProfile,
+        userRole: 'ADMIN'
+      };
       setUserSession(session);
       setIsAdminLoggedIn(true);
-      setAdminName(trimmedName);
+      setAdminName(displayName);
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
       sessionStorage.removeItem('dcore_quote_popup_seen');
 
-      addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${trimmedName}' logged in with full edit access.`, trimmedName);
-      DataService.loginAdminApi(`${trimmedName}@dcore.ops`, cleanPass, trimmedName);
-      showToast(`Welcome Admin '${trimmedName}'! Full editing access unlocked.`);
+      addHistoryLog(
+        'PORTAL_LOGIN',
+        'AUTH',
+        `session_${Date.now()}`,
+        'User Access Audit',
+        `Team Member '${cleanMemberName}' entered D-Core Operations Portal under profile '${trimmedProfile}'.`,
+        displayName
+      );
+      DataService.loginAdminApi(`${trimmedProfile}@dcore.ops`, cleanPass, displayName);
+      showToast(`Welcome ${cleanMemberName}! Access granted under profile '${trimmedProfile}'.`);
       return { success: true };
     }
 
-    return { success: false, error: `Incorrect passcode for ${trimmedName}.` };
+    return { success: false, error: `Incorrect passcode for ${trimmedProfile}.` };
   };
 
   const logoutUserSession = () => {
@@ -172,9 +191,10 @@ export const AppProvider = ({ children }) => {
 
   // Helper to append history audit logs
   const addHistoryLog = (action, entityType, entityId, entityName, details, overrideAdminName = null) => {
+    const activeMember = userSession?.memberName || adminName || userSession?.userName || 'Admin Operator';
     const newLog = {
       id: `hist_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
-      adminName: overrideAdminName || adminName || userSession.userName || 'Admin User',
+      adminName: overrideAdminName || activeMember,
       action,
       entityType,
       entityId,

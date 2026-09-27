@@ -40,6 +40,7 @@ export const AUTHORIZED_USERS = [
 export const InternalAuthWall = () => {
   const { loginUserSession } = useApp();
   const [selectedUser, setSelectedUser] = useState(AUTHORIZED_USERS[0]);
+  const [memberName, setMemberName] = useState('');
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState('');
 
@@ -47,14 +48,19 @@ export const InternalAuthWall = () => {
     e.preventDefault();
     setError('');
 
+    if (!memberName.trim()) {
+      setError('Your name is required to enter the portal and record history audit logs.');
+      return;
+    }
+
     if (!passcode.trim()) {
       setError('Please enter your authorized passcode.');
       return;
     }
 
-    const res = loginUserSession(selectedUser.name, passcode);
+    const res = loginUserSession(selectedUser.name, passcode, memberName);
     if (!res.success) {
-      setError(`Incorrect passcode for ${selectedUser.name}.`);
+      setError(res.error || `Incorrect passcode for ${selectedUser.name}.`);
     }
   };
 
@@ -95,8 +101,8 @@ export const InternalAuthWall = () => {
       <div className="max-w-5xl w-full mx-auto z-10 my-auto py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 bg-white rounded-3xl border border-[#E8E8E8] shadow-card overflow-hidden">
           
-          {/* Left Column: Visual Showcase using Cloudinary Asset */}
-          <div className="lg:col-span-5 relative bg-[#111111] p-8 text-white flex flex-col justify-between hidden md:flex min-h-[480px]">
+          {/* Left Column: Visual Showcase using Cloudinary Asset & Kalaignar Quote */}
+          <div className="lg:col-span-5 relative bg-[#111111] p-8 text-white flex flex-col justify-between hidden md:flex min-h-[500px]">
             <div className="absolute inset-0 z-0 opacity-40">
               <img
                 src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790526461/4_bjljdl.webp"
@@ -117,19 +123,29 @@ export const InternalAuthWall = () => {
               </h3>
             </div>
 
-            <div className="relative z-10 space-y-3 pt-6 border-t border-white/10">
+            <div className="relative z-10 space-y-4 pt-6 border-t border-white/10">
+              {/* Integrated Kalaignar Quote */}
+              <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white space-y-1.5">
+                <p className="text-xs sm:text-sm font-bold italic text-red-100 leading-relaxed font-tamil">
+                  "உண்மையை மறைக்க முனைவது, விதையை பூமிக்குள் மறைப்பதுபோலத்தான்."
+                </p>
+                <p className="text-[11px] font-extrabold text-white text-right font-tamil">
+                  — கலைஞர் மு.கருணாநிதி
+                </p>
+              </div>
+
               <p className="text-xs text-slate-300 font-medium leading-relaxed">
                 Centralized management for digital archives, platform infrastructure, current works, and workflow queues.
               </p>
               <div className="flex items-center gap-2 text-[11px] font-mono text-red-400 font-bold">
                 <span className="w-2 h-2 rounded-full bg-[#E42129] animate-pulse"></span>
-                <span>Protected Access Gateway</span>
+                <span>Audit Log Identity Gateway</span>
               </div>
             </div>
           </div>
 
           {/* Right Column: Authentication Card Form */}
-          <div className="lg:col-span-7 p-6 sm:p-10 space-y-6 flex flex-col justify-center">
+          <div className="lg:col-span-7 p-6 sm:p-10 space-y-5 flex flex-col justify-center">
             
             {/* Header */}
             <div className="space-y-1">
@@ -140,7 +156,17 @@ export const InternalAuthWall = () => {
                 Select Admin Profile
               </h2>
               <p className="text-xs text-[#666666] font-medium">
-                Select your authorized user account to access the D-Core Operations Dashboard.
+                Enter your name and select your authorized profile to record operations in history logs.
+              </p>
+            </div>
+
+            {/* Tamil Quote Card Banner on Form Side */}
+            <div className="p-3.5 rounded-xl bg-red-50/80 border border-red-100 text-[#111111] space-y-1">
+              <p className="text-xs font-bold text-[#E42129] italic leading-relaxed font-tamil">
+                "உண்மையை மறைக்க முனைவது, விதையை பூமிக்குள் மறைப்பதுபோலத்தான்."
+              </p>
+              <p className="text-[10px] font-black text-[#111111] text-right font-tamil">
+                — கலைஞர் மு.கருணாநிதி
               </p>
             </div>
 
@@ -154,7 +180,6 @@ export const InternalAuthWall = () => {
                     key={usr.id}
                     onClick={() => {
                       setSelectedUser(usr);
-                      setPasscode('');
                       setError('');
                     }}
                     className={`p-3.5 rounded-2xl border transition-all duration-200 cursor-pointer flex items-center justify-between group ${
@@ -190,7 +215,7 @@ export const InternalAuthWall = () => {
               })}
             </div>
 
-            {/* Passcode Form (NO HINTS) */}
+            {/* Form Inputs (Mandatory Name + Passcode) */}
             <form onSubmit={handleSubmit} className="space-y-4 text-xs font-medium pt-3 border-t border-[#E8E8E8]">
               {error && (
                 <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-[#E42129] font-bold flex items-center gap-2">
@@ -199,6 +224,27 @@ export const InternalAuthWall = () => {
                 </div>
               )}
 
+              {/* Mandatory Member Name Field */}
+              <div>
+                <label className="block text-[#111111] font-extrabold mb-1.5 text-xs flex items-center justify-between">
+                  <span>Your Full Name / Member Name *</span>
+                  <span className="text-[10px] text-[#E42129] font-bold uppercase tracking-wider">Required for Audit Logs</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter your full name (e.g. Sentinel / Member Name)"
+                    value={memberName}
+                    onChange={(e) => setMemberName(e.target.value)}
+                    className="w-full px-4 py-3 bg-[#F5F5F5] border border-[#E8E8E8] rounded-xl focus:outline-none focus:border-[#E42129] text-sm font-semibold text-[#111111] transition-all placeholder-slate-400"
+                    autoFocus
+                  />
+                  <UserCheck className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Passcode Field */}
               <div>
                 <label className="block text-[#111111] font-extrabold mb-1.5 text-xs">
                   Passcode for <span className="text-[#E42129] font-black">{selectedUser.name}</span> *
@@ -207,11 +253,10 @@ export const InternalAuthWall = () => {
                   <input
                     type="password"
                     required
-                    placeholder={`Enter passcode`}
+                    placeholder="Enter passcode"
                     value={passcode}
                     onChange={(e) => setPasscode(e.target.value)}
                     className="w-full px-4 py-3 bg-[#F5F5F5] border border-[#E8E8E8] rounded-xl focus:outline-none focus:border-[#E42129] text-sm font-mono text-[#111111] transition-all placeholder-slate-400"
-                    autoFocus
                   />
                   <Lock className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
@@ -221,13 +266,13 @@ export const InternalAuthWall = () => {
                 type="submit"
                 className="btn-primary w-full py-3.5"
               >
-                <span>Authenticate as {selectedUser.name}</span>
+                <span>Authenticate & Enter Portal</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
 
             <p className="text-[11px] text-[#666666] font-medium text-center pt-1">
-              🔒 Restricted to authorized internal admin profiles.
+              🔒 Identity verification enabled — All actions are logged into history.
             </p>
 
           </div>
