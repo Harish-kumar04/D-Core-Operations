@@ -9,17 +9,17 @@ export const QuoteCard = ({
 }) => {
   if (variant === 'dark') {
     return (
-      <div className={`p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-dcore-maroon text-white border border-slate-800 shadow-card relative overflow-hidden ${className}`}>
-        <div className="absolute -right-4 -bottom-4 opacity-10 text-white pointer-events-none">
+      <div className={`p-8 rounded-3xl bg-[#111111] text-white border border-[#E8E8E8] shadow-card relative overflow-hidden select-none ${className}`}>
+        <div className="absolute right-4 bottom-4 opacity-10 text-white pointer-events-none">
           <QuoteIcon className="w-32 h-32" />
         </div>
-        <div className="relative z-10 space-y-3">
-          <p className="text-sm sm:text-base font-serif font-semibold leading-relaxed tracking-wide text-slate-100">
+        <div className="relative z-10 space-y-4">
+          <p className="text-base sm:text-lg font-serif font-bold leading-relaxed tracking-wide text-white tamil-quote">
             “{quote}”
           </p>
           <div className="flex items-center gap-2 pt-1">
-            <span className="w-6 h-0.5 bg-dcore-red"></span>
-            <p className="text-xs font-bold text-red-300 tracking-wider">
+            <span className="w-8 h-0.5 bg-[#E42129]"></span>
+            <p className="text-xs font-black text-red-400 tracking-wider">
               — {speaker}
             </p>
           </div>
@@ -30,19 +30,19 @@ export const QuoteCard = ({
 
   if (variant === 'featured') {
     return (
-      <div className={`glass-card p-6 rounded-2xl border-l-4 border-l-dcore-red border-y border-r border-slate-200/90 bg-white relative overflow-hidden ${className}`}>
-        <div className="absolute right-3 top-3 opacity-5 text-dcore-red pointer-events-none">
+      <div className={`glass-card p-6 rounded-2xl border-l-4 border-l-[#E42129] border-y border-r border-[#E8E8E8] bg-white relative overflow-hidden select-none ${className}`}>
+        <div className="absolute right-3 top-3 opacity-5 text-[#E42129] pointer-events-none">
           <QuoteIcon className="w-24 h-24" />
         </div>
         <div className="relative z-10 space-y-3">
-          <div className="flex items-center gap-2 text-dcore-red text-xs font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-[#E42129] text-xs font-black uppercase tracking-wider">
             <QuoteIcon className="w-4 h-4" />
             <span>Operational Philosophy</span>
           </div>
-          <p className="text-sm sm:text-base font-serif font-medium text-slate-900 leading-relaxed">
+          <p className="text-sm sm:text-base font-serif font-bold text-[#111111] leading-relaxed tamil-quote">
             “{quote}”
           </p>
-          <p className="text-xs font-extrabold text-dcore-red text-right">
+          <p className="text-xs font-extrabold text-[#E42129] text-right">
             — {speaker}
           </p>
         </div>
@@ -52,11 +52,11 @@ export const QuoteCard = ({
 
   if (variant === 'minimal') {
     return (
-      <div className={`p-4 rounded-xl bg-red-50/60 border border-red-100/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-medium text-slate-800 ${className}`}>
-        <p className="italic font-serif leading-relaxed text-slate-900">
+      <div className={`p-4 rounded-xl bg-red-50/70 border border-red-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-medium text-[#111111] select-none ${className}`}>
+        <p className="font-serif leading-relaxed text-[#111111] font-bold tamil-quote">
           “{quote}”
         </p>
-        <span className="font-bold text-dcore-red shrink-0 text-[11px]">
+        <span className="font-black text-[#E42129] shrink-0 text-xs">
           — {speaker}
         </span>
       </div>
@@ -65,15 +65,15 @@ export const QuoteCard = ({
 
   // Default 'inline'
   return (
-    <div className={`p-5 rounded-2xl bg-white border border-slate-200/90 shadow-soft flex items-start gap-4 ${className}`}>
-      <div className="w-9 h-9 rounded-xl bg-red-50 text-dcore-red flex items-center justify-center shrink-0 font-bold">
+    <div className={`p-5 rounded-2xl bg-white border border-[#E8E8E8] shadow-soft flex items-start gap-4 select-none ${className}`}>
+      <div className="w-9 h-9 rounded-xl bg-red-50 text-[#E42129] flex items-center justify-center shrink-0 font-bold border border-red-100">
         <QuoteIcon className="w-4 h-4" />
       </div>
       <div className="flex-1 space-y-2">
-        <p className="text-xs sm:text-sm font-serif font-medium text-slate-800 leading-relaxed">
+        <p className="text-xs sm:text-sm font-serif font-bold text-[#111111] leading-relaxed tamil-quote">
           “{quote}”
         </p>
-        <p className="text-xs font-bold text-dcore-red">
+        <p className="text-xs font-black text-[#E42129]">
           — {speaker}
         </p>
       </div>

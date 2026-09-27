@@ -8,12 +8,10 @@ import {
   Lightbulb,
   CheckCircle2,
   ArrowRight,
-  Clock,
   AlertOctagon,
   Sparkles,
   TrendingUp,
-  Activity,
-  UserCheck
+  Activity
 } from 'lucide-react';
 
 export const DashboardView = () => {
@@ -47,22 +45,27 @@ export const DashboardView = () => {
   const recentActivities = (state.activities || []).slice(0, 6);
 
   return (
-    <div className="space-y-8 pb-12 animate-in fade-in duration-300">
+    <div className="space-y-8 pb-12 animate-in fade-in duration-300 select-none">
       
-      {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-dcore-maroon text-white p-6 sm:p-8 shadow-card">
-        {/* Subtle Background Elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-dcore-red/10 rounded-full blur-3xl pointer-events-none"></div>
+      {/* Header Banner — Editorial DMK Dark Container */}
+      <div className="relative overflow-hidden rounded-3xl bg-[#111111] text-white p-6 sm:p-8 shadow-card border border-[#E8E8E8]">
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <img
+            src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790526460/1_cavhvy.webp"
+            alt="DMK Operations Background"
+            className="w-full h-full object-cover"
+          />
+        </div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-dcore-red/20 border border-dcore-red/40 text-red-300 text-xs font-bold uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E42129] text-white text-xs font-black uppercase tracking-wider mb-3 shadow-xs">
               <Sparkles className="w-3.5 h-3.5" />
               <span>D-Core Command Center</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Good Morning, D-Core 👋
             </h1>
-            <p className="text-sm text-slate-300 mt-1 max-w-xl leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed font-medium">
               Here's what's happening across the digital operations pipeline for DMK platforms & IT infrastructure.
             </p>
           </div>
@@ -70,14 +73,14 @@ export const DashboardView = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('current-works')}
-              className="bg-dcore-red hover:bg-dcore-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-lg shadow-dcore-red/30 flex items-center gap-2 transition-all hover:scale-105"
+              className="btn-primary px-5 py-3"
             >
               <Kanban className="w-4 h-4" />
               <span>Go to Current Works</span>
             </button>
             <button
               onClick={() => navigate('analytics')}
-              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-xl font-bold text-xs backdrop-blur-md border border-white/20 transition-all"
+              className="btn-secondary text-white border-white/30 hover:border-white hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-md px-4 py-3"
             >
               View Analytics
             </button>
@@ -85,7 +88,7 @@ export const DashboardView = () => {
         </div>
       </div>
 
-      {/* Integrated Periyar Inspirational Value Quote */}
+      {/* Integrated Periyar Tamil Quote Card */}
       <QuoteCard
         quote="மனிதன் தனது தன்மானத்தையும் சுயமரியாதையையும் உயிரைவிட உயர்வாகக் கருத வேண்டும்."
         speaker="தந்தை பெரியார்"
@@ -97,21 +100,21 @@ export const DashboardView = () => {
         {/* Active Projects */}
         <div
           onClick={() => navigate('projects')}
-          className="glass-card p-4 rounded-2xl cursor-pointer hover:border-dcore-red/30 transition-all group"
+          className="glass-card p-4 rounded-2xl cursor-pointer hover:border-[#E42129]/40 transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
               Active Projects
             </span>
-            <div className="p-2 rounded-xl bg-red-50 text-dcore-red group-hover:scale-110 transition-transform">
+            <div className="p-2 rounded-xl bg-red-50 text-[#E42129] group-hover:scale-110 transition-transform">
               <FolderKanban className="w-4 h-4" />
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <span className="text-2xl sm:text-3xl font-black text-[#111111] tracking-tight">
               {String(activeProjectsCount).padStart(2, '0')}
             </span>
-            <span className="text-[10px] font-semibold text-slate-400">Preloaded Ecosystem</span>
+            <span className="text-[10px] font-bold text-[#666666]">Ecosystem</span>
           </div>
         </div>
 
@@ -121,7 +124,7 @@ export const DashboardView = () => {
           className="glass-card p-4 rounded-2xl cursor-pointer hover:border-emerald-300 transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
               Current Works
             </span>
             <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600 group-hover:scale-110 transition-transform">
@@ -129,10 +132,10 @@ export const DashboardView = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <span className="text-2xl sm:text-3xl font-black text-[#111111] tracking-tight">
               {String(currentWorksCount).padStart(2, '0')}
             </span>
-            <span className="text-[10px] font-semibold text-emerald-600 font-mono">🟢 Active Now</span>
+            <span className="text-[10px] font-bold text-emerald-600 font-mono">🟢 Active</span>
           </div>
         </div>
 
@@ -142,7 +145,7 @@ export const DashboardView = () => {
           className="glass-card p-4 rounded-2xl cursor-pointer hover:border-amber-300 transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
               Works To Do
             </span>
             <div className="p-2 rounded-xl bg-amber-50 text-amber-600 group-hover:scale-110 transition-transform">
@@ -150,10 +153,10 @@ export const DashboardView = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <span className="text-2xl sm:text-3xl font-black text-[#111111] tracking-tight">
               {String(worksToDoCount).padStart(2, '0')}
             </span>
-            <span className="text-[10px] font-semibold text-amber-600 font-mono">🟡 Work Queue</span>
+            <span className="text-[10px] font-bold text-amber-600 font-mono">🟡 Queue</span>
           </div>
         </div>
 
@@ -163,7 +166,7 @@ export const DashboardView = () => {
           className="glass-card p-4 rounded-2xl cursor-pointer hover:border-blue-300 transition-all group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
               Future Ideas
             </span>
             <div className="p-2 rounded-xl bg-blue-50 text-blue-600 group-hover:scale-110 transition-transform">
@@ -171,10 +174,10 @@ export const DashboardView = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <span className="text-2xl sm:text-3xl font-black text-[#111111] tracking-tight">
               {String(futureIdeasCount).padStart(2, '0')}
             </span>
-            <span className="text-[10px] font-semibold text-blue-600 font-mono">🔵 Idea Vault</span>
+            <span className="text-[10px] font-bold text-blue-600 font-mono">🔵 Ideas</span>
           </div>
         </div>
 
@@ -184,7 +187,7 @@ export const DashboardView = () => {
           className="glass-card p-4 rounded-2xl cursor-pointer hover:border-purple-300 transition-all group col-span-2 lg:col-span-1"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
               Completed
             </span>
             <div className="p-2 rounded-xl bg-purple-50 text-purple-600 group-hover:scale-110 transition-transform">
@@ -192,23 +195,23 @@ export const DashboardView = () => {
             </div>
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <span className="text-2xl sm:text-3xl font-black text-[#111111] tracking-tight">
               {String(completedCount).padStart(2, '0')}
             </span>
-            <span className="text-[10px] font-semibold text-purple-600 font-mono">✓ Finished</span>
+            <span className="text-[10px] font-bold text-purple-600 font-mono">✓ Finished</span>
           </div>
         </div>
       </div>
 
       {/* DASHBOARD WORK STATUS VISUALIZATION */}
-      <div className="glass-card p-6 rounded-2xl border border-slate-200/80">
+      <div className="glass-card p-6 rounded-2xl border border-[#E8E8E8]">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-dcore-red" />
+            <h3 className="text-base font-black text-[#111111] flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-[#E42129]" />
               Digital Operational Workflow Pipeline
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-[#666666] font-medium mt-0.5">
               Lifecycle of operational requirements from initial idea to production release.
             </p>
           </div>
@@ -220,10 +223,10 @@ export const DashboardView = () => {
             { key: 'IDEAS', label: 'IDEAS', count: stageCounts.IDEAS, color: 'border-blue-200 bg-blue-50/50 text-blue-700', tab: 'future-ideas' },
             { key: 'PLANNED', label: 'PLANNED', count: stageCounts.PLANNED, color: 'border-amber-200 bg-amber-50/50 text-amber-700', tab: 'work-queue' },
             { key: 'TO DO', label: 'TO DO', count: stageCounts['TO DO'], color: 'border-slate-200 bg-slate-50 text-slate-700', tab: 'current-works' },
-            { key: 'IN PROGRESS', label: 'IN PROGRESS', count: stageCounts['IN PROGRESS'], color: 'border-rose-200 bg-rose-50 text-dcore-red', tab: 'current-works' },
+            { key: 'IN PROGRESS', label: 'IN PROGRESS', count: stageCounts['IN PROGRESS'], color: 'border-rose-200 bg-rose-50 text-[#E42129]', tab: 'current-works' },
             { key: 'REVIEW', label: 'REVIEW', count: stageCounts.REVIEW, color: 'border-indigo-200 bg-indigo-50 text-indigo-700', tab: 'current-works' },
             { key: 'COMPLETED', label: 'COMPLETED', count: stageCounts.COMPLETED, color: 'border-emerald-200 bg-emerald-50 text-emerald-700', tab: 'current-works' }
-          ].map((stage, idx, arr) => (
+          ].map((stage) => (
             <div
               key={stage.key}
               onClick={() => navigate(stage.tab)}
@@ -249,14 +252,14 @@ export const DashboardView = () => {
         
         {/* Left 2 Cols: Priority Watchlist */}
         <div className="lg:col-span-2 glass-card p-6 rounded-2xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E8E8E8]">
             <div className="flex items-center gap-2">
-              <AlertOctagon className="w-5 h-5 text-dcore-red" />
-              <h3 className="font-extrabold text-sm text-slate-900">Priority Operational Watchlist</h3>
+              <AlertOctagon className="w-5 h-5 text-[#E42129]" />
+              <h3 className="font-extrabold text-sm text-[#111111]">Priority Operational Watchlist</h3>
             </div>
             <button
               onClick={() => navigate('current-works')}
-              className="text-xs font-bold text-dcore-red hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#E42129] hover:underline flex items-center gap-1"
             >
               <span>View All Tasks</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -271,29 +274,29 @@ export const DashboardView = () => {
                 <div
                   key={t.id}
                   onClick={() => openTaskDrawer(t.id)}
-                  className="p-4 rounded-xl border border-slate-200/90 hover:border-dcore-red/40 bg-white hover:bg-slate-50/50 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  className="p-4 rounded-xl border border-[#E8E8E8] hover:border-[#E42129]/40 bg-white hover:bg-[#F5F5F5] transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                 >
                   <div className="flex items-start gap-3">
                     <span className={t.priority === 'P0' ? 'badge-p0' : 'badge-p1'}>
                       {t.priority}
                     </span>
                     <div>
-                      <h4 className="font-bold text-xs text-slate-900 group-hover:text-dcore-red transition-colors">
+                      <h4 className="font-bold text-xs text-[#111111] group-hover:text-[#E42129] transition-colors">
                         {t.title}
                       </h4>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
-                        Project: <span className="font-semibold text-slate-700">{proj?.name || 'DMK Core'}</span>
+                      <p className="text-[11px] text-[#666666] mt-0.5 font-medium">
+                        Project: <span className="font-bold text-[#111111]">{proj?.name || 'DMK Core'}</span>
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-4 text-xs shrink-0 self-end sm:self-center">
                     <div className="text-right">
-                      <p className="text-[10px] text-slate-400 font-bold uppercase">Progress</p>
-                      <p className="font-mono font-bold text-dcore-red">{t.progress}%</p>
+                      <p className="text-[10px] text-[#666666] font-black uppercase">Progress</p>
+                      <p className="font-mono font-bold text-[#E42129]">{t.progress}%</p>
                     </div>
-                    <div className="w-16 bg-slate-100 h-2 rounded-full overflow-hidden">
-                      <div className="bg-dcore-red h-full rounded-full" style={{ width: `${t.progress}%` }}></div>
+                    <div className="w-16 bg-slate-100 h-2 rounded-full overflow-hidden border border-[#E8E8E8]">
+                      <div className="bg-[#E42129] h-full rounded-full" style={{ width: `${t.progress}%` }}></div>
                     </div>
                   </div>
                 </div>
@@ -304,24 +307,24 @@ export const DashboardView = () => {
 
         {/* Right 1 Col: Centralized Activity Feed */}
         <div className="glass-card p-6 rounded-2xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E8E8E8]">
             <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-dcore-red" />
-              <h3 className="font-extrabold text-sm text-slate-900">Centralized Activity</h3>
+              <Activity className="w-5 h-5 text-[#E42129]" />
+              <h3 className="font-extrabold text-sm text-[#111111]">Centralized Activity</h3>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 bg-red-50 text-dcore-red rounded">Live</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 bg-red-50 text-[#E42129] rounded border border-red-100">Live</span>
           </div>
 
           <div className="space-y-4">
             {recentActivities.map((act) => (
               <div key={act.id} className="flex items-start gap-3 text-xs">
-                <div className="w-2 h-2 rounded-full bg-dcore-red mt-1.5 shrink-0 ring-4 ring-red-50"></div>
+                <div className="w-2 h-2 rounded-full bg-[#E42129] mt-1.5 shrink-0 ring-4 ring-red-50"></div>
                 <div>
-                  <p className="font-medium text-slate-800 leading-tight">{act.text}</p>
-                  <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400 font-semibold">
+                  <p className="font-medium text-[#111111] leading-tight">{act.text}</p>
+                  <div className="flex items-center gap-2 mt-1 text-[10px] text-[#666666] font-bold">
                     <span>{act.user}</span>
                     <span>•</span>
-                    <span>{new Date(act.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <span className="font-mono">{new Date(act.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                 </div>
               </div>

@@ -5,8 +5,7 @@ import {
   Kanban,
   ListOrdered,
   Lightbulb,
-  FolderKanban,
-  Users
+  FolderKanban
 } from 'lucide-react';
 
 export const BottomNav = () => {
@@ -21,7 +20,7 @@ export const BottomNav = () => {
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 shadow-lg flex items-center justify-around">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E8E8E8] px-2 py-1.5 shadow-lg flex items-center justify-around select-none">
       {mobileTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -29,11 +28,11 @@ export const BottomNav = () => {
           <button
             key={tab.id}
             onClick={() => navigate(tab.id)}
-            className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all ${
-              isActive ? 'text-dcore-red font-bold bg-red-50' : 'text-slate-500 font-medium hover:text-slate-800'
+            className={`flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
+              isActive ? 'text-[#E42129] font-black bg-red-50 border border-red-100' : 'text-[#666666] font-semibold hover:text-[#111111]'
             }`}
           >
-            <Icon className={`w-4 h-4 ${isActive ? 'text-dcore-red scale-110' : 'text-slate-400'}`} />
+            <Icon className={`w-4 h-4 ${isActive ? 'text-[#E42129] scale-110' : 'text-[#666666]'}`} />
             <span className="text-[10px] mt-0.5">{tab.label}</span>
           </button>
         );

@@ -6,10 +6,6 @@ import {
   Plus,
   ExternalLink,
   ChevronRight,
-  Calendar,
-  User,
-  CheckCircle2,
-  Clock,
   Edit3
 } from 'lucide-react';
 
@@ -31,24 +27,24 @@ export const ProjectsView = () => {
   };
 
   return (
-    <div className="space-y-6 pb-12 animate-in fade-in duration-300">
+    <div className="space-y-6 pb-12 animate-in fade-in duration-300 select-none">
       
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-soft">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#E8E8E8] shadow-soft">
         <div>
-          <div className="flex items-center gap-2 text-dcore-red text-xs font-bold uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-[#E42129] text-xs font-black uppercase tracking-wider mb-1">
             <FolderKanban className="w-4 h-4" />
             <span>Digital Platform Portfolio</span>
           </div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">PROJECTS</h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <h1 className="text-2xl font-black text-[#111111] tracking-tight">PROJECTS</h1>
+          <p className="text-xs text-[#666666] font-medium mt-1">
             Core platforms and digital repositories operated by the D-Core technology team for DMK.
           </p>
         </div>
 
         <button
           onClick={handleOpenAddProject}
-          className="bg-dcore-red hover:bg-dcore-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-dcore-red/20 flex items-center gap-2 transition-all self-start sm:self-center shrink-0"
+          className="btn-primary self-start sm:self-center shrink-0"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>+ New Project</span>
@@ -65,7 +61,7 @@ export const ProjectsView = () => {
             <div
               key={proj.id}
               onClick={() => navigate('projects', proj.id)}
-              className="glass-card p-6 rounded-2xl border border-slate-200/90 bg-white hover:border-dcore-red/40 cursor-pointer transition-all space-y-4 group relative"
+              className="glass-card p-6 rounded-2xl border border-[#E8E8E8] bg-white hover:border-[#E42129]/40 cursor-pointer transition-all space-y-4 group relative"
             >
               {/* Card Header */}
               <div className="flex items-start justify-between gap-3">
@@ -74,11 +70,11 @@ export const ProjectsView = () => {
                     <span className={proj.priority === 'P0' ? 'badge-p0' : 'badge-p1'}>
                       {proj.priority}
                     </span>
-                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
                       {proj.status}
                     </span>
                   </div>
-                  <h3 className="text-lg font-black text-slate-900 group-hover:text-dcore-red transition-colors flex items-center gap-2">
+                  <h3 className="text-lg font-black text-[#111111] group-hover:text-[#E42129] transition-colors flex items-center gap-2">
                     <span>{proj.name}</span>
                   </h3>
                 </div>
@@ -89,7 +85,7 @@ export const ProjectsView = () => {
                       e.stopPropagation();
                       openEditModal('PROJECT', proj);
                     }}
-                    className="p-2 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-dcore-red border border-slate-200 transition-colors"
+                    className="p-2 rounded-xl bg-[#F5F5F5] hover:bg-red-50 text-[#666666] hover:text-[#E42129] border border-[#E8E8E8] transition-colors"
                     title="Edit Project Entry"
                   >
                     <Edit3 className="w-4 h-4" />
@@ -101,7 +97,7 @@ export const ProjectsView = () => {
                       target="_blank"
                       rel="noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="p-2 rounded-xl bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-dcore-red border border-slate-200 transition-colors"
+                      className="p-2 rounded-xl bg-[#F5F5F5] hover:bg-red-50 text-[#666666] hover:text-[#E42129] border border-[#E8E8E8] transition-colors"
                       title="Open Website"
                     >
                       <ExternalLink className="w-4 h-4" />
@@ -111,40 +107,37 @@ export const ProjectsView = () => {
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
+              <p className="text-xs text-[#333333] font-medium leading-relaxed line-clamp-2">
                 {proj.description}
               </p>
 
               {/* Progress Bar */}
               <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-xs font-semibold">
-                  <span className="text-slate-500">Progress</span>
-                  <span className="font-mono font-bold text-dcore-red">{proj.progress}%</span>
+                <div className="flex items-center justify-between text-xs font-bold">
+                  <span className="text-[#666666]">Progress</span>
+                  <span className="font-mono font-bold text-[#E42129]">{proj.progress}%</span>
                 </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-[#F5F5F5] h-2 rounded-full overflow-hidden border border-[#E8E8E8]">
                   <div
-                    className="bg-gradient-to-r from-dcore-red to-dcore-maroon h-full rounded-full transition-all duration-500"
+                    className="bg-[#E42129] h-full rounded-full transition-all duration-500"
                     style={{ width: `${proj.progress}%` }}
                   ></div>
                 </div>
               </div>
 
               {/* Footer details */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <div className="pt-3 border-t border-[#E8E8E8] flex items-center justify-between text-xs text-[#666666] font-medium">
                 <div className="flex items-center gap-1.5">
                   {owner ? (
-                    <>
-                      <img src={owner.avatar} alt={owner.name} className="w-5 h-5 rounded-full object-cover" />
-                      <span className="font-bold text-slate-700">{owner.name}</span>
-                    </>
+                    <span className="font-bold text-[#111111]">{owner.name}</span>
                   ) : (
-                    <span>Unassigned</span>
+                    <span>DMK Technology Team</span>
                   )}
                 </div>
 
-                <div className="flex items-center gap-3 font-semibold text-slate-600">
+                <div className="flex items-center gap-3 font-extrabold text-[#111111]">
                   <span>{projTasks.length} Tasks</span>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-dcore-red group-hover:translate-x-1 transition-all" />
+                  <ChevronRight className="w-4 h-4 text-[#666666] group-hover:text-[#E42129] group-hover:translate-x-1 transition-all" />
                 </div>
               </div>
             </div>

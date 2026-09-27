@@ -4,7 +4,15 @@
 
 @layer base {
   body {
-    @apply bg-white text-slate-900 font-sans antialiased selection:bg-red-100 selection:text-dcore-red;
+    @apply bg-white text-[#111111] font-sans antialiased selection:bg-red-100 selection:text-[#E42129];
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-[#111111] tracking-tight font-extrabold;
+  }
+
+  p {
+    @apply text-[#333333] leading-relaxed;
   }
 
   /* Custom scrollbars */
@@ -13,65 +21,81 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #f5f5f5;
   }
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #e8e8e8;
     border-radius: 4px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #9b111e;
+    background: #E42129;
   }
 }
 
-/* Glassmorphism & UI utilities */
+/* Card & UI design tokens */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid #e8e8e8;
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(241, 245, 249, 1);
-  box-shadow: 0 4px 20px -2px rgba(155, 17, 30, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(155, 17, 30, 0.2);
-  box-shadow: 0 12px 28px -4px rgba(155, 17, 30, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
+  border-color: rgba(228, 33, 41, 0.3);
+  box-shadow: 0 12px 28px -4px rgba(228, 33, 41, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
 }
 
 .dcore-gradient-text {
-  background: linear-gradient(135deg, #0f172a 0%, #9b111e 100%);
+  background: linear-gradient(135deg, #111111 0%, #E42129 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .dcore-red-gradient {
-  background: linear-gradient(135deg, #9b111e 0%, #7f0d18 100%);
+  background: linear-gradient(135deg, #E42129 0%, #c81920 100%);
 }
 
 .dcore-hero-gradient {
-  background: radial-gradient(circle at 50% 0%, rgba(155, 17, 30, 0.08) 0%, rgba(255, 255, 255, 0) 75%);
+  background: radial-gradient(circle at 50% 0%, rgba(228, 33, 41, 0.04) 0%, rgba(255, 255, 255, 0) 75%);
+}
+
+/* Button variants */
+.btn-primary {
+  @apply bg-[#E42129] hover:bg-[#c81920] text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-red-500/15 flex items-center justify-center gap-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98];
+}
+
+.btn-secondary {
+  @apply bg-white hover:bg-slate-50 text-[#111111] border border-[#111111] hover:border-[#E42129] hover:text-[#E42129] px-5 py-2.5 rounded-xl font-bold text-xs transition-all duration-200 flex items-center justify-center gap-2;
 }
 
 .badge-p0 {
-  @apply bg-red-100 text-red-700 border border-red-200 font-bold px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+  @apply bg-red-50 text-[#E42129] border border-red-200 font-extrabold px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
 }
 
 .badge-p1 {
-  @apply bg-rose-50 text-dcore-red border border-rose-200 font-semibold px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+  @apply bg-rose-50 text-[#E42129] border border-rose-200 font-semibold px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
 }
 
 .badge-p2 {
-  @apply bg-amber-50 text-amber-700 border border-amber-200 font-medium px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+  @apply bg-amber-50 text-amber-800 border border-amber-200 font-medium px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
 }
 
 .badge-p3 {
-  @apply bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+  @apply bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded text-xs tracking-wider inline-flex items-center gap-1;
+}
+
+/* Tamil quote typography */
+.tamil-quote {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.8;
+  letter-spacing: 0.01em;
 }
