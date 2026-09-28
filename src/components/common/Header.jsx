@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { lockStealthMode } from './StealthGate';
 import {
   Search,
   Plus,
   Bell,
   CheckCircle2,
-  Globe,
   Lock,
   LogOut,
-  History
+  History,
+  EyeOff
 } from 'lucide-react';
 
 export const Header = () => {
@@ -67,21 +68,8 @@ export const Header = () => {
             </div>
           </div>
 
-          {/* Quick Landing Page & History Log Toggles */}
+          {/* History Log Toggle & Stealth Lock Button */}
           <div className="hidden md:flex items-center gap-2">
-            <button
-              onClick={() => navigate(activeTab === 'landing' ? 'dashboard' : 'landing')}
-              aria-label={activeTab === 'landing' ? 'Switch to Operations Center' : 'Switch to Public Landing Page'}
-              className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all ${
-                activeTab === 'landing'
-                  ? 'bg-[#E42129] text-white border-[#E42129] shadow-xs'
-                  : 'bg-[#F5F5F5] text-[#111111] border-[#E8E8E8] hover:bg-slate-100'
-              }`}
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{activeTab === 'landing' ? 'Operations Center' : 'Public Landing Page'}</span>
-            </button>
-
             <button
               onClick={() => navigate('history')}
               aria-label="View History Audit Log"
@@ -203,6 +191,16 @@ export const Header = () => {
                 <span>Admin Login</span>
               </button>
             )}
+
+            <button
+              onClick={lockStealthMode}
+              aria-label="Lock Stealth Mode (Show Blank Page)"
+              className="p-1.5 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center gap-1 text-[11px] font-bold"
+              title="Lock Portal (Show Blank Screen)"
+            >
+              <EyeOff className="w-3.5 h-3.5 text-slate-500" />
+              <span className="hidden xl:inline">Stealth Lock</span>
+            </button>
 
             <button
               onClick={logoutUserSession}

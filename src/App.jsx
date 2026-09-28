@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
+import { StealthGate } from './components/common/StealthGate';
 import { Header } from './components/common/Header';
 import { Sidebar } from './components/common/Sidebar';
 import { BottomNav } from './components/common/BottomNav';
@@ -13,7 +14,6 @@ import { Toast } from './components/common/Toast';
 
 // Lazy-loaded views for performance optimization
 const InternalAuthWall = lazy(() => import('./components/common/InternalAuthWall').then(m => ({ default: m.InternalAuthWall })));
-const LandingPage = lazy(() => import('./components/landing/LandingPage').then(m => ({ default: m.LandingPage })));
 const DashboardView = lazy(() => import('./components/dashboard/DashboardView').then(m => ({ default: m.DashboardView })));
 const CurrentWorksView = lazy(() => import('./components/currentWorks/CurrentWorksView').then(m => ({ default: m.CurrentWorksView })));
 const WorkQueueView = lazy(() => import('./components/workQueue/WorkQueueView').then(m => ({ default: m.WorkQueueView })));
@@ -44,24 +44,6 @@ const MainLayout = () => {
     );
   }
 
-  if (activeTab === 'landing') {
-    return (
-      <div className="min-h-screen bg-white">
-        <Header />
-        <main id="main-content" role="main" aria-label="Public Landing Page">
-          <Suspense fallback={<PageFallback />}>
-            <LandingPage />
-          </Suspense>
-        </main>
-        <Toast />
-        <SearchModal />
-        <QuickAddModal />
-        <QuotePopup />
-        <AdminLoginModal isOpen={isAdminLoginOpen} onClose={() => setIsAdminLoginOpen(false)} />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans selection:bg-red-100 selection:text-dcore-red">
       <Header />
@@ -69,7 +51,7 @@ const MainLayout = () => {
         <Sidebar />
         <main id="main-content" role="main" className="flex-1 p-4 lg:p-8 overflow-y-auto max-w-full">
           <Suspense fallback={<PageFallback />}>
-            {activeTab === 'dashboard' && <DashboardView />}
+            {(activeTab === 'dashboard' || activeTab === 'landing') && <DashboardView />}
             {activeTab === 'current-works' && <CurrentWorksView />}
             {activeTab === 'work-queue' && <WorkQueueView />}
             {activeTab === 'future-ideas' && <FutureIdeasView />}
@@ -100,7 +82,9 @@ const MainLayout = () => {
 export default function App() {
   return (
     <AppProvider>
-      <MainLayout />
+      <StealthGate>
+        <MainLayout />
+      </StealthGate>
     </AppProvider>
   );
 }
