@@ -46,9 +46,11 @@ export const Header = () => {
             className="flex items-center gap-3 cursor-pointer group"
           >
             <img
-              src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790443218/ChatGPT_Image_Sep_26_2026_10_47_31_PM_mtiwsu.png"
-              alt="D-CORE Logo"
+              src="https://res.cloudinary.com/dikaxqooz/image/upload/w_80,f_auto,q_auto/v1790443218/ChatGPT_Image_Sep_26_2026_10_47_31_PM_mtiwsu.png"
+              alt="D-CORE Operations Logo"
               className="w-10 h-10 object-contain rounded-xl shadow-xs border border-[#E8E8E8] group-hover:scale-105 transition-transform"
+              width="40"
+              height="40"
             />
             <div>
               <div className="flex items-center gap-1.5">
@@ -59,7 +61,7 @@ export const Header = () => {
                   OPS
                 </span>
               </div>
-              <p className="text-[10px] font-bold tracking-wider text-[#666666] uppercase -mt-0.5">
+              <p className="text-[10px] font-bold tracking-wider text-slate-600 uppercase -mt-0.5">
                 OPERATIONS
               </p>
             </div>
@@ -69,6 +71,7 @@ export const Header = () => {
           <div className="hidden md:flex items-center gap-2">
             <button
               onClick={() => navigate(activeTab === 'landing' ? 'dashboard' : 'landing')}
+              aria-label={activeTab === 'landing' ? 'Switch to Operations Center' : 'Switch to Public Landing Page'}
               className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all ${
                 activeTab === 'landing'
                   ? 'bg-[#E42129] text-white border-[#E42129] shadow-xs'
@@ -81,6 +84,7 @@ export const Header = () => {
 
             <button
               onClick={() => navigate('history')}
+              aria-label="View History Audit Log"
               className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all ${
                 activeTab === 'history'
                   ? 'bg-[#E42129] text-white border-[#E42129] shadow-xs'
@@ -97,13 +101,14 @@ export const Header = () => {
         <div className="hidden lg:flex items-center gap-4 flex-1 max-w-md">
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-[#F5F5F5] hover:bg-slate-100 border border-[#E8E8E8] text-slate-400 text-sm transition-all hover:border-slate-300"
+            aria-label="Search projects, tasks, and future ideas"
+            className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-[#F5F5F5] hover:bg-slate-100 border border-[#E8E8E8] text-slate-500 text-sm transition-all hover:border-slate-300"
           >
             <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-[#666666]" />
-              <span className="text-[#666666] font-medium">Search projects, tasks, ideas...</span>
+              <Search className="w-4 h-4 text-slate-500" />
+              <span className="text-slate-600 font-medium">Search projects, tasks, ideas...</span>
             </div>
-            <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono text-[#666666] bg-white border border-[#E8E8E8] rounded">
+            <kbd className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono text-slate-600 bg-white border border-[#E8E8E8] rounded">
               ⌘K
             </kbd>
           </button>
@@ -116,6 +121,7 @@ export const Header = () => {
           <div className="relative">
             <button
               onClick={() => setIsNotifOpen(!isNotifOpen)}
+              aria-label="Notifications"
               className="relative p-2.5 rounded-xl bg-[#F5F5F5] hover:bg-slate-100 border border-[#E8E8E8] text-[#111111] transition-colors"
               title="Notifications"
             >
@@ -147,7 +153,7 @@ export const Header = () => {
                       <div className="flex-1">
                         <p className="text-xs font-bold text-[#111111]">{n.title}</p>
                         <p className="text-xs text-[#333333] mt-0.5">{n.message}</p>
-                        <span className="text-[10px] text-[#666666] mt-1 block font-mono">{n.time}</span>
+                        <span className="text-[10px] text-slate-600 mt-1 block font-mono">{n.time}</span>
                       </div>
                     </div>
                   ))}
@@ -155,6 +161,7 @@ export const Header = () => {
                 <div className="pt-2 border-t border-[#E8E8E8] text-center">
                   <button
                     onClick={() => setIsNotifOpen(false)}
+                    aria-label="Close notification drawer"
                     className="text-xs font-bold text-[#E42129] hover:underline"
                   >
                     Close Drawer
@@ -167,6 +174,7 @@ export const Header = () => {
           {/* Quick Add Button */}
           <button
             onClick={() => handleOpenQuickAdd('task')}
+            aria-label="Quick add new task or idea"
             className="btn-primary"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
@@ -187,6 +195,7 @@ export const Header = () => {
             {!isAdminLoggedIn && (
               <button
                 onClick={() => setIsAdminLoginOpen(true)}
+                aria-label="Admin Login"
                 className="text-[10px] bg-[#111111] text-white font-bold px-2.5 py-1 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-1"
                 title="Unlock Admin Edit Access"
               >
@@ -197,7 +206,8 @@ export const Header = () => {
 
             <button
               onClick={logoutUserSession}
-              className="p-1.5 text-[#666666] hover:text-[#E42129] hover:bg-red-50 rounded-lg transition-colors"
+              aria-label="Sign Out of Portal"
+              className="p-1.5 text-slate-600 hover:text-[#E42129] hover:bg-red-50 rounded-lg transition-colors"
               title="Sign Out of Portal"
             >
               <LogOut className="w-4 h-4" />

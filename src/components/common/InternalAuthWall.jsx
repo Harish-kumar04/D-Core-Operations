@@ -105,10 +105,13 @@ export const InternalAuthWall = () => {
           <div className="lg:col-span-5 relative bg-[#111111] p-8 text-white flex flex-col justify-between hidden md:flex min-h-[500px]">
             <div className="absolute inset-0 z-0 opacity-40">
               <img
-                src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790526461/4_bjljdl.webp"
-                alt="D-Core Technology Visual"
+                src="https://res.cloudinary.com/dikaxqooz/image/upload/w_600,f_auto,q_auto/v1790526461/4_bjljdl.webp"
+                alt="D-Core Technology Visual Showcase"
                 className="w-full h-full object-cover"
-                loading="eager"
+                width="600"
+                height="800"
+                fetchpriority="high"
+                decoding="async"
               />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/70 to-transparent z-0"></div>
@@ -226,17 +229,18 @@ export const InternalAuthWall = () => {
 
               {/* Mandatory Member Name Field */}
               <div>
-                <label className="block text-[#111111] font-extrabold mb-1.5 text-xs flex items-center justify-between">
+                <label htmlFor="member-name-input" className="block text-[#111111] font-extrabold mb-1.5 text-xs flex items-center justify-between">
                   <span>Your Full Name / Member Name *</span>
                 </label>
                 <div className="relative">
                   <input
+                    id="member-name-input"
                     type="text"
                     required
                     placeholder="Enter your full name (e.g. Sentinel / Member Name)"
                     value={memberName}
                     onChange={(e) => setMemberName(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#F5F5F5] border border-[#E8E8E8] rounded-xl focus:outline-none focus:border-[#E42129] text-sm font-semibold text-[#111111] transition-all placeholder-slate-400"
+                    className="w-full px-4 py-3 bg-[#F5F5F5] border border-[#E8E8E8] rounded-xl focus:outline-none focus:border-[#E42129] text-sm font-semibold text-[#111111] transition-all placeholder-slate-500"
                     autoFocus
                   />
                   <UserCheck className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -245,17 +249,18 @@ export const InternalAuthWall = () => {
 
               {/* Passcode Field */}
               <div>
-                <label className="block text-[#111111] font-extrabold mb-1.5 text-xs">
+                <label htmlFor="passcode-input" className="block text-[#111111] font-extrabold mb-1.5 text-xs">
                   Passcode for <span className="text-[#E42129] font-black">{selectedUser.name}</span> *
                 </label>
                 <div className="relative">
                   <input
+                    id="passcode-input"
                     type="password"
                     required
                     placeholder="Enter passcode"
                     value={passcode}
                     onChange={(e) => setPasscode(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#F5F5F5] border border-[#E8E8E8] rounded-xl focus:outline-none focus:border-[#E42129] text-sm font-mono text-[#111111] transition-all placeholder-slate-400"
+                    className="w-full px-4 py-3 bg-[#F5F5F5] border border-[#E8E8E8] rounded-xl focus:outline-none focus:border-[#E42129] text-sm font-mono text-[#111111] transition-all placeholder-slate-500"
                   />
                   <Lock className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>

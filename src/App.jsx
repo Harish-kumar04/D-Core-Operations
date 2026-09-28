@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import { Header } from './components/common/Header';
 import { Sidebar } from './components/common/Sidebar';
@@ -7,33 +7,52 @@ import { SearchModal } from './components/common/SearchModal';
 import { QuickAddModal } from './components/common/QuickAddModal';
 import { AdminLoginModal } from './components/common/AdminLoginModal';
 import { EditEntityModal } from './components/common/EditEntityModal';
-import { InternalAuthWall } from './components/common/InternalAuthWall';
+import { TaskDetailDrawer } from './components/currentWorks/TaskDetailDrawer';
 import { QuotePopup } from './components/common/QuotePopup';
 import { Toast } from './components/common/Toast';
-import { LandingPage } from './components/landing/LandingPage';
-import { DashboardView } from './components/dashboard/DashboardView';
-import { CurrentWorksView } from './components/currentWorks/CurrentWorksView';
-import { TaskDetailDrawer } from './components/currentWorks/TaskDetailDrawer';
-import { WorkQueueView } from './components/workQueue/WorkQueueView';
-import { FutureIdeasView } from './components/futureIdeas/FutureIdeasView';
-import { ProjectsView } from './components/projects/ProjectsView';
-import { AnalyticsView } from './components/analytics/AnalyticsView';
-import { HistoryView } from './components/history/HistoryView';
-import { SettingsView } from './components/settings/SettingsView';
+
+// Lazy-loaded views for performance optimization
+const InternalAuthWall = lazy(() => import('./components/common/InternalAuthWall').then(m => ({ default: m.InternalAuthWall })));
+const LandingPage = lazy(() => import('./components/landing/LandingPage').then(m => ({ default: m.LandingPage })));
+const DashboardView = lazy(() => import('./components/dashboard/DashboardView').then(m => ({ default: m.DashboardView })));
+const CurrentWorksView = lazy(() => import('./components/currentWorks/CurrentWorksView').then(m => ({ default: m.CurrentWorksView })));
+const WorkQueueView = lazy(() => import('./components/workQueue/WorkQueueView').then(m => ({ default: m.WorkQueueView })));
+const FutureIdeasView = lazy(() => import('./components/futureIdeas/FutureIdeasView').then(m => ({ default: m.FutureIdeasView })));
+const ProjectsView = lazy(() => import('./components/projects/ProjectsView').then(m => ({ default: m.ProjectsView })));
+const AnalyticsView = lazy(() => import('./components/analytics/AnalyticsView').then(m => ({ default: m.AnalyticsView })));
+const HistoryView = lazy(() => import('./components/history/HistoryView').then(m => ({ default: m.HistoryView })));
+const SettingsView = lazy(() => import('./components/settings/SettingsView').then(m => ({ default: m.SettingsView })));
+
+const PageFallback = () => (
+  <div className="flex items-center justify-center min-h-[400px] w-full p-8 text-center" role="status" aria-label="Loading content">
+    <div className="flex flex-col items-center gap-3">
+      <div className="w-8 h-8 rounded-full border-3 border-slate-200 border-t-[#E42129] animate-spin"></div>
+      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Loading D-CORE Operations...</span>
+    </div>
+  </div>
+);
 
 const MainLayout = () => {
   const { userSession, activeTab, isAdminLoginOpen, setIsAdminLoginOpen, editModal, closeEditModal } = useApp();
 
   // If user is not authenticated for internal access, show mandatory Internal Auth Wall first
   if (!userSession.isAuthenticated) {
-    return <InternalAuthWall />;
+    return (
+      <Suspense fallback={<PageFallback />}>
+        <InternalAuthWall />
+      </Suspense>
+    );
   }
 
   if (activeTab === 'landing') {
     return (
       <div className="min-h-screen bg-white">
         <Header />
-        <LandingPage />
+        <main id="main-content" role="main" aria-label="Public Landing Page">
+          <Suspense fallback={<PageFallback />}>
+            <LandingPage />
+          </Suspense>
+        </main>
         <Toast />
         <SearchModal />
         <QuickAddModal />
@@ -48,15 +67,17 @@ const MainLayout = () => {
       <Header />
       <div className="flex flex-1 max-w-[1600px] w-full mx-auto">
         <Sidebar />
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto max-w-full">
-          {activeTab === 'dashboard' && <DashboardView />}
-          {activeTab === 'current-works' && <CurrentWorksView />}
-          {activeTab === 'work-queue' && <WorkQueueView />}
-          {activeTab === 'future-ideas' && <FutureIdeasView />}
-          {activeTab === 'projects' && <ProjectsView />}
-          {activeTab === 'analytics' && <AnalyticsView />}
-          {activeTab === 'history' && <HistoryView />}
-          {activeTab === 'settings' && <SettingsView />}
+        <main id="main-content" role="main" className="flex-1 p-4 lg:p-8 overflow-y-auto max-w-full">
+          <Suspense fallback={<PageFallback />}>
+            {activeTab === 'dashboard' && <DashboardView />}
+            {activeTab === 'current-works' && <CurrentWorksView />}
+            {activeTab === 'work-queue' && <WorkQueueView />}
+            {activeTab === 'future-ideas' && <FutureIdeasView />}
+            {activeTab === 'projects' && <ProjectsView />}
+            {activeTab === 'analytics' && <AnalyticsView />}
+            {activeTab === 'history' && <HistoryView />}
+            {activeTab === 'settings' && <SettingsView />}
+          </Suspense>
         </main>
       </div>
       <BottomNav />
@@ -83,3 +104,4 @@ export default function App() {
     </AppProvider>
   );
 }
+

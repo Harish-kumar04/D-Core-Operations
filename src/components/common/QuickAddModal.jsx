@@ -94,6 +94,7 @@ export const QuickAddModal = () => {
           </div>
           <button
             onClick={() => setIsQuickAddOpen(false)}
+            aria-label="Close modal"
             className="p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-700 transition-colors"
           >
             <X className="w-5 h-5" />

@@ -53,15 +53,18 @@ export const SearchModal = () => {
         <div className="flex items-center px-4 py-3.5 border-b border-slate-200 gap-3 bg-slate-50/50">
           <Search className="w-5 h-5 text-dcore-red shrink-0" />
           <input
+            id="search-modal-input"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search across Projects, Tasks, Ideas, Team Members... (e.g. Kalaignar, SSL, AI)"
+            aria-label="Search across Projects, Tasks, Ideas and Team Members"
             className="w-full bg-transparent text-slate-900 font-medium placeholder-slate-400 text-sm focus:outline-none"
             autoFocus
           />
           <button
             onClick={() => setIsSearchOpen(false)}
+            aria-label="Close search modal"
             className="p-1 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-700 transition-colors"
           >
             <X className="w-5 h-5" />

@@ -101,10 +101,13 @@ export const Sidebar = () => {
       <div className="mt-4 rounded-2xl overflow-hidden border border-[#E8E8E8] bg-white relative group shadow-xs shrink-0">
         <div className="h-32 relative overflow-hidden">
           <img
-            src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790526461/4_bjljdl.webp"
-            alt="DMK Leadership & IT Backbone"
+            src="https://res.cloudinary.com/dikaxqooz/image/upload/w_400,f_auto,q_auto/v1790526461/4_bjljdl.webp"
+            alt="DMK Leadership & IT Backbone Archive"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            width="240"
+            height="128"
             loading="lazy"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/30 to-transparent"></div>
           <div className="absolute bottom-2.5 left-3 right-3 text-white space-y-0.5">

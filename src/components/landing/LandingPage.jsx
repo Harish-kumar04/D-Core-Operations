@@ -103,10 +103,13 @@ export const LandingPage = () => {
           <div className="lg:col-span-5 relative">
             <div className="relative rounded-3xl overflow-hidden border border-[#E8E8E8] shadow-card bg-[#F5F5F5] group">
               <img
-                src="https://res.cloudinary.com/dikaxqooz/image/upload/v1790526460/1_cavhvy.webp"
-                alt="D-Core Operations Command"
+                src="https://res.cloudinary.com/dikaxqooz/image/upload/w_600,f_auto,q_auto/v1790526460/1_cavhvy.webp"
+                alt="D-Core Operations Command Showcase"
                 className="w-full h-[420px] object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="eager"
+                width="600"
+                height="420"
+                fetchpriority="high"
+                decoding="async"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/80 via-transparent to-transparent"></div>
               <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">

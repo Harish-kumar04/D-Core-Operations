@@ -20,7 +20,7 @@ export const BottomNav = () => {
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E8E8E8] px-2 py-1.5 shadow-lg flex items-center justify-around select-none">
+    <nav role="navigation" aria-label="Mobile Navigation" className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#E8E8E8] px-2 py-1.5 shadow-lg flex items-center justify-around select-none">
       {mobileTabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -28,15 +28,17 @@ export const BottomNav = () => {
           <button
             key={tab.id}
             onClick={() => navigate(tab.id)}
+            aria-label={tab.label}
+            aria-current={isActive ? 'page' : undefined}
             className={`flex flex-col items-center py-1.5 px-3 rounded-xl transition-all ${
-              isActive ? 'text-[#E42129] font-black bg-red-50 border border-red-100' : 'text-[#666666] font-semibold hover:text-[#111111]'
+              isActive ? 'text-[#E42129] font-black bg-red-50 border border-red-100' : 'text-slate-700 font-semibold hover:text-[#111111]'
             }`}
           >
-            <Icon className={`w-4 h-4 ${isActive ? 'text-[#E42129] scale-110' : 'text-[#666666]'}`} />
+            <Icon className={`w-4 h-4 ${isActive ? 'text-[#E42129] scale-110' : 'text-slate-600'}`} />
             <span className="text-[10px] mt-0.5">{tab.label}</span>
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 };
