@@ -10,13 +10,12 @@ import {
   ArrowLeft,
   Plus,
   Activity,
-  Kanban,
   FileText,
   Lightbulb
 } from 'lucide-react';
 
 export const ProjectDetailView = ({ projectId, onBack }) => {
-  const { state, openTaskDrawer, setIsQuickAddOpen, setQuickAddType } = useApp();
+  const { state, setIsQuickAddOpen, setQuickAddType } = useApp();
   const [activeTab, setActiveTab] = useState('overview');
 
   const project = (state.projects || []).find(p => p.id === projectId);
@@ -168,7 +167,7 @@ export const ProjectDetailView = ({ projectId, onBack }) => {
             {projectTasks.map(t => (
               <div
                 key={t.id}
-                onClick={() => openTaskDrawer(t.id)}
+                onClick={() => {}}
                 className="p-4 rounded-xl border border-slate-200 bg-white hover:border-dcore-red/40 cursor-pointer flex items-center justify-between transition-all"
               >
                 <div className="space-y-1">
