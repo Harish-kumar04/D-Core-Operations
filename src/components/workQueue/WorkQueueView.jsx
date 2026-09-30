@@ -4,14 +4,13 @@ import { QuoteCard } from '../common/QuoteCard';
 import {
   ListOrdered,
   Plus,
-  ArrowRight,
   Clock,
   Calendar,
   Edit3
 } from 'lucide-react';
 
 export const WorkQueueView = () => {
-  const { state, moveWorkQueueToCurrentWork, setIsQuickAddOpen, setQuickAddType, openEditModal } = useApp();
+  const { state, setIsQuickAddOpen, setQuickAddType, openEditModal } = useApp();
 
   const [filterProject, setFilterProject] = useState('ALL');
 
@@ -38,7 +37,7 @@ export const WorkQueueView = () => {
           </div>
           <h1 className="text-2xl font-black text-[#111111] tracking-tight">WORKS TO BE DONE</h1>
           <p className="text-xs text-[#666666] font-medium mt-1">
-            Approved and planned requirements waiting to be scheduled. Move any item to Current Works when ready.
+            Approved and planned requirements scheduled for execution. Track progress and manage task details.
           </p>
         </div>
 
@@ -64,10 +63,10 @@ export const WorkQueueView = () => {
           <span className="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 uppercase">
             Work Queue Flow:
           </span>
-          <span className="font-mono">IDEA → PLANNED → READY → 🟢 CURRENT WORK</span>
+          <span className="font-mono">IDEA → PLANNED → IN PROGRESS → ✅ COMPLETED</span>
         </div>
         <span className="text-[#666666] font-medium">
-          Clicking <strong>Move to Current Work</strong> transfers task to active Kanban board.
+          Update task status to track progress through the pipeline.
         </span>
       </div>
 
@@ -78,7 +77,7 @@ export const WorkQueueView = () => {
             <ListOrdered className="w-12 h-12 mx-auto text-slate-300" />
             <h3 className="text-base font-extrabold text-[#111111]">No pending work in queue</h3>
             <p className="text-xs text-[#666666] font-medium max-w-sm mx-auto">
-              All approved projects have been transferred to Current Works or no new requirements are pending.
+              All approved projects are completed or no new requirements are pending.
             </p>
             <button
               onClick={handleOpenAddPlanned}
@@ -127,14 +126,6 @@ export const WorkQueueView = () => {
                     </p>
                   </div>
 
-                  {/* Move CTA Button */}
-                  <button
-                    onClick={() => moveWorkQueueToCurrentWork(item.id)}
-                    className="btn-primary shrink-0 self-start lg:self-center bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20"
-                  >
-                    <span>Move to Current Work</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
                 </div>
 
                 {/* Bottom Details Grid */}

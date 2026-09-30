@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { Search, X, FolderKanban, CheckSquare, Lightbulb, User, ArrowRight } from 'lucide-react';
 
 export const SearchModal = () => {
-  const { isSearchOpen, setIsSearchOpen, state, navigate, openTaskDrawer } = useApp();
+  const { isSearchOpen, setIsSearchOpen, state, navigate } = useApp();
   const [query, setQuery] = useState('');
 
   // Handle escape key
@@ -132,12 +132,7 @@ export const SearchModal = () => {
                         key={t.id}
                         onClick={() => {
                           setIsSearchOpen(false);
-                          if (t.type === 'WORK_QUEUE') {
-                            navigate('work-queue');
-                          } else {
-                            navigate('current-works');
-                            openTaskDrawer(t.id);
-                          }
+                          navigate('work-queue');
                         }}
                         className="p-2.5 rounded-xl hover:bg-slate-50 border border-slate-100 flex items-center justify-between cursor-pointer transition-all group"
                       >

@@ -3,7 +3,6 @@ import { useApp } from '../../context/AppContext';
 import { QuoteCard } from '../common/QuoteCard';
 import {
   FolderKanban,
-  Kanban,
   ListOrdered,
   Lightbulb,
   CheckCircle2,
@@ -15,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export const DashboardView = () => {
-  const { state, navigate, openTaskDrawer } = useApp();
+  const { state, navigate } = useApp();
 
   const projects = state.projects || [];
   const tasks = state.tasks || [];
@@ -23,8 +22,7 @@ export const DashboardView = () => {
 
   // Dynamic stat counts
   const activeProjectsCount = projects.filter(p => p.status === 'active').length;
-  const currentWorksCount = tasks.filter(t => t.type === 'CURRENT_WORK' && t.status !== 'COMPLETED').length;
-  const worksToDoCount = tasks.filter(t => t.type === 'WORK_QUEUE').length;
+  const workQueueCount = tasks.filter(t => t.type === 'WORK_QUEUE').length;
   const futureIdeasCount = ideas.filter(i => i.status !== 'CONVERTED TO PROJECT').length;
   const completedCount = tasks.filter(t => t.status === 'COMPLETED').length;
 
@@ -76,11 +74,11 @@ export const DashboardView = () => {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => navigate('current-works')}
+              onClick={() => navigate('work-queue')}
               className="btn-primary px-5 py-3"
             >
-              <Kanban className="w-4 h-4" />
-              <span>Go to Current Works</span>
+              <ListOrdered className="w-4 h-4" />
+              <span>Go to Work Queue</span>
             </button>
             <button
               onClick={() => navigate('analytics')}
@@ -99,8 +97,8 @@ export const DashboardView = () => {
         variant="minimal"
       />
 
-      {/* 5 Summary Stat Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+      {/* 4 Summary Stat Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Active Projects */}
         <div
           onClick={() => navigate('projects')}
@@ -122,27 +120,6 @@ export const DashboardView = () => {
           </div>
         </div>
 
-        {/* Current Works */}
-        <div
-          onClick={() => navigate('current-works')}
-          className="glass-card p-4 rounded-2xl cursor-pointer hover:border-emerald-300 transition-all group"
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
-              Current Works
-            </span>
-            <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600 group-hover:scale-110 transition-transform">
-              <Kanban className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline justify-between">
-            <span className="text-2xl sm:text-3xl font-black text-[#111111] tracking-tight">
-              {String(currentWorksCount).padStart(2, '0')}
-            </span>
-            <span className="text-[10px] font-bold text-emerald-600 font-mono">🟢 Active</span>
-          </div>
-        </div>
-
         {/* Works To Do */}
         <div
           onClick={() => navigate('work-queue')}
@@ -150,7 +127,7 @@ export const DashboardView = () => {
         >
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
-              Works To Do
+              Work Queue
             </span>
             <div className="p-2 rounded-xl bg-amber-50 text-amber-600 group-hover:scale-110 transition-transform">
               <ListOrdered className="w-4 h-4" />
@@ -158,7 +135,7 @@ export const DashboardView = () => {
           </div>
           <div className="mt-3 flex items-baseline justify-between">
             <span className="text-2xl sm:text-3xl font-black text-[#111111] tracking-tight">
-              {String(worksToDoCount).padStart(2, '0')}
+              {String(workQueueCount).padStart(2, '0')}
             </span>
             <span className="text-[10px] font-bold text-amber-600 font-mono">🟡 Queue</span>
           </div>
@@ -187,8 +164,8 @@ export const DashboardView = () => {
 
         {/* Completed */}
         <div
-          onClick={() => navigate('current-works')}
-          className="glass-card p-4 rounded-2xl cursor-pointer hover:border-purple-300 transition-all group col-span-2 lg:col-span-1"
+          onClick={() => navigate('work-queue')}
+          className="glass-card p-4 rounded-2xl cursor-pointer hover:border-purple-300 transition-all group"
         >
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-black uppercase tracking-wider text-[#666666]">
@@ -226,10 +203,10 @@ export const DashboardView = () => {
           {[
             { key: 'IDEAS', label: 'IDEAS', count: stageCounts.IDEAS, color: 'border-blue-200 bg-blue-50/50 text-blue-700', tab: 'future-ideas' },
             { key: 'PLANNED', label: 'PLANNED', count: stageCounts.PLANNED, color: 'border-amber-200 bg-amber-50/50 text-amber-700', tab: 'work-queue' },
-            { key: 'TO DO', label: 'TO DO', count: stageCounts['TO DO'], color: 'border-slate-200 bg-slate-50 text-slate-700', tab: 'current-works' },
-            { key: 'IN PROGRESS', label: 'IN PROGRESS', count: stageCounts['IN PROGRESS'], color: 'border-rose-200 bg-rose-50 text-[#E42129]', tab: 'current-works' },
-            { key: 'REVIEW', label: 'REVIEW', count: stageCounts.REVIEW, color: 'border-indigo-200 bg-indigo-50 text-indigo-700', tab: 'current-works' },
-            { key: 'COMPLETED', label: 'COMPLETED', count: stageCounts.COMPLETED, color: 'border-emerald-200 bg-emerald-50 text-emerald-700', tab: 'current-works' }
+            { key: 'TO DO', label: 'TO DO', count: stageCounts['TO DO'], color: 'border-slate-200 bg-slate-50 text-slate-700', tab: 'work-queue' },
+            { key: 'IN PROGRESS', label: 'IN PROGRESS', count: stageCounts['IN PROGRESS'], color: 'border-rose-200 bg-rose-50 text-[#E42129]', tab: 'work-queue' },
+            { key: 'REVIEW', label: 'REVIEW', count: stageCounts.REVIEW, color: 'border-indigo-200 bg-indigo-50 text-indigo-700', tab: 'work-queue' },
+            { key: 'COMPLETED', label: 'COMPLETED', count: stageCounts.COMPLETED, color: 'border-emerald-200 bg-emerald-50 text-emerald-700', tab: 'work-queue' }
           ].map((stage) => (
             <div
               key={stage.key}
@@ -262,7 +239,7 @@ export const DashboardView = () => {
               <h3 className="font-extrabold text-sm text-[#111111]">Priority Operational Watchlist</h3>
             </div>
             <button
-              onClick={() => navigate('current-works')}
+              onClick={() => navigate('work-queue')}
               className="text-xs font-bold text-[#E42129] hover:underline flex items-center gap-1"
             >
               <span>View All Tasks</span>
@@ -277,7 +254,7 @@ export const DashboardView = () => {
               return (
                 <div
                   key={t.id}
-                  onClick={() => openTaskDrawer(t.id)}
+                  onClick={() => navigate('work-queue')}
                   className="p-4 rounded-xl border border-[#E8E8E8] hover:border-[#E42129]/40 bg-white hover:bg-[#F5F5F5] transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                 >
                   <div className="flex items-start gap-3">

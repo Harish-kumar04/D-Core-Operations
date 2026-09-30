@@ -296,7 +296,7 @@ export const AppProvider = ({ children }) => {
       progress: parseInt(taskData.progress || 0, 10),
       estimatedHours: parseInt(taskData.estimatedHours || 16, 10),
       tags: Array.isArray(taskData.tags) ? taskData.tags : (taskData.tags ? taskData.tags.split(',').map(t => t.trim()) : []),
-      type: taskData.type || 'CURRENT_WORK',
+      type: taskData.type || 'WORK_QUEUE',
       notes: taskData.notes || '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -545,7 +545,6 @@ export const AppProvider = ({ children }) => {
     addTask,
     updateTask,
     moveTaskStatus,
-    moveWorkQueueToCurrentWork,
     deleteTask,
     addIdea,
     updateIdea,

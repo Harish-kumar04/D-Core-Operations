@@ -247,11 +247,10 @@ export const EditEntityModal = ({ isOpen, onClose, entityType, entityData }) => 
                 <div>
                   <label className="block text-slate-700 font-bold mb-1">Pipeline Section</label>
                   <select
-                    value={formData.type || 'CURRENT_WORK'}
+                    value={formData.type || 'WORK_QUEUE'}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-dcore-red"
                   >
-                    <option value="CURRENT_WORK">🟢 Current Work</option>
                     <option value="WORK_QUEUE">🟡 Work Queue (Planned)</option>
                   </select>
                 </div>

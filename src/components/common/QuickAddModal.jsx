@@ -23,7 +23,7 @@ export const QuickAddModal = () => {
     ownerId: '',
     priority: 'P1',
     status: 'TO DO',
-    type: 'CURRENT_WORK',
+    type: 'WORK_QUEUE',
     dueDate: '',
     tags: '',
     estimatedHours: 16
@@ -200,7 +200,6 @@ export const QuickAddModal = () => {
                     onChange={(e) => setTaskForm({ ...taskForm, type: e.target.value })}
                     className="w-full px-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-dcore-red"
                   >
-                    <option value="CURRENT_WORK">🟢 Current Works (Active)</option>
                     <option value="WORK_QUEUE">🟡 Work Queue (Planned)</option>
                   </select>
                 </div>
