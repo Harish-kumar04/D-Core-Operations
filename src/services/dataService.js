@@ -1,13 +1,11 @@
 import initialData from '../data/initialData.json';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
-const API_BASE = 'http://localhost:5000/api';
 const STORAGE_KEY = 'dcore_operations_state_v4';
 
 export const DataService = {
-  // Fetch full state from Supabase Cloud DB or local Express REST API or localStorage
+  // Fetch full state from Supabase Cloud DB
   fetchStateAsync: async () => {
-    // 1. Try Supabase Cloud Database if configured
     if (isSupabaseConfigured && supabase) {
       try {
         const [projRes, taskRes, ideaRes, teamRes, histRes] = await Promise.all([
@@ -18,7 +16,11 @@ export const DataService = {
           supabase.from('history').select('*').order('timestamp', { ascending: false })
         ]);
 
-        if (!projRes.error && projRes.data) {
+        if (projRes.error || taskRes.error || ideaRes.error || teamRes.error || histRes.error) {
+          return { error: true, message: 'Failed to sync with Supabase backend.' };
+        }
+
+        if (projRes.data) {
           const mapProject = (p) => ({
             id: p.id,
             name: p.name,
@@ -118,30 +120,17 @@ export const DataService = {
           if (missingIdeas.length > 0) cloudState.ideas = [...cloudState.ideas, ...missingIdeas];
 
           localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudState));
-          return cloudState;
+          return { success: true, data: cloudState };
         }
       } catch (err) {
-        console.warn('Supabase fetch error, fallback to REST API / localStorage:', err);
+        console.warn('Supabase fetch error:', err);
+        return { error: true, message: 'Network error connecting to Supabase.' };
       }
     }
-
-    // 2. Fallback to Local Express REST API
-    try {
-      const res = await fetch(`${API_BASE}/state`);
-      if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        return data;
-      }
-    } catch (e) {
-      console.warn('REST API unavailable, fallback to localStorage cache.');
-    }
-
-    // 3. Fallback to LocalStorage
-    return DataService.loadState();
+    return { error: true, message: 'Backend authentication service is not configured.' };
   },
 
-  // Save Project to Supabase & Local DB
+  // Save Project to Supabase
   saveProjectApi: async (project, adminName, isEdit = false) => {
     if (isSupabaseConfigured && supabase) {
       try {
@@ -169,19 +158,9 @@ export const DataService = {
         console.error('Supabase project mutation error:', e);
       }
     }
-
-    // Local REST API backup
-    try {
-      const url = isEdit ? `${API_BASE}/projects/${project.id}` : `${API_BASE}/projects`;
-      await fetch(url, {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ project, updates: project, adminName })
-      });
-    } catch (e) {}
   },
 
-  // Save Task to Supabase & Local DB
+  // Save Task to Supabase
   saveTaskApi: async (task, adminName, isEdit = false) => {
     if (isSupabaseConfigured && supabase) {
       try {
@@ -212,18 +191,9 @@ export const DataService = {
         console.error('Supabase task mutation error:', e);
       }
     }
-
-    try {
-      const url = isEdit ? `${API_BASE}/tasks/${task.id}` : `${API_BASE}/tasks`;
-      await fetch(url, {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ task, updates: task, adminName })
-      });
-    } catch (e) {}
   },
 
-  // Save Idea to Supabase & Local DB
+  // Save Idea to Supabase
   saveIdeaApi: async (idea, adminName, isEdit = false) => {
     if (isSupabaseConfigured && supabase) {
       try {
@@ -247,18 +217,9 @@ export const DataService = {
         console.error('Supabase idea mutation error:', e);
       }
     }
-
-    try {
-      const url = isEdit ? `${API_BASE}/ideas/${idea.id}` : `${API_BASE}/ideas`;
-      await fetch(url, {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idea, updates: idea, adminName })
-      });
-    } catch (e) {}
   },
 
-  // Save Team Member to Supabase & Local DB
+  // Save Team Member to Supabase
   saveTeamApi: async (member, adminName, isEdit = false) => {
     if (isSupabaseConfigured && supabase) {
       try {
@@ -282,18 +243,9 @@ export const DataService = {
         console.error('Supabase team mutation error:', e);
       }
     }
-
-    try {
-      const url = isEdit ? `${API_BASE}/team/${member.id}` : `${API_BASE}/team`;
-      await fetch(url, {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ member, updates: member, adminName })
-      });
-    } catch (e) {}
   },
 
-  // Log Audit History Entry in Supabase & Local DB
+  // Log Audit History Entry in Supabase
   saveHistoryApi: async (log) => {
     if (isSupabaseConfigured && supabase) {
       try {
@@ -313,7 +265,7 @@ export const DataService = {
     }
   },
 
-  // Delete Entity from Supabase & Local DB
+  // Delete Entity from Supabase
   deleteEntityApi: async (type, id, adminName) => {
     const tableMap = {
       PROJECT: 'projects',
@@ -330,35 +282,6 @@ export const DataService = {
         console.error('Supabase delete error:', e);
       }
     }
-
-    try {
-      if (table) {
-        await fetch(`${API_BASE}/${table}/${id}`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ adminName })
-        });
-      }
-    } catch (e) {}
-  },
-
-  // Admin Login via Supabase / REST API
-  loginAdminApi: async (email, password, adminName) => {
-    try {
-      const res = await fetch(`${API_BASE}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, adminName })
-      });
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch (e) {}
-
-    if (email === 'admin@dcore.ops' && password === 'admin123') {
-      return { success: true, adminName: adminName || 'Admin' };
-    }
-    return { success: false, error: 'Invalid credentials' };
   },
 
   // Load state from localStorage

@@ -81,11 +81,13 @@ export const AppProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [toast, setToast] = useState(null);
 
-  // Initial async sync from Supabase Cloud / REST API server
+  // Initial async sync from Supabase Cloud
   useEffect(() => {
-    DataService.fetchStateAsync().then((fetchedState) => {
-      if (fetchedState) {
-        setState(fetchedState);
+    DataService.fetchStateAsync().then((res) => {
+      if (res && res.error) {
+        showToast(res.message, 'error');
+      } else if (res && res.success) {
+        setState(res.data);
       }
     });
   }, []);
