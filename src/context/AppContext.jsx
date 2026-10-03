@@ -1,5 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { DataService } from '../services/dataService';
+import {
+  getStoredPasswords,
+  verifyAdminPasscode,
+  changeAdminPassword as updatePasswordService,
+  getPasswordExpiryInfo
+} from '../services/passwordService';
 
 const AppContext = createContext();
 
@@ -10,6 +16,7 @@ export const AppProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [passwordExpiry, setPasswordExpiry] = useState(() => getPasswordExpiryInfo());
 
   // User Session & Gated Access State
   const [userSession, setUserSession] = useState(() => {
@@ -86,7 +93,7 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- INTERNAL AUTH WALL LOGIN (FOR 4 AUTHORIZED ADMIN USERS) ---
+  // --- INTERNAL AUTH WALL LOGIN (FOR AUTHORIZED ADMIN USERS) ---
   const loginUserSession = (profileName, passcode, memberName = '') => {
     const trimmedProfile = profileName.trim();
     const cleanPass = passcode.trim();
@@ -96,16 +103,18 @@ export const AppProvider = ({ children }) => {
       return { success: false, error: 'Your name is required to enter the application.' };
     }
 
-    // Passcode mapping for the authorized users
-    const userPasscodes = {
-      'admin': 'admin@321',
-      'admin2': 'admin!321',
-      'admin3': 'admin@dmk67',
-      'admin4': 'admin@dcore67'
+    const storedPasswords = getStoredPasswords();
+    const defaultPasscodes = {
+      'admin': storedPasswords.ADMIN || 'admin@321',
+      'admin2': storedPasswords.ADMIN2 || storedPasswords.ADMIN || 'admin!321',
+      'admin3': storedPasswords.ADMIN3 || storedPasswords.ADMIN || 'admin@dmk67',
+      'admin4': storedPasswords.ADMIN4 || storedPasswords.ADMIN || 'admin@dcore67'
     };
 
-    const expectedPasscode = userPasscodes[trimmedProfile];
-    if (expectedPasscode && cleanPass === expectedPasscode) {
+    const expectedPasscode = defaultPasscodes[trimmedProfile];
+    const isValid = cleanPass === expectedPasscode || verifyAdminPasscode(cleanPass);
+
+    if (isValid) {
       const displayName = `${cleanMemberName} (${trimmedProfile})`;
       const session = {
         isAuthenticated: true,
@@ -118,7 +127,6 @@ export const AppProvider = ({ children }) => {
       setIsAdminLoggedIn(true);
       setAdminName(displayName);
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-      sessionStorage.removeItem('dcore_quote_popup_seen');
 
       addHistoryLog(
         'PORTAL_LOGIN',
@@ -134,6 +142,44 @@ export const AppProvider = ({ children }) => {
     }
 
     return { success: false, error: `Incorrect passcode for ${trimmedProfile}.` };
+  };
+
+  const changePassword = (role, oldPass, newPass) => {
+    const res = updatePasswordService(role, oldPass, newPass);
+    if (res.success) {
+      setPasswordExpiry(getPasswordExpiryInfo());
+      showToast(res.message);
+    } else {
+      showToast(res.error, 'error');
+    }
+    return res;
+  };
+
+  const addFeedPost = (feedData) => {
+    const newPost = {
+      id: `feed_${Date.now()}`,
+      author: userSession?.memberName || adminName || 'Core Team Member',
+      role: userSession?.userRole || 'ADMIN',
+      category: feedData.category || 'GENERAL',
+      content: feedData.content,
+      createdAt: new Date().toISOString()
+    };
+
+    setState(prev => ({
+      ...prev,
+      feeds: [newPost, ...(prev.feeds || [])]
+    }));
+
+    addHistoryLog('POST_FEED', 'FEED', newPost.id, 'Feed Post', `Published feed update: "${feedData.content.substring(0, 40)}..."`);
+    showToast('Feed update posted successfully!');
+  };
+
+  const deleteFeedPost = (feedId) => {
+    setState(prev => ({
+      ...prev,
+      feeds: (prev.feeds || []).filter(f => f.id !== feedId)
+    }));
+    showToast('Feed post removed.');
   };
 
   const logoutUserSession = () => {
@@ -552,6 +598,10 @@ export const AppProvider = ({ children }) => {
     addTeamMember,
     updateTeamMember,
     addActivity,
+    passwordExpiry,
+    changePassword,
+    addFeedPost,
+    deleteFeedPost,
     resetDemoData,
     exportJSON,
     importJSON

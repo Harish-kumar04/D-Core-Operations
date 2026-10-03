@@ -1,6 +1,5 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { QuoteCard } from '../common/QuoteCard';
 import { ProjectDetailView } from './ProjectDetailView';
 import {
   FolderKanban,
@@ -51,13 +50,6 @@ export const ProjectsView = () => {
           <span>+ New Project</span>
         </button>
       </div>
-
-      {/* Integrated Periyar Rationalism Quote Card */}
-      <QuoteCard
-        quote="கேள்வி கேட்கத் துணிவில்லாத சமூகம் முன்னேற முடியாது."
-        speaker="தந்தை பெரியார்"
-        variant="minimal"
-      />
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

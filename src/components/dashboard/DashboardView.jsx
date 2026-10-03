@@ -1,6 +1,5 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { QuoteCard } from '../common/QuoteCard';
 import {
   FolderKanban,
   ListOrdered,
@@ -89,13 +88,6 @@ export const DashboardView = () => {
           </div>
         </div>
       </div>
-
-      {/* Integrated Periyar Self-Respect Quote Card */}
-      <QuoteCard
-        quote="சுயமரியாதை இல்லாத வாழ்க்கை, பிறர் கருணையில் உயிர்வாழும் அடிமைத்தனமே."
-        speaker="தந்தை பெரியார்"
-        variant="minimal"
-      />
 
       {/* 4 Summary Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

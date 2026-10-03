@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { QuoteCard } from '../common/QuoteCard';
 import {
   ListOrdered,
   Plus,
@@ -49,13 +48,6 @@ export const WorkQueueView = () => {
           <span>+ Add Planned Work</span>
         </button>
       </div>
-
-      {/* Integrated Kalaignar Service Quote Card */}
-      <QuoteCard
-        quote="நம்மால் பயனடைந்தவர்கள் நம்மிடம் நன்றி காட்டுவார்கள் என்று எதிர்பார்க்க வேண்டாம். நாம் செய்தது மனிதத்திற்காக... புகழுக்காக அல்ல."
-        speaker="கலைஞர் மு.கருணாநிதி"
-        variant="minimal"
-      />
 
       {/* Workflow Indicator Banner */}
       <div className="p-4 rounded-2xl bg-[#F5F5F5] border border-[#E8E8E8] flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-bold text-[#111111]">

@@ -3,9 +3,44 @@ import { useApp } from '../../context/AppContext';
 import { Settings, Download, Upload, RotateCcw, ShieldCheck, Database, Sliders, Bell } from 'lucide-react';
 
 export const SettingsView = () => {
-  const { state, exportJSON, importJSON, resetDemoData, showToast } = useApp();
+  const { state, exportJSON, importJSON, resetDemoData, passwordExpiry, changePassword, showToast } = useApp();
   const [importString, setImportString] = useState('');
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+
+  // Password Change Form State
+  const [passRole, setPassRole] = useState('ADMIN');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passMessage, setPassMessage] = useState(null);
+
+  const handlePasswordChange = (e) => {
+    e.preventDefault();
+    setPassMessage(null);
+
+    if (!oldPassword) {
+      setPassMessage({ type: 'error', text: 'Please enter your current password.' });
+      return;
+    }
+    if (!newPassword || newPassword.length < 6) {
+      setPassMessage({ type: 'error', text: 'New password must be at least 6 characters.' });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPassMessage({ type: 'error', text: 'New passwords do not match.' });
+      return;
+    }
+
+    const res = changePassword(passRole, oldPassword, newPassword);
+    if (res.success) {
+      setPassMessage({ type: 'success', text: res.message });
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } else {
+      setPassMessage({ type: 'error', text: res.error || 'Failed to update password.' });
+    }
+  };
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -34,8 +69,140 @@ export const SettingsView = () => {
           </div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">SETTINGS</h1>
           <p className="text-xs text-slate-500 mt-1">
-            Manage workflow defaults, persistent JSON backups, import/export data, and system preferences.
+            Manage workflow defaults, password rotation security, persistent JSON backups, and system preferences.
           </p>
+        </div>
+      </div>
+
+      {/* 0. Admin Security & 14-Day Password Rotation Banner */}
+      <div className="glass-card p-6 rounded-2xl border border-red-100 bg-linear-to-r from-red-50/50 to-white space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-red-100">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#E42129] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-extrabold text-base text-slate-900">Admin Password Security & 14-Day Rotation</h3>
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-red-100 text-[#E42129]">
+                  SECURITY POLICY
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 mt-0.5">
+                Passwords must be changed every 14 days to maintain compliance with D-Core Security Directives.
+              </p>
+            </div>
+          </div>
+
+          {/* Expiry Countdown Indicator */}
+          <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shrink-0">
+            <div className="text-right">
+              <div className="text-[10px] font-bold text-slate-500 uppercase">Rotation Status</div>
+              <div className={`text-xs font-extrabold ${
+                passwordExpiry?.isExpired || passwordExpiry?.isExpiringSoon
+                  ? 'text-red-600 animate-pulse'
+                  : passwordExpiry?.daysRemaining <= 3
+                  ? 'text-amber-600'
+                  : 'text-emerald-600'
+              }`}>
+                {passwordExpiry?.isExpired
+                  ? '⚠️ PASSWORD EXPIRED - CHANGE NOW'
+                  : passwordExpiry?.isExpiringSoon
+                  ? '⚠️ EXPIRES TOMORROW (DAY 14)'
+                  : `${passwordExpiry?.daysRemaining} DAYS REMAINING`}
+              </div>
+            </div>
+            <div className={`w-3 h-3 rounded-full ${
+              passwordExpiry?.isExpired || passwordExpiry?.isExpiringSoon
+                ? 'bg-red-500 animate-ping'
+                : passwordExpiry?.daysRemaining <= 3
+                ? 'bg-amber-500'
+                : 'bg-emerald-500'
+            }`}></div>
+          </div>
+        </div>
+
+        {/* Rotation Details & Change Password Form Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          {/* Status Column */}
+          <div className="space-y-3 text-xs bg-white p-4 rounded-xl border border-slate-200/80">
+            <span className="text-slate-400 font-bold uppercase text-[10px] block">Rotation Audit Summary</span>
+            <div className="flex justify-between py-1 border-b border-slate-100">
+              <span className="text-slate-500">Rotation Cycle</span>
+              <span className="font-bold text-slate-800">Every 14 Days</span>
+            </div>
+            <div className="flex justify-between py-1 border-b border-slate-100">
+              <span className="text-slate-500">Last Changed</span>
+              <span className="font-bold text-slate-800">{passwordExpiry?.lastChangedDate || 'N/A'}</span>
+            </div>
+            <div className="flex justify-between py-1 border-b border-slate-100">
+              <span className="text-slate-500">Next Mandatory Due</span>
+              <span className="font-bold text-[#E42129]">{passwordExpiry?.nextDueDate || 'N/A'}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-slate-500">Last Day Warning</span>
+              <span className="font-bold text-amber-600">Day 13 Notification Banner</span>
+            </div>
+          </div>
+
+          {/* Form Column */}
+          <form onSubmit={handlePasswordChange} className="md:col-span-2 space-y-3 bg-white p-4 rounded-xl border border-slate-200/80">
+            <span className="text-slate-900 font-extrabold text-xs block mb-1">Update Admin Password</span>
+
+            {passMessage && (
+              <div className={`p-2.5 rounded-lg text-xs font-bold ${
+                passMessage.type === 'success'
+                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                  : 'bg-red-50 text-red-800 border border-red-200'
+              }`}>
+                {passMessage.text}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label className="text-slate-500 font-bold text-[10px] uppercase block mb-1">Current Password</label>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:border-[#E42129]"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-500 font-bold text-[10px] uppercase block mb-1">New Password</label>
+                <input
+                  type="password"
+                  placeholder="Min 6 chars"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:border-[#E42129]"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-500 font-bold text-[10px] uppercase block mb-1">Confirm New Password</label>
+                <input
+                  type="password"
+                  placeholder="Confirm match"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-800 focus:outline-none focus:border-[#E42129]"
+                />
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                type="submit"
+                className="btn-primary py-2 px-4 text-xs font-bold bg-[#E42129] hover:bg-[#c21920]"
+              >
+                Change Password & Reset 14-Day Cycle
+              </button>
+            </div>
+          </form>
         </div>
       </div>
 

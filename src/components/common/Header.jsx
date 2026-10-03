@@ -24,7 +24,8 @@ export const Header = () => {
     logoutUserSession,
     isAdminLoggedIn,
     adminName,
-    setIsAdminLoginOpen
+    setIsAdminLoginOpen,
+    passwordExpiry
   } = useApp();
 
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -37,7 +38,30 @@ export const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-[#E8E8E8] px-4 lg:px-8 py-3 transition-all select-none">
+    <>
+      {/* 14-Day Mandatory Password Expiry Warning Banner */}
+      {(passwordExpiry?.isExpiringSoon || passwordExpiry?.isExpired) && (
+        <div className="bg-[#E42129] text-white px-4 py-2 text-xs font-bold flex items-center justify-between shadow-md z-40 select-none">
+          <div className="flex items-center gap-2 max-w-5xl mx-auto w-full justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              <span>
+                {passwordExpiry?.isExpired
+                  ? '⚠️ MANDATORY SECURITY ACTION REQUIRED: Your Admin Password has EXPIRED after 14 days.'
+                  : '⚠️ SECURITY WARNING: Your Admin Password expires TOMORROW (14-day rotation policy).'}
+              </span>
+            </div>
+            <button
+              onClick={() => navigate('settings')}
+              className="bg-white text-[#E42129] px-3 py-1 rounded-lg font-black uppercase text-[10px] hover:bg-slate-100 transition-colors shadow-xs shrink-0"
+            >
+              Change Password Now →
+            </button>
+          </div>
+        </div>
+      )}
+
+      <header className="sticky top-0 z-30 bg-white border-b border-[#E8E8E8] px-4 lg:px-8 py-3 transition-all select-none">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         
         {/* Left: Brand Identity */}
@@ -215,5 +239,6 @@ export const Header = () => {
         </div>
       </div>
     </header>
+  </>
   );
 };

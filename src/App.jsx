@@ -8,12 +8,12 @@ import { SearchModal } from './components/common/SearchModal';
 import { QuickAddModal } from './components/common/QuickAddModal';
 import { AdminLoginModal } from './components/common/AdminLoginModal';
 import { EditEntityModal } from './components/common/EditEntityModal';
-import { QuotePopup } from './components/common/QuotePopup';
 import { Toast } from './components/common/Toast';
 
 // Lazy-loaded views for performance optimization
 const InternalAuthWall = lazy(() => import('./components/common/InternalAuthWall').then(m => ({ default: m.InternalAuthWall })));
 const DashboardView = lazy(() => import('./components/dashboard/DashboardView').then(m => ({ default: m.DashboardView })));
+const FeedsView = lazy(() => import('./components/feeds/FeedsView').then(m => ({ default: m.FeedsView })));
 const WorkQueueView = lazy(() => import('./components/workQueue/WorkQueueView').then(m => ({ default: m.WorkQueueView })));
 const FutureIdeasView = lazy(() => import('./components/futureIdeas/FutureIdeasView').then(m => ({ default: m.FutureIdeasView })));
 const ProjectsView = lazy(() => import('./components/projects/ProjectsView').then(m => ({ default: m.ProjectsView })));
@@ -50,6 +50,7 @@ const MainLayout = () => {
         <main id="main-content" role="main" className="flex-1 p-4 lg:p-8 overflow-y-auto max-w-full">
           <Suspense fallback={<PageFallback />}>
             {(activeTab === 'dashboard' || activeTab === 'landing') && <DashboardView />}
+            {activeTab === 'feeds' && <FeedsView />}
             {activeTab === 'work-queue' && <WorkQueueView />}
             {activeTab === 'future-ideas' && <FutureIdeasView />}
             {activeTab === 'projects' && <ProjectsView />}
@@ -69,7 +70,6 @@ const MainLayout = () => {
         entityType={editModal.type}
         entityData={editModal.data}
       />
-      <QuotePopup />
       <Toast />
     </div>
   );

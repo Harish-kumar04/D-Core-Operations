@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   LayoutDashboard,
+  MessageSquare,
   ListOrdered,
   Lightbulb,
   FolderKanban,
@@ -15,6 +16,7 @@ import {
 export const Sidebar = () => {
   const { activeTab, navigate, state } = useApp();
 
+  const feedsCount = (state.feeds || []).length;
   const workQueueCount = (state.tasks || []).filter(t => t.type === 'WORK_QUEUE').length;
   const ideasCount = (state.ideas || []).filter(i => i.status !== 'CONVERTED TO PROJECT').length;
   const projectsCount = (state.projects || []).length;
@@ -22,6 +24,7 @@ export const Sidebar = () => {
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'feeds', label: 'Feeds', icon: MessageSquare, badge: feedsCount, badgeColor: 'bg-emerald-50 text-emerald-800 border border-emerald-200' },
     { id: 'work-queue', label: 'Work Queue', icon: ListOrdered, badge: workQueueCount, badgeColor: 'bg-amber-50 text-amber-800 border border-amber-200' },
     { id: 'future-ideas', label: 'Future Ideas', icon: Lightbulb, badge: ideasCount, badgeColor: 'bg-blue-50 text-blue-800 border border-blue-200' },
     { id: 'projects', label: 'Projects', icon: FolderKanban, badge: projectsCount },

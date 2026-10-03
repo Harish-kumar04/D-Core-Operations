@@ -2,6 +2,7 @@ import React from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   LayoutDashboard,
+  MessageSquare,
   ListOrdered,
   Lightbulb,
   FolderKanban
@@ -12,6 +13,7 @@ export const BottomNav = () => {
 
   const mobileTabs = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'feeds', label: 'Feeds', icon: MessageSquare },
     { id: 'work-queue', label: 'Queue', icon: ListOrdered },
     { id: 'future-ideas', label: 'Ideas', icon: Lightbulb },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
