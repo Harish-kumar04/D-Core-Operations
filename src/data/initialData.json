@@ -472,6 +472,90 @@
       "complexity": "LOW",
       "notes": "Approved for Q4 implementation. Can be converted into a standalone project.",
       "createdAt": "2026-09-14T09:30:00Z"
+    },
+    {
+      "id": "idea_mtg_001",
+      "title": "Udhay Butcher Site",
+      "description": "Udhay Butcher site ideas and segments to be decided and fixed. Full site architecture and content segments pending finalization.",
+      "category": "Web Platform",
+      "status": "NEW",
+      "createdBy": "Anbagam Team Meeting",
+      "impact": "MEDIUM",
+      "complexity": "MEDIUM",
+      "notes": "Discussed in Anbagam team meeting. Site ideas and segments to be decided and fixed.",
+      "createdAt": "2026-10-03T05:00:00Z"
+    },
+    {
+      "id": "idea_mtg_002",
+      "title": "Influencer Site",
+      "description": "Influencer site ideas and segments to be decided and fixed. Platform for managing and coordinating influencer outreach activities.",
+      "category": "Digital Outreach",
+      "status": "NEW",
+      "createdBy": "Anbagam Team Meeting",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Discussed in Anbagam team meeting. Site ideas and segments to be decided and fixed.",
+      "createdAt": "2026-10-03T05:05:00Z"
+    },
+    {
+      "id": "idea_mtg_003",
+      "title": "TVK MLA Data Scraping & Dossier Folders",
+      "description": "TVK MLA data to be scraped and maintained as individual Dossier Folders. Comprehensive data collection and profiling of each MLA.",
+      "category": "Data & Intelligence",
+      "status": "NEW",
+      "createdBy": "Anbagam Team Meeting",
+      "impact": "HIGH",
+      "complexity": "MEDIUM",
+      "notes": "Discussed in Anbagam team meeting. Data to be scraped and maintained as individual Dossier Folders.",
+      "createdAt": "2026-10-03T05:10:00Z"
+    },
+    {
+      "id": "idea_mtg_004",
+      "title": "Social Media Cadre Drive — Youth Wing",
+      "description": "Collection of active social media users from Youth Wing and other Wing cadres. Assign 1 hour of social media work every day through the Influencer Portal. Minimum target: 10,000 Youth Wing members.",
+      "category": "Cadre Management & Outreach",
+      "status": "NEW",
+      "createdBy": "Anbagam Team Meeting",
+      "impact": "CRITICAL",
+      "complexity": "HIGH",
+      "notes": "Discussed in Anbagam team meeting. Target: 10,000 Youth Wing members. 1 hour daily social media work via Influencer Portal.",
+      "createdAt": "2026-10-03T05:15:00Z"
+    },
+    {
+      "id": "idea_mtg_005",
+      "title": "Kalaignar.org Official Launch",
+      "description": "Launch of Kalaignar.org. Rajesh to coordinate. Youth Wing to arrange the launch event.",
+      "category": "Core Infrastructure",
+      "status": "APPROVED",
+      "createdBy": "Anbagam Team Meeting",
+      "impact": "CRITICAL",
+      "complexity": "MEDIUM",
+      "notes": "Discussed in Anbagam team meeting. Rajesh to coordinate. Youth Wing to arrange launch event.",
+      "createdAt": "2026-10-03T05:20:00Z"
+    },
+    {
+      "id": "idea_mtg_006",
+      "title": "By-Election Campaign Pamphlet Design",
+      "description": "Design the by-election campaign pamphlet. Owner: Kathir RS.",
+      "category": "Campaign & Election",
+      "status": "NEW",
+      "createdBy": "Anbagam Team Meeting",
+      "impact": "HIGH",
+      "complexity": "LOW",
+      "notes": "Discussed in Anbagam team meeting. Owner: Kathir RS.",
+      "createdAt": "2026-10-03T05:25:00Z"
+    },
+    {
+      "id": "idea_mtg_007",
+      "title": "Experimental Meta Ads — Lowest Vote Booth",
+      "description": "Select one booth where the lowest votes were received last time. Run experimental Meta Ads using our accounts. Owner: Harish.",
+      "category": "Campaign & Digital Ads",
+      "status": "NEW",
+      "createdBy": "Anbagam Team Meeting",
+      "impact": "HIGH",
+      "complexity": "LOW",
+      "notes": "Discussed in Anbagam team meeting. Select lowest vote booth, run experimental Meta Ads. Owner: Harish.",
+      "createdAt": "2026-10-03T05:30:00Z"
     }
   ],
   "team": [

@@ -2,7 +2,7 @@ import initialData from '../data/initialData.json';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
 const API_BASE = 'http://localhost:5000/api';
-const STORAGE_KEY = 'dcore_operations_state_v3';
+const STORAGE_KEY = 'dcore_operations_state_v4';
 
 export const DataService = {
   // Fetch full state from Supabase Cloud DB or local Express REST API or localStorage
