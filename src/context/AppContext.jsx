@@ -116,14 +116,18 @@ export const AppProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [toast, setToast] = useState(null);
 
+  const [isLoadingState, setIsLoadingState] = useState(true);
+
   // Initial async sync from Supabase Cloud
   useEffect(() => {
+    setIsLoadingState(true);
     DataService.fetchStateAsync().then((res) => {
       if (res && res.error) {
         showToast(res.message, 'error');
       } else if (res && res.success) {
         setState(res.data);
       }
+      setIsLoadingState(false);
     });
   }, []);
 
@@ -179,7 +183,7 @@ export const AppProvider = ({ children }) => {
     addHistoryLog(
       'PORTAL_LOGIN',
       'AUTH',
-      `session_${Date.now()}`,
+      `session_${crypto.randomUUID()}`,
       'User Access Audit',
       `Team Member '${displayName}' authenticated via Supabase Auth.`,
       displayName
@@ -223,7 +227,7 @@ export const AppProvider = ({ children }) => {
       addHistoryLog(
         'PASSWORD_ROTATION',
         'SECURITY',
-        `pass_${Date.now()}`,
+        `pass_${crypto.randomUUID()}`,
         '14-Day Password Rotation',
         `Password updated successfully for ${userSession.userName || 'Admin'}. 14-day rotation compliance cycle reset.`,
         userSession.userName
@@ -237,7 +241,7 @@ export const AppProvider = ({ children }) => {
   const addFeedPost = (feedData) => {
     const activeAuthor = userSession?.userName || 'Core Team Member';
     const newPost = {
-      id: `feed_${Date.now()}`,
+      id: `feed_${crypto.randomUUID()}`,
       author: activeAuthor,
       role: userSession?.userRole || 'ADMIN',
       category: feedData.category || 'GENERAL',
@@ -278,11 +282,11 @@ export const AppProvider = ({ children }) => {
     setSelectedTaskId(null);
   };
 
-  // Helper to append history audit logs using real display name
+  // Helper to append history audit logs outside setState updaters
   const addHistoryLog = (action, entityType, entityId, entityName, details, overrideAdminName = null) => {
     const activeMember = userSession?.userName || userSession?.memberName || 'Admin Operator';
     const newLog = {
-      id: `hist_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      id: `hist_${crypto.randomUUID()}`,
       adminName: overrideAdminName || activeMember,
       action,
       entityType,
@@ -300,7 +304,7 @@ export const AppProvider = ({ children }) => {
 
   const addActivity = (text, type = 'GENERAL', projectId = null, taskId = null) => {
     const newActivity = {
-      id: `act_${Date.now()}`,
+      id: `act_${crypto.randomUUID()}`,
       type,
       text,
       projectId,
@@ -314,10 +318,49 @@ export const AppProvider = ({ children }) => {
     }));
   };
 
+  // Unified save helper for optimistic UI updates, error rollbacks, and single audit logs
+  const saveEntity = async ({
+    type,
+    action,
+    entityId,
+    entityName,
+    historyDetails,
+    apiCall,
+    optimisticUpdate,
+    successMessage
+  }) => {
+    let previousStateSnapshot = null;
+
+    setState(prev => {
+      previousStateSnapshot = prev;
+      return optimisticUpdate(prev);
+    });
+
+    const res = await apiCall();
+
+    if (res && res.error) {
+      if (previousStateSnapshot) {
+        setState(previousStateSnapshot);
+      }
+      showToast(`Save failed: ${res.message || res.error}`, 'error');
+      return { success: false, error: res.message || res.error };
+    }
+
+    if (historyDetails) {
+      addHistoryLog(action, type, entityId, entityName, historyDetails);
+    }
+
+    if (successMessage) {
+      showToast(successMessage, 'success');
+    }
+
+    return { success: true };
+  };
+
   // --- PROJECTS ---
-  const addProject = (projectData) => {
+  const addProject = async (projectData) => {
     const newProject = {
-      id: `proj_${Date.now()}`,
+      id: `proj_${crypto.randomUUID()}`,
       name: projectData.name,
       url: projectData.url || '',
       description: projectData.description || '',
@@ -328,53 +371,71 @@ export const AppProvider = ({ children }) => {
       category: projectData.category || 'Digital Platform',
       startDate: projectData.startDate || new Date().toISOString().split('T')[0],
       targetDate: projectData.targetDate || '',
-      notes: projectData.notes ? [projectData.notes] : [],
+      notes: projectData.notes ? (Array.isArray(projectData.notes) ? projectData.notes : [projectData.notes]) : [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
-    setState(prev => ({
-      ...prev,
-      projects: [newProject, ...prev.projects]
-    }));
-
-    addHistoryLog('CREATE_PROJECT', 'PROJECT', newProject.id, newProject.name, `Created project '${newProject.name}' (${newProject.category}).`);
-    DataService.saveProjectApi(newProject, adminName, false);
-    showToast(`Project '${newProject.name}' created!`);
-    return newProject;
-  };
-
-  const updateProject = (projectId, updates) => {
-    setState(prev => {
-      const proj = prev.projects.find(p => p.id === projectId);
-      const projName = updates.name || (proj ? proj.name : 'Project');
-      addHistoryLog('EDIT_PROJECT', 'PROJECT', projectId, projName, `Updated project '${projName}'. Modified progress to ${updates.progress}%.`);
-      DataService.saveProjectApi({ id: projectId, ...updates }, adminName, true);
-
-      return {
-        ...prev,
-        projects: prev.projects.map(p => p.id === projectId ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p)
-      };
+    return await saveEntity({
+      type: 'PROJECT',
+      action: 'CREATE_PROJECT',
+      entityId: newProject.id,
+      entityName: newProject.name,
+      historyDetails: `Created project '${newProject.name}' (${newProject.category}).`,
+      apiCall: () => DataService.saveProjectApi(newProject, userSession.userName, false),
+      optimisticUpdate: prev => ({ ...prev, projects: [newProject, ...(prev.projects || [])] }),
+      successMessage: `Project '${newProject.name}' created!`
     });
-    showToast('Project entry updated successfully.');
   };
 
-  const deleteProject = (projectId) => {
+  const updateProject = async (projectId, updates) => {
+    const proj = state.projects.find(p => p.id === projectId);
+    const projName = updates.name || (proj ? proj.name : 'Project');
+    const fullProject = { ...(proj || {}), ...updates, id: projectId, updatedAt: new Date().toISOString() };
+
+    let detailsStr = `Updated project details for '${projName}'.`;
+    if (updates.progress !== undefined && updates.progress !== null) {
+      detailsStr = `Updated project '${projName}'. Modified progress to ${updates.progress}%.`;
+    }
+
+    return await saveEntity({
+      type: 'PROJECT',
+      action: 'EDIT_PROJECT',
+      entityId: projectId,
+      entityName: projName,
+      historyDetails: detailsStr,
+      apiCall: () => DataService.saveProjectApi(fullProject, userSession.userName, true),
+      optimisticUpdate: prev => ({
+        ...prev,
+        projects: (prev.projects || []).map(p => p.id === projectId ? fullProject : p)
+      }),
+      successMessage: 'Project entry updated successfully.'
+    });
+  };
+
+  const deleteProject = async (projectId) => {
     const proj = state.projects.find(p => p.id === projectId);
     const projName = proj ? proj.name : projectId;
-    setState(prev => ({
-      ...prev,
-      projects: prev.projects.filter(p => p.id !== projectId)
-    }));
-    addHistoryLog('DELETE_PROJECT', 'PROJECT', projectId, projName, `Deleted project '${projName}'.`);
-    DataService.deleteEntityApi('PROJECT', projectId, adminName);
-    showToast(`Project '${projName}' deleted.`, 'info');
+
+    return await saveEntity({
+      type: 'PROJECT',
+      action: 'DELETE_PROJECT',
+      entityId: projectId,
+      entityName: projName,
+      historyDetails: `Deleted project '${projName}'.`,
+      apiCall: () => DataService.deleteEntityApi('PROJECT', projectId, userSession.userName),
+      optimisticUpdate: prev => ({
+        ...prev,
+        projects: (prev.projects || []).filter(p => p.id !== projectId)
+      }),
+      successMessage: `Project '${projName}' deleted.`
+    });
   };
 
   // --- TASKS ---
-  const addTask = (taskData) => {
+  const addTask = async (taskData) => {
     const newTask = {
-      id: `task_${Date.now()}`,
+      id: `task_${crypto.randomUUID()}`,
       projectId: taskData.projectId,
       title: taskData.title,
       description: taskData.description || '',
@@ -382,6 +443,7 @@ export const AppProvider = ({ children }) => {
       priority: taskData.priority || 'P2',
       ownerId: taskData.ownerId || 'team_1',
       dueDate: taskData.dueDate || '',
+      targetDate: taskData.targetDate || '',
       progress: parseInt(taskData.progress || 0, 10),
       estimatedHours: parseInt(taskData.estimatedHours || 16, 10),
       tags: Array.isArray(taskData.tags) ? taskData.tags : (taskData.tags ? taskData.tags.split(',').map(t => t.trim()) : []),
@@ -391,154 +453,207 @@ export const AppProvider = ({ children }) => {
       updatedAt: new Date().toISOString()
     };
 
-    setState(prev => ({
-      ...prev,
-      tasks: [newTask, ...prev.tasks]
-    }));
-
-    addHistoryLog('CREATE_TASK', 'TASK', newTask.id, newTask.title, `Created task '${newTask.title}' in ${newTask.type}.`);
-    DataService.saveTaskApi(newTask, adminName, false);
-    showToast(`Task '${newTask.title}' added.`);
-    return newTask;
-  };
-
-  const updateTask = (taskId, updates) => {
-    setState(prev => {
-      const task = prev.tasks.find(t => t.id === taskId);
-      const taskTitle = updates.title || (task ? task.title : 'Task');
-      addHistoryLog('EDIT_TASK', 'TASK', taskId, taskTitle, `Updated task '${taskTitle}'. Status: ${updates.status || (task ? task.status : '')}.`);
-      DataService.saveTaskApi({ id: taskId, ...updates }, adminName, true);
-
-      return {
-        ...prev,
-        tasks: prev.tasks.map(t => t.id === taskId ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t)
-      };
+    return await saveEntity({
+      type: 'TASK',
+      action: 'CREATE_TASK',
+      entityId: newTask.id,
+      entityName: newTask.title,
+      historyDetails: `Created task '${newTask.title}' in ${newTask.type}.`,
+      apiCall: () => DataService.saveTaskApi(newTask, userSession.userName, false),
+      optimisticUpdate: prev => ({ ...prev, tasks: [newTask, ...(prev.tasks || [])] }),
+      successMessage: `Task '${newTask.title}' added.`
     });
-    showToast('Task entry updated successfully.');
   };
 
-  const moveTaskStatus = (taskId, newStatus) => {
+  const updateTask = async (taskId, updates) => {
+    const task = state.tasks.find(t => t.id === taskId);
+    const taskTitle = updates.title || (task ? task.title : 'Task');
+    const fullTask = { ...(task || {}), ...updates, id: taskId, updatedAt: new Date().toISOString() };
+
+    return await saveEntity({
+      type: 'TASK',
+      action: 'EDIT_TASK',
+      entityId: taskId,
+      entityName: taskTitle,
+      historyDetails: `Updated task '${taskTitle}'. Status: ${fullTask.status}.`,
+      apiCall: () => DataService.saveTaskApi(fullTask, userSession.userName, true),
+      optimisticUpdate: prev => ({
+        ...prev,
+        tasks: (prev.tasks || []).map(t => t.id === taskId ? fullTask : t)
+      }),
+      successMessage: 'Task entry updated successfully.'
+    });
+  };
+
+  const moveTaskStatus = async (taskId, newStatus) => {
     const task = state.tasks.find(t => t.id === taskId);
     if (!task) return;
 
     const oldStatus = task.status;
     const isCompleted = newStatus === 'COMPLETED';
     const newProgress = isCompleted ? 100 : (oldStatus === 'COMPLETED' ? 80 : task.progress);
+    const updatedTask = {
+      ...task,
+      status: newStatus,
+      progress: newProgress,
+      updatedAt: new Date().toISOString()
+    };
 
-    setState(prev => ({
-      ...prev,
-      tasks: prev.tasks.map(t => t.id === taskId ? {
-        ...t,
-        status: newStatus,
-        progress: newProgress,
-        updatedAt: new Date().toISOString()
-      } : t)
-    }));
-
-    addHistoryLog('STATUS_CHANGE', 'TASK', taskId, task.title, `Moved status '${task.title}': ${oldStatus} → ${newStatus}.`);
-    showToast(`Task moved to ${newStatus}`);
+    return await saveEntity({
+      type: 'TASK',
+      action: 'STATUS_CHANGE',
+      entityId: taskId,
+      entityName: task.title,
+      historyDetails: `Moved status '${task.title}': ${oldStatus} → ${newStatus}.`,
+      apiCall: () => DataService.saveTaskApi(updatedTask, userSession.userName, true),
+      optimisticUpdate: prev => ({
+        ...prev,
+        tasks: (prev.tasks || []).map(t => t.id === taskId ? updatedTask : t)
+      }),
+      successMessage: `Task moved to ${newStatus}`
+    });
   };
 
-  const moveWorkQueueToCurrentWork = (taskId) => {
+  const moveWorkQueueToCurrentWork = async (taskId) => {
     const task = state.tasks.find(t => t.id === taskId);
     if (!task) return;
 
-    setState(prev => ({
-      ...prev,
-      tasks: prev.tasks.map(t => t.id === taskId ? {
-        ...t,
-        type: 'CURRENT_WORK',
-        status: 'TO DO',
-        updatedAt: new Date().toISOString()
-      } : t)
-    }));
+    const updatedTask = {
+      ...task,
+      type: 'CURRENT_WORK',
+      status: 'TO DO',
+      updatedAt: new Date().toISOString()
+    };
 
-    addHistoryLog('WORK_STARTED', 'TASK', taskId, task.title, `Transferred Work Queue item '${task.title}' into active Current Works.`);
-    showToast(`'${task.title}' moved to Current Works Kanban!`);
+    return await saveEntity({
+      type: 'TASK',
+      action: 'WORK_STARTED',
+      entityId: taskId,
+      entityName: task.title,
+      historyDetails: `Transferred Work Queue item '${task.title}' into active Current Works.`,
+      apiCall: () => DataService.saveTaskApi(updatedTask, userSession.userName, true),
+      optimisticUpdate: prev => ({
+        ...prev,
+        tasks: (prev.tasks || []).map(t => t.id === taskId ? updatedTask : t)
+      }),
+      successMessage: `'${task.title}' moved to Current Works Kanban!`
+    });
   };
 
-  const deleteTask = (taskId) => {
+  const deleteTask = async (taskId) => {
     const task = state.tasks.find(t => t.id === taskId);
     const taskTitle = task ? task.title : taskId;
 
-    setState(prev => ({
-      ...prev,
-      tasks: prev.tasks.filter(t => t.id !== taskId)
-    }));
-
-    addHistoryLog('DELETE_TASK', 'TASK', taskId, taskTitle, `Deleted task '${taskTitle}'.`);
-    DataService.deleteEntityApi('TASK', taskId, adminName);
-    showToast('Task entry deleted.', 'info');
     if (selectedTaskId === taskId) {
       setSelectedTaskId(null);
     }
+
+    return await saveEntity({
+      type: 'TASK',
+      action: 'DELETE_TASK',
+      entityId: taskId,
+      entityName: taskTitle,
+      historyDetails: `Deleted task '${taskTitle}'.`,
+      apiCall: () => DataService.deleteEntityApi('TASK', taskId, userSession.userName),
+      optimisticUpdate: prev => ({
+        ...prev,
+        tasks: (prev.tasks || []).filter(t => t.id !== taskId)
+      }),
+      successMessage: 'Task entry deleted.'
+    });
   };
 
   // --- FUTURE IDEAS ---
-  const addIdea = (ideaData) => {
+  const addIdea = async (ideaData) => {
     const newIdea = {
-      id: `idea_${Date.now()}`,
+      id: `idea_${crypto.randomUUID()}`,
       title: ideaData.title,
       description: ideaData.description || '',
       category: ideaData.category || 'General Innovation',
       status: ideaData.status || 'NEW',
-      createdBy: ideaData.createdBy || adminName || userSession.userName || 'Arun Kumar',
+      createdBy: ideaData.createdBy || userSession.userName || 'Admin Operator',
       impact: ideaData.impact || 'MEDIUM',
       complexity: ideaData.complexity || 'MEDIUM',
       notes: ideaData.notes || '',
       createdAt: new Date().toISOString()
     };
 
-    setState(prev => ({
-      ...prev,
-      ideas: [newIdea, ...prev.ideas]
-    }));
-
-    addHistoryLog('CREATE_IDEA', 'IDEA', newIdea.id, newIdea.title, `Added future idea '${newIdea.title}'.`);
-    DataService.saveIdeaApi(newIdea, adminName, false);
-    showToast(`Idea '${newIdea.title}' added!`);
-    return newIdea;
-  };
-
-  const updateIdea = (ideaId, updates) => {
-    setState(prev => {
-      const idea = prev.ideas.find(i => i.id === ideaId);
-      const ideaTitle = updates.title || (idea ? idea.title : 'Idea');
-      addHistoryLog('EDIT_IDEA', 'IDEA', ideaId, ideaTitle, `Updated future idea '${ideaTitle}'.`);
-      DataService.saveIdeaApi({ id: ideaId, ...updates }, adminName, true);
-
-      return {
-        ...prev,
-        ideas: prev.ideas.map(i => i.id === ideaId ? { ...i, ...updates } : i)
-      };
+    return await saveEntity({
+      type: 'IDEA',
+      action: 'CREATE_IDEA',
+      entityId: newIdea.id,
+      entityName: newIdea.title,
+      historyDetails: `Added future idea '${newIdea.title}'.`,
+      apiCall: () => DataService.saveIdeaApi(newIdea, userSession.userName, false),
+      optimisticUpdate: prev => ({ ...prev, ideas: [newIdea, ...(prev.ideas || [])] }),
+      successMessage: `Idea '${newIdea.title}' added!`
     });
-    showToast('Idea entry updated.');
   };
 
-  const convertIdeaToProject = (ideaId) => {
+  const updateIdea = async (ideaId, updates) => {
+    const idea = state.ideas.find(i => i.id === ideaId);
+    const ideaTitle = updates.title || (idea ? idea.title : 'Idea');
+    const fullIdea = { ...(idea || {}), ...updates, id: ideaId };
+
+    return await saveEntity({
+      type: 'IDEA',
+      action: 'EDIT_IDEA',
+      entityId: ideaId,
+      entityName: ideaTitle,
+      historyDetails: `Updated future idea '${ideaTitle}'.`,
+      apiCall: () => DataService.saveIdeaApi(fullIdea, userSession.userName, true),
+      optimisticUpdate: prev => ({
+        ...prev,
+        ideas: (prev.ideas || []).map(i => i.id === ideaId ? fullIdea : i)
+      }),
+      successMessage: 'Idea entry updated.'
+    });
+  };
+
+  const deleteIdea = async (ideaId) => {
+    const idea = state.ideas.find(i => i.id === ideaId);
+    const ideaTitle = idea ? idea.title : ideaId;
+
+    return await saveEntity({
+      type: 'IDEA',
+      action: 'DELETE_IDEA',
+      entityId: ideaId,
+      entityName: ideaTitle,
+      historyDetails: `Deleted future idea '${ideaTitle}'.`,
+      apiCall: () => DataService.deleteEntityApi('IDEA', ideaId, userSession.userName),
+      optimisticUpdate: prev => ({
+        ...prev,
+        ideas: (prev.ideas || []).filter(i => i.id !== ideaId)
+      }),
+      successMessage: `Idea '${ideaTitle}' deleted.`
+    });
+  };
+
+  const convertIdeaToProject = async (ideaId) => {
     const idea = state.ideas.find(i => i.id === ideaId);
     if (!idea) return;
 
-    const createdProject = addProject({
+    const res = await addProject({
       name: idea.title,
       description: idea.description,
       category: idea.category,
       priority: idea.impact === 'CRITICAL' || idea.impact === 'HIGH' ? 'P1' : 'P2',
       status: 'active',
       progress: 0,
-      notes: `Converted from Future Idea by ${adminName || userSession.userName || 'Admin'}.`
+      notes: `Converted from Future Idea by ${userSession.userName || 'Admin'}.`
     });
 
-    updateIdea(ideaId, { status: 'CONVERTED TO PROJECT' });
-    addHistoryLog('CONVERT_IDEA', 'IDEA', ideaId, idea.title, `Converted future idea '${idea.title}' into Project '${createdProject.name}'.`);
-    showToast(`Idea converted into Project '${createdProject.name}'!`);
-    navigate('projects', createdProject.id);
+    if (res && res.success) {
+      await updateIdea(ideaId, { status: 'CONVERTED TO PROJECT' });
+      addHistoryLog('CONVERT_IDEA', 'IDEA', ideaId, idea.title, `Converted future idea '${idea.title}' into Project.`);
+      showToast(`Idea converted into Project!`);
+    }
   };
 
   // --- TEAM ---
-  const addTeamMember = (memberData) => {
+  const addTeamMember = async (memberData) => {
     const newMember = {
-      id: `team_${Date.now()}`,
+      id: `team_${crypto.randomUUID()}`,
       name: memberData.name,
       role: memberData.role || 'Software Engineer',
       department: memberData.department || 'Technology Operations',
@@ -549,29 +664,55 @@ export const AppProvider = ({ children }) => {
       capacity: 50
     };
 
-    setState(prev => ({
-      ...prev,
-      team: [...prev.team, newMember]
-    }));
-
-    addHistoryLog('CREATE_TEAM', 'TEAM', newMember.id, newMember.name, `Registered team member '${newMember.name}' (${newMember.role}).`);
-    DataService.saveTeamApi(newMember, adminName, false);
-    showToast(`Team member '${newMember.name}' added!`);
+    return await saveEntity({
+      type: 'TEAM',
+      action: 'CREATE_TEAM',
+      entityId: newMember.id,
+      entityName: newMember.name,
+      historyDetails: `Registered team member '${newMember.name}' (${newMember.role}).`,
+      apiCall: () => DataService.saveTeamApi(newMember, userSession.userName, false),
+      optimisticUpdate: prev => ({ ...prev, team: [...(prev.team || []), newMember] }),
+      successMessage: `Team member '${newMember.name}' added!`
+    });
   };
 
-  const updateTeamMember = (memberId, updates) => {
-    setState(prev => {
-      const member = prev.team.find(m => m.id === memberId);
-      const name = updates.name || (member ? member.name : 'Team Member');
-      addHistoryLog('EDIT_TEAM', 'TEAM', memberId, name, `Updated team member profile for '${name}'.`);
-      DataService.saveTeamApi({ id: memberId, ...updates }, adminName, true);
+  const updateTeamMember = async (memberId, updates) => {
+    const member = state.team.find(m => m.id === memberId);
+    const name = updates.name || (member ? member.name : 'Team Member');
+    const fullMember = { ...(member || {}), ...updates, id: memberId };
 
-      return {
+    return await saveEntity({
+      type: 'TEAM',
+      action: 'EDIT_TEAM',
+      entityId: memberId,
+      entityName: name,
+      historyDetails: `Updated team member profile for '${name}'.`,
+      apiCall: () => DataService.saveTeamApi(fullMember, userSession.userName, true),
+      optimisticUpdate: prev => ({
         ...prev,
-        team: prev.team.map(m => m.id === memberId ? { ...m, ...updates } : m)
-      };
+        team: (prev.team || []).map(m => m.id === memberId ? fullMember : m)
+      }),
+      successMessage: 'Team member profile updated.'
     });
-    showToast('Team member profile updated.');
+  };
+
+  const deleteTeamMember = async (memberId) => {
+    const member = state.team.find(m => m.id === memberId);
+    const name = member ? member.name : memberId;
+
+    return await saveEntity({
+      type: 'TEAM',
+      action: 'DELETE_TEAM',
+      entityId: memberId,
+      entityName: name,
+      historyDetails: `Deleted team member profile for '${name}'.`,
+      apiCall: () => DataService.deleteEntityApi('TEAM', memberId, userSession.userName),
+      optimisticUpdate: prev => ({
+        ...prev,
+        team: (prev.team || []).filter(m => m.id !== memberId)
+      }),
+      successMessage: `Team member profile deleted.`
+    });
   };
 
   // --- SETTINGS & DATA MANAGEMENT ---
@@ -586,11 +727,33 @@ export const AppProvider = ({ children }) => {
     showToast('Application JSON data exported successfully!');
   };
 
-  const importJSON = (jsonStr) => {
+  const importJSON = async (jsonStr) => {
     const res = DataService.importDataJSON(jsonStr);
     if (res.success) {
       setState(res.data);
-      showToast('JSON state restored successfully!');
+      showToast('Restoring JSON state to Supabase Cloud DB...', 'info');
+      // Persist imported objects to Supabase Cloud
+      if (res.data.projects?.length) {
+        for (const p of res.data.projects) {
+          await DataService.saveProjectApi(p, userSession.userName, false);
+        }
+      }
+      if (res.data.tasks?.length) {
+        for (const t of res.data.tasks) {
+          await DataService.saveTaskApi(t, userSession.userName, false);
+        }
+      }
+      if (res.data.ideas?.length) {
+        for (const i of res.data.ideas) {
+          await DataService.saveIdeaApi(i, userSession.userName, false);
+        }
+      }
+      if (res.data.team?.length) {
+        for (const tm of res.data.team) {
+          await DataService.saveTeamApi(tm, userSession.userName, false);
+        }
+      }
+      showToast('JSON state imported and synced to Supabase Cloud DB successfully!');
       return true;
     } else {
       showToast(`Import failed: ${res.error}`, 'error');
@@ -600,6 +763,7 @@ export const AppProvider = ({ children }) => {
 
   const value = {
     state,
+    isLoadingState,
     activeTab,
     selectedProjectId,
     selectedTaskId,
@@ -628,12 +792,15 @@ export const AppProvider = ({ children }) => {
     addTask,
     updateTask,
     moveTaskStatus,
+    moveWorkQueueToCurrentWork,
     deleteTask,
     addIdea,
     updateIdea,
+    deleteIdea,
     convertIdeaToProject,
     addTeamMember,
     updateTeamMember,
+    deleteTeamMember,
     addActivity,
     passwordExpiry,
     changePassword,

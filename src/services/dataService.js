@@ -132,136 +132,167 @@ export const DataService = {
 
   // Save Project to Supabase
   saveProjectApi: async (project, adminName, isEdit = false) => {
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const row = {
-          id: project.id,
-          name: project.name,
-          url: project.url,
-          description: project.description,
-          status: project.status,
-          priority: project.priority,
-          progress: project.progress,
-          owner_id: project.ownerId,
-          category: project.category,
-          start_date: project.startDate,
-          target_date: project.targetDate,
-          notes: project.notes || [],
-          updated_at: new Date().toISOString()
-        };
-        if (isEdit) {
-          await supabase.from('projects').update(row).eq('id', project.id);
-        } else {
-          await supabase.from('projects').insert([row]);
-        }
-      } catch (e) {
-        console.error('Supabase project mutation error:', e);
+    if (!isSupabaseConfigured || !supabase) {
+      return { error: true, message: 'Supabase is not configured.' };
+    }
+    try {
+      const row = {
+        id: project.id,
+        name: project.name,
+        url: project.url,
+        description: project.description,
+        status: project.status,
+        priority: project.priority,
+        progress: project.progress,
+        owner_id: project.ownerId,
+        category: project.category,
+        start_date: project.startDate,
+        target_date: project.targetDate,
+        notes: project.notes || [],
+        updated_at: new Date().toISOString()
+      };
+      const res = isEdit
+        ? await supabase.from('projects').update(row).eq('id', project.id)
+        : await supabase.from('projects').insert([row]);
+
+      if (res.error) {
+        console.error('Supabase project mutation error:', res.error);
+        return { error: true, message: res.error.message };
       }
+      return { success: true };
+    } catch (e) {
+      console.error('Supabase project mutation exception:', e);
+      return { error: true, message: e.message || 'Failed to save project.' };
     }
   },
 
   // Save Task to Supabase
   saveTaskApi: async (task, adminName, isEdit = false) => {
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const row = {
-          id: task.id,
-          project_id: task.projectId,
-          title: task.title,
-          description: task.description,
-          status: task.status,
-          priority: task.priority,
-          owner_id: task.ownerId,
-          due_date: task.dueDate,
-          target_date: task.targetDate,
-          progress: task.progress,
-          estimated_hours: task.estimatedHours,
-          tags: task.tags || [],
-          type: task.type,
-          dependencies: task.dependencies,
-          notes: task.notes,
-          updated_at: new Date().toISOString()
-        };
-        if (isEdit) {
-          await supabase.from('tasks').update(row).eq('id', task.id);
-        } else {
-          await supabase.from('tasks').insert([row]);
-        }
-      } catch (e) {
-        console.error('Supabase task mutation error:', e);
+    if (!isSupabaseConfigured || !supabase) {
+      return { error: true, message: 'Supabase is not configured.' };
+    }
+    try {
+      const row = {
+        id: task.id,
+        project_id: task.projectId,
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        priority: task.priority,
+        owner_id: task.ownerId,
+        due_date: task.dueDate,
+        target_date: task.targetDate,
+        progress: task.progress,
+        estimated_hours: task.estimatedHours,
+        tags: task.tags || [],
+        type: task.type,
+        dependencies: task.dependencies,
+        notes: task.notes,
+        updated_at: new Date().toISOString()
+      };
+      const res = isEdit
+        ? await supabase.from('tasks').update(row).eq('id', task.id)
+        : await supabase.from('tasks').insert([row]);
+
+      if (res.error) {
+        console.error('Supabase task mutation error:', res.error);
+        return { error: true, message: res.error.message };
       }
+      return { success: true };
+    } catch (e) {
+      console.error('Supabase task mutation exception:', e);
+      return { error: true, message: e.message || 'Failed to save task.' };
     }
   },
 
   // Save Idea to Supabase
   saveIdeaApi: async (idea, adminName, isEdit = false) => {
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const row = {
-          id: idea.id,
-          title: idea.title,
-          description: idea.description,
-          category: idea.category,
-          status: idea.status,
-          created_by: idea.createdBy,
-          impact: idea.impact,
-          complexity: idea.complexity,
-          notes: idea.notes
-        };
-        if (isEdit) {
-          await supabase.from('ideas').update(row).eq('id', idea.id);
-        } else {
-          await supabase.from('ideas').insert([row]);
-        }
-      } catch (e) {
-        console.error('Supabase idea mutation error:', e);
+    if (!isSupabaseConfigured || !supabase) {
+      return { error: true, message: 'Supabase is not configured.' };
+    }
+    try {
+      const row = {
+        id: idea.id,
+        title: idea.title,
+        description: idea.description,
+        category: idea.category,
+        status: idea.status,
+        created_by: idea.createdBy,
+        impact: idea.impact,
+        complexity: idea.complexity,
+        notes: idea.notes
+      };
+      const res = isEdit
+        ? await supabase.from('ideas').update(row).eq('id', idea.id)
+        : await supabase.from('ideas').insert([row]);
+
+      if (res.error) {
+        console.error('Supabase idea mutation error:', res.error);
+        return { error: true, message: res.error.message };
       }
+      return { success: true };
+    } catch (e) {
+      console.error('Supabase idea mutation exception:', e);
+      return { error: true, message: e.message || 'Failed to save idea.' };
     }
   },
 
   // Save Team Member to Supabase
   saveTeamApi: async (member, adminName, isEdit = false) => {
-    if (isSupabaseConfigured && supabase) {
-      try {
-        const row = {
-          id: member.id,
-          name: member.name,
-          role: member.role,
-          department: member.department,
-          email: member.email,
-          avatar: member.avatar,
-          skills: member.skills || [],
-          active_projects: member.activeProjects,
-          capacity: member.capacity
-        };
-        if (isEdit) {
-          await supabase.from('team').update(row).eq('id', member.id);
-        } else {
-          await supabase.from('team').insert([row]);
-        }
-      } catch (e) {
-        console.error('Supabase team mutation error:', e);
+    if (!isSupabaseConfigured || !supabase) {
+      return { error: true, message: 'Supabase is not configured.' };
+    }
+    try {
+      const row = {
+        id: member.id,
+        name: member.name,
+        role: member.role,
+        department: member.department,
+        email: member.email,
+        avatar: member.avatar,
+        skills: member.skills || [],
+        active_projects: member.activeProjects,
+        capacity: member.capacity
+      };
+      const res = isEdit
+        ? await supabase.from('team').update(row).eq('id', member.id)
+        : await supabase.from('team').insert([row]);
+
+      if (res.error) {
+        console.error('Supabase team mutation error:', res.error);
+        return { error: true, message: res.error.message };
       }
+      return { success: true };
+    } catch (e) {
+      console.error('Supabase team mutation exception:', e);
+      return { error: true, message: e.message || 'Failed to save team member.' };
     }
   },
 
   // Log Audit History Entry in Supabase
   saveHistoryApi: async (log) => {
-    if (isSupabaseConfigured && supabase) {
-      try {
-        await supabase.from('history').insert([{
-          id: log.id,
-          admin_name: log.adminName,
-          action: log.action,
-          entity_type: log.entityType,
-          entity_id: log.entityId,
-          entity_name: log.entityName,
-          details: log.details,
-          timestamp: log.timestamp
-        }]);
-      } catch (e) {
-        console.error('Supabase history insert error:', e);
+    if (!isSupabaseConfigured || !supabase) {
+      return { error: true, message: 'Supabase is not configured.' };
+    }
+    try {
+      const res = await supabase.from('history').insert([{
+        id: log.id,
+        admin_name: log.adminName,
+        action: log.action,
+        entity_type: log.entityType,
+        entity_id: log.entityId,
+        entity_name: log.entityName,
+        details: log.details,
+        timestamp: log.timestamp
+      }]);
+      if (res.error) {
+        console.error('Supabase history insert error:', res.error);
+        return { error: true, message: res.error.message };
       }
+      return { success: true };
+    } catch (e) {
+      console.error('Supabase history insert exception:', e);
+      return { error: true, message: e.message || 'Failed to save history entry.' };
     }
   },
 
@@ -275,12 +306,19 @@ export const DataService = {
     };
     const table = tableMap[type];
 
-    if (isSupabaseConfigured && supabase && table) {
-      try {
-        await supabase.from(table).delete().eq('id', id);
-      } catch (e) {
-        console.error('Supabase delete error:', e);
+    if (!isSupabaseConfigured || !supabase || !table) {
+      return { error: true, message: 'Supabase or table not configured.' };
+    }
+    try {
+      const res = await supabase.from(table).delete().eq('id', id);
+      if (res.error) {
+        console.error('Supabase delete error:', res.error);
+        return { error: true, message: res.error.message };
       }
+      return { success: true };
+    } catch (e) {
+      console.error('Supabase delete exception:', e);
+      return { error: true, message: e.message || 'Failed to delete entity.' };
     }
   },
 

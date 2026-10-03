@@ -30,7 +30,11 @@ const PageFallback = () => (
 );
 
 const MainLayout = () => {
-  const { userSession, activeTab, editModal, closeEditModal } = useApp();
+  const { userSession, activeTab, editModal, closeEditModal, isLoadingState } = useApp();
+
+  if (isLoadingState) {
+    return <PageFallback />;
+  }
 
   // If user is not authenticated for internal access, show mandatory Internal Auth Wall first
   if (!userSession.isAuthenticated) {

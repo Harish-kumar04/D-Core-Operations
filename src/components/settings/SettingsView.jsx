@@ -3,9 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { Settings, Download, Upload, RotateCcw, ShieldCheck, Database, Sliders, Bell } from 'lucide-react';
 
 export const SettingsView = () => {
-  const { state, exportJSON, importJSON, resetDemoData, passwordExpiry, changePassword, showToast } = useApp();
-  const [importString, setImportString] = useState('');
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const { state, exportJSON, importJSON, resetDemoData, passwordExpiry, changePassword, userSession } = useApp();
 
   // Password Change Form State
   const [oldPassword, setOldPassword] = useState('');
@@ -53,15 +51,18 @@ export const SettingsView = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (!window.confirm("WARNING: Importing a data backup will overwrite your current local state and sync all imported items to Supabase Cloud DB. Are you sure you want to proceed?")) {
+      e.target.value = '';
+      return;
+    }
+
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       const content = event.target.result;
-      const success = importJSON(content);
-      if (success) {
-        setIsImportModalOpen(false);
-      }
+      await importJSON(content);
     };
     reader.readAsText(file);
+    e.target.value = '';
   };
 
   return (
@@ -263,11 +264,11 @@ export const SettingsView = () => {
           </div>
 
           <p className="text-xs text-slate-600 leading-relaxed">
-            All D-Core projects, tasks, ideas, team profiles, and activity logs are stored locally in your browser. Export backups or restore previous state anytime.
+            All D-Core projects, tasks, ideas, team profiles, and audit history logs are stored securely in Supabase Cloud Database and synchronized in real time.
           </p>
 
           <div className="space-y-2 pt-2">
-            {/* Export JSON */}
+            {/* Export JSON - Available for all users */}
             <button
               onClick={exportJSON}
               className="w-full p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-between transition-colors shadow-sm"
@@ -279,36 +280,44 @@ export const SettingsView = () => {
               <span className="text-[10px] font-mono text-slate-400">Download .json</span>
             </button>
 
-            {/* Import JSON */}
-            <label className="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs flex items-center justify-between cursor-pointer transition-colors">
-              <div className="flex items-center gap-2">
-                <Upload className="w-4 h-4 text-dcore-red" />
-                <span>Import Data Backup (JSON File)</span>
-              </div>
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-              <span className="text-[10px] font-mono text-slate-400">Select File</span>
-            </label>
+            {userSession?.userRole === 'ADMIN' ? (
+              <>
+                {/* Import JSON - Admin Only */}
+                <label className="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs flex items-center justify-between cursor-pointer transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Upload className="w-4 h-4 text-dcore-red" />
+                    <span>Import Data Backup (JSON File)</span>
+                  </div>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <span className="text-[10px] font-mono text-slate-400">Select File</span>
+                </label>
 
-            {/* Reset Demo Data */}
-            <button
-              onClick={() => {
-                if (window.confirm("Are you sure you want to reset all data back to original DEMO DATA state?")) {
-                  resetDemoData();
-                }
-              }}
-              className="w-full p-3 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-dcore-red font-bold text-xs flex items-center justify-between transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <RotateCcw className="w-4 h-4" />
-                <span>Reset Demo Data</span>
+                {/* Reset Demo Data - Admin Only */}
+                <button
+                  onClick={() => {
+                    if (window.confirm("WARNING: Resetting demo data will restore standard initial projects and reset your local cache. Are you sure you want to proceed?")) {
+                      resetDemoData();
+                    }
+                  }}
+                  className="w-full p-3 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-dcore-red font-bold text-xs flex items-center justify-between transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <RotateCcw className="w-4 h-4" />
+                    <span>Reset Demo Data</span>
+                  </div>
+                  <span className="text-[10px] font-mono">Restore Standard Demo State</span>
+                </button>
+              </>
+            ) : (
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-slate-400 text-xs font-semibold">
+                🔒 Data restore and reset options are restricted to ADMIN operators.
               </div>
-              <span className="text-[10px] font-mono">Restore 4 Core Projects</span>
-            </button>
+            )}
           </div>
         </div>
 
