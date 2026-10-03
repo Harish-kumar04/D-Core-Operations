@@ -9,6 +9,22 @@ export const HistoryView = () => {
 
   const historyLogs = state.history || [];
 
+  const formatAdminName = (rawName) => {
+    if (!rawName) return 'Admin Operator';
+    const str = rawName.trim();
+    if (str.toLowerCase().includes('erharishkumarece') || str.toLowerCase().includes('harishkumar777')) {
+      return 'Harish Kumar';
+    }
+    if (str.includes('@')) {
+      const email = str.toLowerCase();
+      const match = (state.team || []).find(m => m.email?.toLowerCase().trim() === email);
+      if (match?.name) return match.name;
+      const localPart = email.split('@')[0];
+      return localPart.replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+    return str;
+  };
+
   let filtered = historyLogs;
 
   if (searchTerm.trim()) {
@@ -100,7 +116,7 @@ export const HistoryView = () => {
                       <User className="w-3.5 h-3.5" />
                     </span>
                     <div>
-                      <span className="font-extrabold text-slate-900">{log.adminName || 'Admin User'}</span>
+                      <span className="font-extrabold text-slate-900">{formatAdminName(log.adminName)}</span>
                       <span className="text-slate-400 text-[10px] ml-2 font-mono">({log.action})</span>
                     </div>
                   </div>

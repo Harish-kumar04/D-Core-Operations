@@ -25,13 +25,48 @@ export const AppProvider = ({ children }) => {
     userRole: 'GUEST'
   });
 
+  // Helper to map user email / metadata to a clean human display name
+  const resolveDisplayName = (userObj, rawEmail = '') => {
+    const email = (userObj?.email || rawEmail || '').toLowerCase().trim();
+    const metaName = userObj?.user_metadata?.display_name || userObj?.user_metadata?.full_name || userObj?.user_metadata?.name;
+
+    if (metaName && metaName !== email && !metaName.includes('@')) {
+      return metaName;
+    }
+
+    // Match against team member profiles
+    if (state?.team?.length && email) {
+      const match = state.team.find(m => m.email?.toLowerCase().trim() === email);
+      if (match?.name) return match.name;
+    }
+
+    // Known email address mappings for authorized team members
+    if (email.includes('erharishkumarece') || email.includes('harishkumar777')) {
+      return 'Harish Kumar';
+    }
+    if (email.includes('architect@dcore.ops')) return 'Systems Architecture Lead';
+    if (email.includes('frontend@dcore.ops')) return 'Frontend Platforms Lead';
+    if (email.includes('noc@dcore.ops')) return 'IT Security Lead';
+    if (email.includes('data@dcore.ops')) return 'Data Systems Specialist';
+
+    // Format local email part if unknown (e.g. john.doe -> John Doe)
+    const localPart = email.split('@')[0] || '';
+    if (localPart && localPart !== 'admin' && localPart !== 'user') {
+      return localPart
+        .replace(/[._-]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    return 'Admin Operator';
+  };
+
   // Listen for Supabase auth state changes
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) return;
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        const displayName = session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'Admin Operator';
+        const displayName = resolveDisplayName(session.user);
         setUserSession({
           isAuthenticated: true,
           user: session.user,
@@ -45,7 +80,7 @@ export const AppProvider = ({ children }) => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        const displayName = session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'Admin Operator';
+        const displayName = resolveDisplayName(session.user);
         setUserSession({
           isAuthenticated: true,
           user: session.user,
@@ -69,7 +104,7 @@ export const AppProvider = ({ children }) => {
     return () => {
       subscription?.unsubscribe();
     };
-  }, []);
+  }, [state.team]);
 
   // Edit Modal State
   const [editModal, setEditModal] = useState({ isOpen: false, type: null, data: null });
@@ -139,7 +174,7 @@ export const AppProvider = ({ children }) => {
       return { success: false, error: 'Authentication failed. Please try again.' };
     }
 
-    const displayName = data.user.user_metadata?.display_name || data.user.email?.split('@')[0] || 'Admin Operator';
+    const displayName = resolveDisplayName(data.user, cleanEmail);
 
     addHistoryLog(
       'PORTAL_LOGIN',
@@ -169,11 +204,30 @@ export const AppProvider = ({ children }) => {
     showToast('Signed out of D-Core Operations Portal.', 'info');
   };
 
-  const changePassword = (role, oldPass, newPass) => {
+  const changePassword = async (role, oldPass, newPass) => {
+    // 1. If Supabase Auth session active, update Supabase password
+    if (isSupabaseConfigured && supabase && userSession.isAuthenticated) {
+      const { error } = await supabase.auth.updateUser({ password: newPass });
+      if (error) {
+        console.error('Supabase Auth Password Update Error:', error);
+        showToast(`Supabase Auth: ${error.message}`, 'error');
+        return { success: false, error: error.message };
+      }
+    }
+
+    // 2. Update local 14-day password rotation tracker
     const res = updatePasswordService(role, oldPass, newPass);
     if (res.success) {
       setPasswordExpiry(getPasswordExpiryInfo());
       showToast(res.message);
+      addHistoryLog(
+        'PASSWORD_ROTATION',
+        'SECURITY',
+        `pass_${Date.now()}`,
+        '14-Day Password Rotation',
+        `Password updated successfully for ${userSession.userName || 'Admin'}. 14-day rotation compliance cycle reset.`,
+        userSession.userName
+      );
     } else {
       showToast(res.error, 'error');
     }

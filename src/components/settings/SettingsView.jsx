@@ -12,8 +12,9 @@ export const SettingsView = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passMessage, setPassMessage] = useState(null);
+  const [isSubmittingPass, setIsSubmittingPass] = useState(false);
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = async (e) => {
     e.preventDefault();
     setPassMessage(null);
 
@@ -30,14 +31,21 @@ export const SettingsView = () => {
       return;
     }
 
-    const res = changePassword('ADMIN', oldPassword, newPassword);
-    if (res.success) {
-      setPassMessage({ type: 'success', text: res.message });
-      setOldPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } else {
-      setPassMessage({ type: 'error', text: res.error || 'Failed to update password.' });
+    setIsSubmittingPass(true);
+    try {
+      const res = await changePassword('ADMIN', oldPassword, newPassword);
+      if (res && res.success) {
+        setPassMessage({ type: 'success', text: res.message });
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        setPassMessage({ type: 'error', text: res?.error || 'Failed to update password.' });
+      }
+    } catch (err) {
+      setPassMessage({ type: 'error', text: err.message || 'An error occurred while updating password.' });
+    } finally {
+      setIsSubmittingPass(false);
     }
   };
 
@@ -196,9 +204,10 @@ export const SettingsView = () => {
             <div className="pt-2 flex justify-end">
               <button
                 type="submit"
-                className="btn-primary py-2 px-4 text-xs font-bold bg-[#E42129] hover:bg-[#c21920]"
+                disabled={isSubmittingPass}
+                className="btn-primary py-2 px-4 text-xs font-bold bg-[#E42129] hover:bg-[#c21920] disabled:opacity-50"
               >
-                Change Password & Reset 14-Day Cycle
+                {isSubmittingPass ? 'Updating Password...' : 'Change Password & Reset 14-Day Cycle'}
               </button>
             </div>
           </form>
