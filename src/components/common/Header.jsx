@@ -22,9 +22,6 @@ export const Header = () => {
     setQuickAddType,
     userSession,
     logoutUserSession,
-    isAdminLoggedIn,
-    adminName,
-    setIsAdminLoginOpen,
     passwordExpiry
   } = useApp();
 
@@ -197,24 +194,12 @@ export const Header = () => {
           <div className="flex items-center gap-2 bg-[#F5F5F5] border border-[#E8E8E8] px-3 py-1.5 rounded-xl text-xs">
             <div className="text-left hidden sm:block">
               <p className="text-[10px] font-black uppercase text-[#E42129] leading-none">
-                {isAdminLoggedIn ? 'ADMIN' : 'INTERNAL USER'}
+                AUTHENTICATED USER
               </p>
-              <p className="text-xs font-extrabold text-[#111111] leading-tight mt-0.5">
-                OPERATOR
+              <p className="text-xs font-extrabold text-[#111111] leading-tight mt-0.5 max-w-[140px] truncate">
+                {userSession?.userName || 'Admin Operator'}
               </p>
             </div>
-
-            {!isAdminLoggedIn && (
-              <button
-                onClick={() => setIsAdminLoginOpen(true)}
-                aria-label="Admin Login"
-                className="text-[10px] bg-[#111111] text-white font-bold px-2.5 py-1 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-1"
-                title="Unlock Admin Edit Access"
-              >
-                <Lock className="w-3 h-3 text-[#E42129]" />
-                <span>Admin Login</span>
-              </button>
-            )}
 
             <button
               onClick={lockStealthMode}

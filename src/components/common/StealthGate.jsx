@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
+/**
+ * NOTE: StealthGate is a COSMETIC UI HIDING feature only (stealth screen lock).
+ * It is NOT a security control. Real access control and authorization are handled
+ * exclusively by Supabase Auth and Row Level Security (RLS) policies.
+ */
+
 const STEALTH_KEY = 'dcore_stealth_unlocked';
 
 export const lockStealthMode = () => {
   try {
     localStorage.removeItem(STEALTH_KEY);
-    sessionStorage.removeItem('dcore_internal_user_session');
   } catch (e) {
     console.error(e);
   }

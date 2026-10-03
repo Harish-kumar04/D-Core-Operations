@@ -6,7 +6,6 @@ import { Sidebar } from './components/common/Sidebar';
 import { BottomNav } from './components/common/BottomNav';
 import { SearchModal } from './components/common/SearchModal';
 import { QuickAddModal } from './components/common/QuickAddModal';
-import { AdminLoginModal } from './components/common/AdminLoginModal';
 import { EditEntityModal } from './components/common/EditEntityModal';
 import { Toast } from './components/common/Toast';
 
@@ -31,7 +30,7 @@ const PageFallback = () => (
 );
 
 const MainLayout = () => {
-  const { userSession, activeTab, isAdminLoginOpen, setIsAdminLoginOpen, editModal, closeEditModal } = useApp();
+  const { userSession, activeTab, editModal, closeEditModal } = useApp();
 
   // If user is not authenticated for internal access, show mandatory Internal Auth Wall first
   if (!userSession.isAuthenticated) {
@@ -63,7 +62,6 @@ const MainLayout = () => {
       <BottomNav />
       <SearchModal />
       <QuickAddModal />
-      <AdminLoginModal isOpen={isAdminLoginOpen} onClose={() => setIsAdminLoginOpen(false)} />
       <EditEntityModal
         isOpen={editModal.isOpen}
         onClose={closeEditModal}

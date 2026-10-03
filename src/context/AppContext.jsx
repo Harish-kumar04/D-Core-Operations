@@ -1,15 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { DataService } from '../services/dataService';
+import { supabase, isSupabaseConfigured } from '../services/supabaseClient';
 import {
-  getStoredPasswords,
-  verifyAdminPasscode,
   changeAdminPassword as updatePasswordService,
   getPasswordExpiryInfo
 } from '../services/passwordService';
 
 const AppContext = createContext();
-
-const SESSION_KEY = 'dcore_internal_user_session';
 
 export const AppProvider = ({ children }) => {
   const [state, setState] = useState(() => DataService.loadState());
@@ -18,39 +15,61 @@ export const AppProvider = ({ children }) => {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [passwordExpiry, setPasswordExpiry] = useState(() => getPasswordExpiryInfo());
 
-  // User Session & Gated Access State
-  const [userSession, setUserSession] = useState(() => {
-    try {
-      const saved = sessionStorage.getItem(SESSION_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {}
-    return { isAuthenticated: false, userName: '', userRole: 'GUEST' };
+  // User Session & Gated Access State derived from Supabase Auth
+  const [userSession, setUserSession] = useState({
+    isAuthenticated: false,
+    user: null,
+    email: '',
+    userName: '',
+    memberName: '',
+    userRole: 'GUEST'
   });
 
-  // Admin Auth & Name capture state
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
-    try {
-      const saved = sessionStorage.getItem(SESSION_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.userRole === 'ADMIN';
+  // Listen for Supabase auth state changes
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase) return;
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const displayName = session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'Admin Operator';
+        setUserSession({
+          isAuthenticated: true,
+          user: session.user,
+          email: session.user.email || '',
+          userName: displayName,
+          memberName: displayName,
+          userRole: 'ADMIN'
+        });
       }
-    } catch (e) {}
-    return false;
-  });
+    });
 
-  const [adminName, setAdminName] = useState(() => {
-    try {
-      const saved = sessionStorage.getItem(SESSION_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return parsed.userRole === 'ADMIN' ? parsed.userName : '';
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const displayName = session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'Admin Operator';
+        setUserSession({
+          isAuthenticated: true,
+          user: session.user,
+          email: session.user.email || '',
+          userName: displayName,
+          memberName: displayName,
+          userRole: 'ADMIN'
+        });
+      } else {
+        setUserSession({
+          isAuthenticated: false,
+          user: null,
+          email: '',
+          userName: '',
+          memberName: '',
+          userRole: 'GUEST'
+        });
       }
-    } catch (e) {}
-    return '';
-  });
+    });
 
-  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, []);
 
   // Edit Modal State
   const [editModal, setEditModal] = useState({ isOpen: false, type: null, data: null });
@@ -93,55 +112,56 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- INTERNAL AUTH WALL LOGIN (FOR AUTHORIZED ADMIN USERS) ---
-  const loginUserSession = (profileName, passcode, memberName = '') => {
-    const trimmedProfile = profileName.trim();
-    const cleanPass = passcode.trim();
-    const cleanMemberName = memberName.trim();
-
-    if (!cleanMemberName) {
-      return { success: false, error: 'Your name is required to enter the application.' };
+  // --- SUPABASE AUTH LOGIN ---
+  const loginUserSession = async (email, password) => {
+    if (!isSupabaseConfigured || !supabase) {
+      return { success: false, error: 'Backend authentication service is not configured.' };
     }
 
-    const storedPasswords = getStoredPasswords();
-    const defaultPasscodes = {
-      'admin': storedPasswords.ADMIN || 'admin@321',
-      'admin2': storedPasswords.ADMIN2 || storedPasswords.ADMIN || 'admin!321',
-      'admin3': storedPasswords.ADMIN3 || storedPasswords.ADMIN || 'admin@dmk67',
-      'admin4': storedPasswords.ADMIN4 || storedPasswords.ADMIN || 'admin@dcore67'
-    };
+    const cleanEmail = (email || '').trim();
+    const cleanPass = (password || '').trim();
 
-    const expectedPasscode = defaultPasscodes[trimmedProfile];
-    const isValid = cleanPass === expectedPasscode || verifyAdminPasscode(cleanPass);
-
-    if (isValid) {
-      const displayName = `${cleanMemberName} (${trimmedProfile})`;
-      const session = {
-        isAuthenticated: true,
-        userName: displayName,
-        memberName: cleanMemberName,
-        profileName: trimmedProfile,
-        userRole: 'ADMIN'
-      };
-      setUserSession(session);
-      setIsAdminLoggedIn(true);
-      setAdminName(displayName);
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-
-      addHistoryLog(
-        'PORTAL_LOGIN',
-        'AUTH',
-        `session_${Date.now()}`,
-        'User Access Audit',
-        `Team Member '${cleanMemberName}' entered D-Core Operations Portal under profile '${trimmedProfile}'.`,
-        displayName
-      );
-      DataService.loginAdminApi(`${trimmedProfile}@dcore.ops`, cleanPass, displayName);
-      showToast(`Welcome ${cleanMemberName}! Access granted under profile '${trimmedProfile}'.`);
-      return { success: true };
+    if (!cleanEmail || !cleanPass) {
+      return { success: false, error: 'Invalid email or password.' };
     }
 
-    return { success: false, error: `Incorrect passcode for ${trimmedProfile}.` };
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: cleanEmail,
+      password: cleanPass
+    });
+
+    if (error || !data?.user) {
+      return { success: false, error: 'Invalid email or password.' };
+    }
+
+    const displayName = data.user.user_metadata?.display_name || data.user.email?.split('@')[0] || 'Admin Operator';
+
+    addHistoryLog(
+      'PORTAL_LOGIN',
+      'AUTH',
+      `session_${Date.now()}`,
+      'User Access Audit',
+      `Team Member '${displayName}' authenticated via Supabase Auth.`,
+      displayName
+    );
+
+    showToast(`Welcome ${displayName}! Access granted.`);
+    return { success: true };
+  };
+
+  const logoutUserSession = async () => {
+    if (isSupabaseConfigured && supabase) {
+      await supabase.auth.signOut();
+    }
+    setUserSession({
+      isAuthenticated: false,
+      user: null,
+      email: '',
+      userName: '',
+      memberName: '',
+      userRole: 'GUEST'
+    });
+    showToast('Signed out of D-Core Operations Portal.', 'info');
   };
 
   const changePassword = (role, oldPass, newPass) => {
@@ -156,9 +176,10 @@ export const AppProvider = ({ children }) => {
   };
 
   const addFeedPost = (feedData) => {
+    const activeAuthor = userSession?.userName || 'Core Team Member';
     const newPost = {
       id: `feed_${Date.now()}`,
-      author: userSession?.memberName || adminName || 'Core Team Member',
+      author: activeAuthor,
       role: userSession?.userRole || 'ADMIN',
       category: feedData.category || 'GENERAL',
       content: feedData.content,
@@ -182,44 +203,7 @@ export const AppProvider = ({ children }) => {
     showToast('Feed post removed.');
   };
 
-  const logoutUserSession = () => {
-    sessionStorage.removeItem(SESSION_KEY);
-    setUserSession({ isAuthenticated: false, userName: '', userRole: 'GUEST' });
-    setIsAdminLoggedIn(false);
-    setAdminName('');
-    showToast('Signed out of D-Core Operations Portal.', 'info');
-  };
-
-  // --- ADMIN AUTH & NAME LOGGING ---
-  const loginAdmin = (email, password, name) => {
-    if (email === 'admin@dcore.ops' && (password === 'admin123' || password === 'dcore101' || password === 'dcore102')) {
-      const formattedName = name.trim();
-      const session = { isAuthenticated: true, userName: formattedName, userRole: 'ADMIN' };
-      setUserSession(session);
-      setIsAdminLoggedIn(true);
-      setAdminName(formattedName);
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-
-      addHistoryLog('ADMIN_LOGIN', 'AUTH', 'session_01', 'Admin Session', `Admin '${formattedName}' logged into Operations Center.`, formattedName);
-      DataService.loginAdminApi(email, password, formattedName);
-      showToast(`Welcome ${formattedName}! Admin editing access unlocked.`);
-      return { success: true };
-    }
-    return { success: false, error: 'Invalid Admin credentials.' };
-  };
-
-  const logoutAdmin = () => {
-    setIsAdminLoggedIn(false);
-    setAdminName('');
-    showToast('Admin session logged out.', 'info');
-  };
-
   const openEditModal = (type, data) => {
-    if (!isAdminLoggedIn) {
-      setIsAdminLoginOpen(true);
-      showToast('Please log in as Admin to edit entries.', 'info');
-      return;
-    }
     setEditModal({ isOpen: true, type, data });
   };
 
@@ -235,9 +219,9 @@ export const AppProvider = ({ children }) => {
     setSelectedTaskId(null);
   };
 
-  // Helper to append history audit logs
+  // Helper to append history audit logs using real display name
   const addHistoryLog = (action, entityType, entityId, entityName, details, overrideAdminName = null) => {
-    const activeMember = userSession?.memberName || adminName || userSession?.userName || 'Admin Operator';
+    const activeMember = userSession?.userName || userSession?.memberName || 'Admin Operator';
     const newLog = {
       id: `hist_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
       adminName: overrideAdminName || activeMember,
@@ -262,7 +246,7 @@ export const AppProvider = ({ children }) => {
       text,
       projectId,
       taskId,
-      user: adminName || userSession.userName || state.settings.currentUserName || 'Arun Kumar',
+      user: userSession?.userName || state.settings?.currentUserName || 'Admin Operator',
       timestamp: new Date().toISOString()
     };
     setState(prev => ({
@@ -563,12 +547,6 @@ export const AppProvider = ({ children }) => {
     userSession,
     loginUserSession,
     logoutUserSession,
-    isAdminLoggedIn,
-    adminName,
-    isAdminLoginOpen,
-    setIsAdminLoginOpen,
-    loginAdmin,
-    logoutAdmin,
     editModal,
     openEditModal,
     closeEditModal,
