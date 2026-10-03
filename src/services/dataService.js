@@ -16,8 +16,16 @@ export const DataService = {
           supabase.from('history').select('*').order('timestamp', { ascending: false })
         ]);
 
-        if (projRes.error || taskRes.error || ideaRes.error || teamRes.error || histRes.error) {
-          return { error: true, message: 'Failed to sync with Supabase backend.' };
+        const errors = [];
+        if (projRes.error) errors.push(`projects (${projRes.error.message})`);
+        if (taskRes.error) errors.push(`tasks (${taskRes.error.message})`);
+        if (ideaRes.error) errors.push(`ideas (${ideaRes.error.message})`);
+        if (teamRes.error) errors.push(`team (${teamRes.error.message})`);
+        if (histRes.error) errors.push(`history (${histRes.error.message})`);
+
+        if (errors.length > 0) {
+          console.warn('Supabase fetch error details:', errors.join('; '));
+          return { error: true, message: `Failed to sync with Supabase: ${errors[0]}` };
         }
 
         if (projRes.data) {

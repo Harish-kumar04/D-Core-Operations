@@ -118,18 +118,28 @@ export const AppProvider = ({ children }) => {
 
   const [isLoadingState, setIsLoadingState] = useState(true);
 
-  // Initial async sync from Supabase Cloud
+  // Sync state from Supabase Cloud DB when authenticated or on initial load
   useEffect(() => {
+    let isMounted = true;
     setIsLoadingState(true);
+
     DataService.fetchStateAsync().then((res) => {
+      if (!isMounted) return;
       if (res && res.error) {
-        showToast(res.message, 'error');
+        // Only show toast error if authenticated (where RLS expects success) or serious network failure
+        if (userSession.isAuthenticated) {
+          showToast(res.message, 'error');
+        }
       } else if (res && res.success) {
         setState(res.data);
       }
       setIsLoadingState(false);
     });
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [userSession.isAuthenticated]);
 
   // Auto-save to localStorage whenever state updates
   useEffect(() => {
