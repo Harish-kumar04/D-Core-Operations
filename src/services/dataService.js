@@ -104,6 +104,19 @@ export const DataService = {
             settings: initialData.settings
           };
 
+          // Merge any new items from initialData.json that are missing in cloud DB
+          const existingProjIds = new Set(cloudState.projects.map(p => p.id));
+          const missingProj = initialData.projects.filter(p => !existingProjIds.has(p.id));
+          if (missingProj.length > 0) cloudState.projects = [...cloudState.projects, ...missingProj];
+
+          const existingTaskIds = new Set(cloudState.tasks.map(t => t.id));
+          const missingTasks = initialData.tasks.filter(t => !existingTaskIds.has(t.id));
+          if (missingTasks.length > 0) cloudState.tasks = [...cloudState.tasks, ...missingTasks];
+
+          const existingIdeaIds = new Set(cloudState.ideas.map(i => i.id));
+          const missingIdeas = initialData.ideas.filter(i => !existingIdeaIds.has(i.id));
+          if (missingIdeas.length > 0) cloudState.ideas = [...cloudState.ideas, ...missingIdeas];
+
           localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudState));
           return cloudState;
         }
