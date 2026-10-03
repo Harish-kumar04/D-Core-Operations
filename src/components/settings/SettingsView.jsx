@@ -8,7 +8,6 @@ export const SettingsView = () => {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   // Password Change Form State
-  const [passRole, setPassRole] = useState('ADMIN');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -31,7 +30,7 @@ export const SettingsView = () => {
       return;
     }
 
-    const res = changePassword(passRole, oldPassword, newPassword);
+    const res = changePassword('ADMIN', oldPassword, newPassword);
     if (res.success) {
       setPassMessage({ type: 'success', text: res.message });
       setOldPassword('');

@@ -3,19 +3,7 @@
 -- Copy and paste this script into Supabase SQL Editor & click Run
 -- ============================================================
 
--- 1. AUTHORIZED USERS TABLE (STRICT 4 USERS)
-CREATE TABLE IF NOT EXISTS public.users (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  email TEXT UNIQUE NOT NULL,
-  passcode TEXT NOT NULL,
-  role TEXT NOT NULL DEFAULT 'MEMBER', -- ADMIN or MEMBER
-  department TEXT,
-  avatar TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 2. PROJECTS TABLE
+-- 1. PROJECTS TABLE
 CREATE TABLE IF NOT EXISTS public.projects (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -33,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. TASKS TABLE
+-- 2. TASKS TABLE
 CREATE TABLE IF NOT EXISTS public.tasks (
   id TEXT PRIMARY KEY,
   project_id TEXT REFERENCES public.projects(id) ON DELETE CASCADE,
@@ -54,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public.tasks (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. FUTURE IDEAS TABLE
+-- 3. FUTURE IDEAS TABLE
 CREATE TABLE IF NOT EXISTS public.ideas (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
@@ -68,7 +56,7 @@ CREATE TABLE IF NOT EXISTS public.ideas (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. TEAM MEMBERS TABLE
+-- 4. TEAM MEMBERS TABLE
 CREATE TABLE IF NOT EXISTS public.team (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
@@ -81,7 +69,7 @@ CREATE TABLE IF NOT EXISTS public.team (
   capacity INT DEFAULT 50
 );
 
--- 6. ADMIN EDIT HISTORY AUDIT LOG TABLE
+-- 5. ADMIN EDIT HISTORY AUDIT LOG TABLE
 CREATE TABLE IF NOT EXISTS public.history (
   id TEXT PRIMARY KEY,
   admin_name TEXT NOT NULL,
@@ -90,55 +78,91 @@ CREATE TABLE IF NOT EXISTS public.history (
   entity_id TEXT,
   entity_name TEXT,
   details TEXT,
+  created_by_user_id UUID DEFAULT auth.uid(),
   timestamp TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ============================================================
--- ENABLE PUBLIC RLS POLICIES FOR TEAM COLLABORATION
+-- AUTOMATIC UPDATED_AT TRIGGER FUNCTION
 -- ============================================================
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+CREATE OR REPLACE FUNCTION public.handle_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trigger_set_updated_at_projects ON public.projects;
+CREATE TRIGGER trigger_set_updated_at_projects
+  BEFORE UPDATE ON public.projects
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_updated_at();
+
+DROP TRIGGER IF EXISTS trigger_set_updated_at_tasks ON public.tasks;
+CREATE TRIGGER trigger_set_updated_at_tasks
+  BEFORE UPDATE ON public.tasks
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_updated_at();
+
+-- ============================================================
+-- ENABLE STRICT ROW LEVEL SECURITY (AUTHENTICATED ONLY)
+-- ============================================================
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ideas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.team ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.history ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Allow anon read users" ON public.users FOR SELECT USING (true);
+-- Projects Policies
+CREATE POLICY "Allow authenticated read projects"
+  ON public.projects FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated insert projects"
+  ON public.projects FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Allow authenticated update projects"
+  ON public.projects FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow authenticated delete projects"
+  ON public.projects FOR DELETE TO authenticated USING (true);
 
-CREATE POLICY "Allow anon read projects" ON public.projects FOR SELECT USING (true);
-CREATE POLICY "Allow anon insert projects" ON public.projects FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow anon update projects" ON public.projects FOR UPDATE USING (true);
-CREATE POLICY "Allow anon delete projects" ON public.projects FOR DELETE USING (true);
+-- Tasks Policies
+CREATE POLICY "Allow authenticated read tasks"
+  ON public.tasks FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated insert tasks"
+  ON public.tasks FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Allow authenticated update tasks"
+  ON public.tasks FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow authenticated delete tasks"
+  ON public.tasks FOR DELETE TO authenticated USING (true);
 
-CREATE POLICY "Allow anon read tasks" ON public.tasks FOR SELECT USING (true);
-CREATE POLICY "Allow anon insert tasks" ON public.tasks FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow anon update tasks" ON public.tasks FOR UPDATE USING (true);
-CREATE POLICY "Allow anon delete tasks" ON public.tasks FOR DELETE USING (true);
+-- Ideas Policies
+CREATE POLICY "Allow authenticated read ideas"
+  ON public.ideas FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated insert ideas"
+  ON public.ideas FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Allow authenticated update ideas"
+  ON public.ideas FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow authenticated delete ideas"
+  ON public.ideas FOR DELETE TO authenticated USING (true);
 
-CREATE POLICY "Allow anon read ideas" ON public.ideas FOR SELECT USING (true);
-CREATE POLICY "Allow anon insert ideas" ON public.ideas FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow anon update ideas" ON public.ideas FOR UPDATE USING (true);
-CREATE POLICY "Allow anon delete ideas" ON public.ideas FOR DELETE USING (true);
+-- Team Policies
+CREATE POLICY "Allow authenticated read team"
+  ON public.team FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated insert team"
+  ON public.team FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "Allow authenticated update team"
+  ON public.team FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow authenticated delete team"
+  ON public.team FOR DELETE TO authenticated USING (true);
 
-CREATE POLICY "Allow anon read team" ON public.team FOR SELECT USING (true);
-CREATE POLICY "Allow anon insert team" ON public.team FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow anon update team" ON public.team FOR UPDATE USING (true);
-CREATE POLICY "Allow anon delete team" ON public.team FOR DELETE USING (true);
-
-CREATE POLICY "Allow anon read history" ON public.history FOR SELECT USING (true);
-CREATE POLICY "Allow anon insert history" ON public.history FOR INSERT WITH CHECK (true);
+-- History Policies (SELECT & INSERT ONLY, NO UPDATE, NO DELETE)
+CREATE POLICY "Allow authenticated read history"
+  ON public.history FOR SELECT TO authenticated USING (true);
+CREATE POLICY "Allow authenticated insert history"
+  ON public.history FOR INSERT TO authenticated WITH CHECK (true);
 
 -- ============================================================
--- INITIAL SEED DATA FOR THE 4 AUTHORIZED USERS & PLATFORMS
+-- INITIAL SEED DATA FOR PLATFORMS, TASKS, IDEAS & HISTORY
 -- ============================================================
-
--- SEED 4 AUTHORIZED ADMIN USERS
-INSERT INTO public.users (id, name, email, passcode, role, department, avatar) VALUES
-('user_1', 'admin', 'admin@dcore.ops', 'admin@321', 'ADMIN', 'System Administration', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'),
-('user_2', 'admin2', 'admin2@dcore.ops', 'admin!321', 'ADMIN', 'Operations Management', 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'),
-('user_3', 'admin3', 'admin3@dcore.ops', 'admin@dmk67', 'ADMIN', 'DMK Infrastructure', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'),
-('user_4', 'admin4', 'admin4@dcore.ops', 'admin@dcore67', 'ADMIN', 'Core Operations', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80')
-ON CONFLICT (id) DO NOTHING;
 
 -- SEED PROJECTS TABLE
 INSERT INTO public.projects (id, name, url, description, status, priority, progress, owner_id, category, start_date, target_date, notes) VALUES
@@ -162,5 +186,5 @@ ON CONFLICT (id) DO NOTHING;
 
 -- SEED HISTORY TABLE
 INSERT INTO public.history (id, admin_name, action, entity_type, entity_id, entity_name, details) VALUES
-('hist_001', 'Arun Kumar (Admin)', 'SYSTEM_INITIALIZED', 'SYSTEM', 'sys_01', 'Supabase Cloud Database', 'Supabase Cloud Database initialized with 4 Authorized Users system.')
+('hist_001', 'Arun Kumar (Admin)', 'SYSTEM_INITIALIZED', 'SYSTEM', 'sys_01', 'Supabase Cloud Database', 'Supabase Cloud Database initialized with strict RLS policies.')
 ON CONFLICT (id) DO NOTHING;
