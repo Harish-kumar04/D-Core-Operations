@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { isSupabaseConfigured } from '../../services/supabaseClient';
+import { isSupabaseConfigured, debugInfo } from '../../services/supabaseClient';
 import { ShieldCheck, Lock, Mail, ArrowRight, Sparkles, AlertCircle, ServerOff } from 'lucide-react';
 
 export const InternalAuthWall = () => {
@@ -162,6 +162,12 @@ export const InternalAuthWall = () => {
                       <span>{error}</span>
                     </div>
                   )}
+
+                  {/* Temporary debug panel - remove after login is fixed */}
+                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[10px] font-mono text-slate-500 space-y-1">
+                    <p><span className="font-bold text-slate-700">URL:</span> {debugInfo.url}</p>
+                    <p><span className="font-bold text-slate-700">Key:</span> {debugInfo.keyPrefix}</p>
+                  </div>
 
                   {/* Email Input */}
                   <div>
