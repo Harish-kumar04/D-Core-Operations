@@ -112,26 +112,29 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- SUPABASE AUTH LOGIN ---
   const loginUserSession = async (email, password) => {
     if (!isSupabaseConfigured || !supabase) {
       return { success: false, error: 'Backend authentication service is not configured.' };
     }
 
     const cleanEmail = (email || '').trim();
-    const cleanPass = (password || '').trim();
 
-    if (!cleanEmail || !cleanPass) {
+    if (!cleanEmail || !password) {
       return { success: false, error: 'Invalid email or password.' };
     }
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email: cleanEmail,
-      password: cleanPass
+      password: password
     });
 
-    if (error || !data?.user) {
-      return { success: false, error: 'Invalid email or password.' };
+    if (error) {
+      console.error('Supabase Auth Error:', error);
+      return { success: false, error: error.message };
+    }
+    
+    if (!data?.user) {
+      return { success: false, error: 'Authentication failed. Please try again.' };
     }
 
     const displayName = data.user.user_metadata?.display_name || data.user.email?.split('@')[0] || 'Admin Operator';
